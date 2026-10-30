@@ -47,6 +47,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private static final String AMAZON_SETTINGS = "com.amazon.tv.settings.v2";
     private static final String PROFILE_PICKER = "com.amazon.ftv.profilepicker";
     private static final int PROFILE_TRIES = 20;
+    private static final String PARENTAL_CONTROLS = "com.amazon.tv.parentalcontrols";
     private static final String[] PROFILE_LABELS = {"Profiles", "Profili", "Profile", "Perfiles", "Profils", "Perfis", "Profielen"};
     private int profileTries;
 
@@ -335,11 +336,13 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     public void openProfiles() {
         openSettings();
         profileTries = 0;
+        pinSeen = false;
         handler.removeCallbacks(profileClicker);
         handler.postDelayed(profileClicker, 600L);
     }
 
     private boolean profileTapped;
+    private boolean pinSeen;
 
     private final Runnable profileClicker = new Runnable() {
         @Override
@@ -362,6 +365,18 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
             return false;
         }
         String pkg = String.valueOf(root.getPackageName());
+        if (PARENTAL_CONTROLS.contentEquals(pkg)) {
+            // Amazon asks for the PIN: wait for the user without using up the tries.
+            pinSeen = true;
+            profileTries = 0;
+            root.recycle();
+            return false;
+        }
+        if (pinSeen && AMAZON_LAUNCHER.contentEquals(pkg)) {
+            // Back on the Settings grid after the PIN screen: the user cancelled.
+            root.recycle();
+            return true;
+        }
         if (PROFILE_PICKER.contentEquals(pkg)) {
             root.recycle();
             return true;
@@ -370,11 +385,19 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
             root.recycle();
             return false;
         }
-        boolean clicked = false;
+        if (!clickLabel(root, pkg, true)) {
+            clickLabel(root, pkg, false);
+        }
+        root.recycle();
+        return false;
+    }
+
+    // exact: the row is called just "Profiles"; otherwise accept a longer title such as "Account & Profile Settings".
+    private boolean clickLabel(AccessibilityNodeInfo root, String pkg, boolean exact) {
         for (String label : PROFILE_LABELS) {
-            List<AccessibilityNodeInfo> nodes = root.findAccessibilityNodeInfosByText(label);
-            for (AccessibilityNodeInfo node : nodes) {
-                if (!label.contentEquals(String.valueOf(node.getText()))) {
+            for (AccessibilityNodeInfo node : root.findAccessibilityNodeInfosByText(label)) {
+                String text = String.valueOf(node.getText());
+                if (exact ? !label.contentEquals(text) : text.length() > 60) {
                     continue;
                 }
                 AccessibilityNodeInfo target = node;
@@ -382,15 +405,10 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
                     target = target.getParent();
                 }
                 if (target != null) {
-                    clicked = AMAZON_SETTINGS.contentEquals(pkg) ? tap(target) : target.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    break;
+                    return AMAZON_SETTINGS.contentEquals(pkg) ? tap(target) : target.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 }
             }
-            if (clicked) {
-                break;
-            }
         }
-        root.recycle();
         return false;
     }
 
