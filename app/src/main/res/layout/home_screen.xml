@@ -582,6 +582,16 @@
         </FrameLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/credit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="56dp"
+        android:textColor="#80FFFFFF"
+        android:textSize="10sp" />
+
     <FrameLayout
         android:id="@+id/bt_panel"
         android:layout_width="match_parent"

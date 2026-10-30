@@ -50,6 +50,7 @@ public final class HomeScreen {
 
     private final Context context;
     private final PackageManager pm;
+    private final TextView credit;
     private final Host host;
 
     private final View homeContent;
@@ -201,6 +202,8 @@ public final class HomeScreen {
         search.setOnClickListener(v -> host.openSearch());
         View tabStore = root.findViewById(R.id.tab_store);
         tabStore.setOnClickListener(v -> openStore());
+        credit = root.findViewById(R.id.credit);
+        credit.setText(context.getString(R.string.made_by, versionName()));
         View settings = root.findViewById(R.id.settings);
         settings.setOnClickListener(v -> host.openSettings());
         settings.setOnLongClickListener(v -> {
@@ -355,8 +358,17 @@ public final class HomeScreen {
         return libraryShown;
     }
 
+    private String versionName() {
+        try {
+            return pm.getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "";
+        }
+    }
+
     public void showLibrary(boolean show) {
         libraryShown = show;
+        credit.setVisibility(show ? View.GONE : View.VISIBLE);
         homeContent.setVisibility(show ? View.GONE : View.VISIBLE);
         library.setVisibility(show ? View.VISIBLE : View.GONE);
         tabHome.setSelected(!show);

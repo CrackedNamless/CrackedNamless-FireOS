@@ -13,6 +13,7 @@ All notable changes to this project are documented here. Each release on GitHub 
 - **Power button.** The remote's power button puts the Fire TV in standby again. The log line that the real remote produces was not being recognised, so the key was ignored.
 
 ### Changed
+- The Home shows "Made by CrackedNamless - vX.Y.Z" in the bottom right corner (localized, version read from the app).
 - The Home screenshot in the README shows the new top bar.
 
 ## [0.1.1] - 2026-10-30

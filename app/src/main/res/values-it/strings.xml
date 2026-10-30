@@ -12,6 +12,7 @@
     <string name="tab_search">Cerca</string>
     <string name="tab_library">Libreria</string>
     <string name="tab_store">Store</string>
+    <string name="made_by">Creato da CrackedNamless - v%1$s</string>
     <string name="store_missing">Amazon Appstore non disponibile su questo dispositivo.</string>
     <string name="hero_featured">IN EVIDENZA</string>
     <string name="hero_last_opened">ULTIMA APP APERTA</string>
