@@ -10,6 +10,9 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 - On the first install, `tools/install.sh` turns off Amazon's FireTV Troubleshooting app (`pm disable-user`, it stays on the device) so it no longer clutters the app list. Undo with `adb shell pm enable com.amazon.firetv.troubleshooting`. Later runs of the script leave it alone.
 
+### Fixed
+- **Profile icon.** The profile icon in the top bar now goes all the way to Amazon's "Who's Watching?" screen. Before, it stopped on "Account & Profile Settings". If you set a PIN for switching profiles, Amazon asks for it there; the launcher never sees or stores it. The service now declares the gesture capability (`canPerformGestures`) to press Amazon's rows, so after updating, turn the accessibility service off and on once (or run `tools/install.sh` again).
+
 ### Changed
 - The Home screenshot in the README shows the new top bar, and a new screenshot shows the store chooser.
 - `tools/undo.sh` leaves the store installed; remove it with `adb uninstall cm.aptoidetv.pt`.

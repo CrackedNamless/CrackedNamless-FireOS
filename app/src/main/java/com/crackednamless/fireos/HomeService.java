@@ -1,6 +1,7 @@
 package com.crackednamless.fireos;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.GestureDescription;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -8,7 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -41,7 +44,9 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private static final long ALREADY_HOME_MS = 900L;
     private static final long BOOT_WINDOW_MS = 180000L;
     private static final long BOOT_COVER_MAX_MS = 12000L;
-    private static final int PROFILE_TRIES = 12;
+    private static final String AMAZON_SETTINGS = "com.amazon.tv.settings.v2";
+    private static final String PROFILE_PICKER = "com.amazon.ftv.profilepicker";
+    private static final int PROFILE_TRIES = 20;
     private static final String[] PROFILE_LABELS = {"Profiles", "Profili", "Profile", "Perfiles", "Profils", "Perfis", "Profielen"};
     private int profileTries;
 
@@ -334,6 +339,8 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         handler.postDelayed(profileClicker, 600L);
     }
 
+    private boolean profileTapped;
+
     private final Runnable profileClicker = new Runnable() {
         @Override
         public void run() {
@@ -341,14 +348,26 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
                 return;
             }
             if (++profileTries < PROFILE_TRIES) {
-                handler.postDelayed(this, 400L);
+                handler.postDelayed(this, profileTapped ? 1500L : 400L);
+                profileTapped = false;
             }
         }
     };
 
+    // Returns true once Amazon's profile picker (which asks for the PIN itself) is in front.
+    // Before that it keeps clicking "Profiles": first in Settings, then on "Account & Profile Settings".
     private boolean clickProfiles() {
         AccessibilityNodeInfo root = getRootInActiveWindow();
-        if (root == null || !AMAZON_LAUNCHER.contentEquals(String.valueOf(root.getPackageName()))) {
+        if (root == null) {
+            return false;
+        }
+        String pkg = String.valueOf(root.getPackageName());
+        if (PROFILE_PICKER.contentEquals(pkg)) {
+            root.recycle();
+            return true;
+        }
+        if (!AMAZON_LAUNCHER.contentEquals(pkg) && !AMAZON_SETTINGS.contentEquals(pkg)) {
+            root.recycle();
             return false;
         }
         boolean clicked = false;
@@ -363,7 +382,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
                     target = target.getParent();
                 }
                 if (target != null) {
-                    clicked = target.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    clicked = AMAZON_SETTINGS.contentEquals(pkg) ? tap(target) : target.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     break;
                 }
             }
@@ -372,7 +391,18 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
             }
         }
         root.recycle();
-        return clicked;
+        return false;
+    }
+
+    private boolean tap(AccessibilityNodeInfo node) {
+        Rect bounds = new Rect();
+        node.getBoundsInScreen(bounds);
+        Path path = new Path();
+        path.moveTo(bounds.centerX(), bounds.centerY());
+        GestureDescription gesture = new GestureDescription.Builder()
+                .addStroke(new GestureDescription.StrokeDescription(path, 0L, 60L)).build();
+        profileTapped = dispatchGesture(gesture, null, null);
+        return profileTapped;
     }
 
     @Override
