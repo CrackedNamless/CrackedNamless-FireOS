@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CrackedNamless-FireOS</string>
+    <string name="no_apps">Nessuna app trovata</string>
+    <string name="app_unavailable">App non disponibile</string>
+    <string name="settings">Impostazioni</string>
+    <string name="profiles">Profili e account Amazon</string>
+    <string name="service_name">CrackedNamless-FireOS Home</string>
+    <string name="service_description">Apre CrackedNamless-FireOS quando premi il tasto Home. Mostra la Home sopra quella di Amazon durante il caricamento e legge i tasti del telecomando solo in quel momento. Legge lo schermo solo dopo il tocco sull\'icona profilo, per aprire la voce Profili nelle Impostazioni di Amazon.</string>
+</resources>
