@@ -12,13 +12,11 @@ A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Ama
 
 - **A clean Home.** Frosted-glass top bar, a card for the last app you opened, your apps, a "continue watching" row and a full library. No ads, no promoted content.
 - **It really replaces Home.** Pressing the Home button on the remote shows this launcher, even though Fire OS pins Amazon's.
-- **App stores built in.** The **Store** tab in the top bar lets you choose between [Aptoide TV](https://tv.aptoide.com), which the installer adds for you, and the Amazon Appstore that is already on the Fire TV. Skip Aptoide with `--no-store`.
+- **A Store tab.** The **Store** tab in the top bar opens the Amazon Appstore that is already on the Fire TV, so you can get new apps without leaving the launcher.
 - **Fast.** Fire OS normally delays app launches for 5 seconds after Home. Fast Home removes that wait, so Home appears in about 1.2 s.
 - **Status at a glance.** Wi-Fi latency, Bluetooth, clock and weather ([Open-Meteo](https://open-meteo.com)).
 - **A Tools menu** to switch off Amazon telemetry and background services in bulk, stop Prime Video from starting by itself, free memory and set a performance preset. Everything is reversible.
 - **Light on memory.** Plain Android views, no heavy frameworks, no analytics, no resident helper process.
-
-![Store chooser](docs/screenshots/store.png)
 
 ![Tools menu](docs/screenshots/tools.png)
 
@@ -58,7 +56,7 @@ My Fire TV's IP address is <ip address>. It's a <model, from Settings > My Fire 
 6. Tell me how to undo everything.
 ```
 
-Claude Code reads the script first, so you can see what it is about to do. It installs this app and the Aptoide TV store (add `--no-store` to the command if you do not want the store). `tools/undo.sh` removes our app; the store is removed with `adb uninstall cm.aptoidetv.pt`.
+Claude Code reads the script first, so you can see what it is about to do. `tools/undo.sh` removes our app.
 
 ### Install by hand
 
@@ -82,7 +80,7 @@ cd CrackedNamless-FireOS
 tools/install.sh 192.168.1.50      # use your Fire TV's IP
 ```
 
-The script downloads the latest release, installs it, grants the two permissions it needs and turns the Home service on. It then installs [Aptoide TV](https://tv.aptoide.com) for the Store tab: it fetches the current build from Aptoide's API and refuses to install it if the MD5 does not match the one Aptoide publishes. Add `--no-store` to skip this step. On the first install only, it also turns off Amazon's FireTV Troubleshooting app so it stops showing in your apps; bring it back with `adb shell pm enable com.amazon.firetv.troubleshooting`. When the TV shows **Allow USB debugging?**, choose **Always allow**.
+The script downloads the latest release, installs it, grants the two permissions it needs and turns the Home service on. On the first install only, it also turns off Amazon's FireTV Troubleshooting app so it stops showing in your apps; bring it back with `adb shell pm enable com.amazon.firetv.troubleshooting`. When the TV shows **Allow USB debugging?**, choose **Always allow**.
 
 **B. By hand (any OS, plain `adb`)**
 
@@ -115,7 +113,7 @@ Press **Home** on the remote. The first time can take a few seconds while the se
 | Open an app | Select its tile and press OK |
 | App info | **i** button on the hero card |
 | All apps | **All apps**, or the Library tab |
-| Get new apps | **Store** tab, then choose Aptoide TV or the Amazon Appstore |
+| Get new apps | **Store** tab (opens the Amazon Appstore) |
 | Tools menu | Long-press OK on the settings icon in the top bar |
 | Amazon settings | Short press OK on the settings icon |
 
@@ -185,7 +183,6 @@ The APK is in `app/build/outputs/apk/debug/`. For a signed release build, create
 - The app holds an ADB key that you authorised with **Always allow**. That gives it shell-level access on this Fire TV, which is how the Tools menu works. Turn **ADB debugging** off in Developer options to cut that access, or uninstall the app, which deletes the key.
 - `READ_LOGS` is used to detect the Home and power buttons from the system log. Logs are not stored or sent anywhere.
 - The launcher's only network request is the weather lookup to Open-Meteo. There is no analytics, no tracking and no account.
-- Aptoide TV is a third-party store made by Aptoide, not by this project. It is installed only by `tools/install.sh` (never by the app itself), and apps you download from it are your responsibility. Use `--no-store` if you prefer not to have it.
 - The weather location defaults to Rome. Change `weather_default_city` in `strings.xml` and `DEFAULT_LAT` and `DEFAULT_LON` in `Weather.java`.
 
 ## Troubleshooting
@@ -195,8 +192,6 @@ The APK is in `app/build/outputs/apk/debug/`. For a signed release build, create
 **Fast Home says another VPN is active.** Only one VPN can run at a time. Turn the other one off, then try again.
 
 **The VPN or ADB prompt does not appear.** Make sure **ADB debugging** is on, then toggle Fast Home off and on again.
-
-**The Store chooser says Aptoide TV is not installed.** Run `tools/install.sh <ip>` again (without `--no-store`); it only adds what is missing.
 
 **I want Amazon's launcher back right now.** Run `tools/undo.sh <ip>`.
 

@@ -12,12 +12,7 @@
     <string name="tab_search">Cerca</string>
     <string name="tab_library">Libreria</string>
     <string name="tab_store">Store</string>
-    <string name="store_title">STORE</string>
-    <string name="store_choose">Scegli uno store</string>
-    <string name="store_aptoide_sub">Store aperto con molte app che Amazon non offre</string>
-    <string name="store_amazon_sub">Lo store ufficiale di Amazon</string>
-    <string name="store_not_installed">Non installato</string>
-    <string name="store_missing">Questo store non è installato. Per aggiungere Aptoide TV, rilancia tools/install.sh.</string>
+    <string name="store_missing">Amazon Appstore non disponibile su questo dispositivo.</string>
     <string name="hero_featured">IN EVIDENZA</string>
     <string name="hero_last_opened">ULTIMA APP APERTA</string>
     <string name="hero_installed">App installata</string>
