@@ -38,7 +38,6 @@ public final class HomeScreen {
 
         void openBluetooth();
 
-        void openSearch();
 
         void openStore(Intent intent);
 
@@ -198,8 +197,6 @@ public final class HomeScreen {
         tabHome.setSelected(true);
         tabHome.setOnClickListener(v -> showLibrary(false));
         tabLibrary.setOnClickListener(v -> showLibrary(true));
-        View search = root.findViewById(R.id.tab_search);
-        search.setOnClickListener(v -> host.openSearch());
         View tabStore = root.findViewById(R.id.tab_store);
         tabStore.setOnClickListener(v -> openStore());
         credit = root.findViewById(R.id.credit);
@@ -242,7 +239,7 @@ public final class HomeScreen {
         FocusScale.apply(speedClose, null);
         onNetwork(NetworkMonitor.OFFLINE, -1);
 
-        for (View v : new View[]{profile, tabHome, tabLibrary, tabStore, search, settings, wifiButton, btButton, heroPlay,
+        for (View v : new View[]{profile, tabHome, tabLibrary, tabStore, settings, wifiButton, btButton, heroPlay,
                 root.findViewById(R.id.hero_all), heroInfo}) {
             FocusScale.apply(v, null);
         }

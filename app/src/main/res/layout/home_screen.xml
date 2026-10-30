@@ -54,24 +54,6 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tab_search"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_marginLeft="4dp"
-                android:background="@drawable/tab_bg"
-                android:clickable="true"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="6dp"
-                android:focusable="true"
-                android:gravity="center"
-                android:paddingLeft="14dp"
-                android:paddingRight="16dp"
-                android:text="@string/tab_search"
-                android:textColor="@color/tab_text"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/tab_library"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"

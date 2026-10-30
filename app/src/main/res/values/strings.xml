@@ -14,7 +14,6 @@
     <string name="network">Network</string>
     <string name="bluetooth" translatable="false">Bluetooth</string>
     <string name="tab_home">Home</string>
-    <string name="tab_search">Search</string>
     <string name="tab_library">Library</string>
     <string name="tab_store">Store</string>
     <string name="made_by">Made by CrackedNamless - v%1$s</string>

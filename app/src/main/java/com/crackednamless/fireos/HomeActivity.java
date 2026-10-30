@@ -173,11 +173,6 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     }
 
     @Override
-    public void openSearch() {
-        start(new Intent(Intent.ACTION_ASSIST).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
-    @Override
     public void openStore(Intent intent) {
         start(intent);
     }

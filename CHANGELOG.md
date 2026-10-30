@@ -13,6 +13,7 @@ All notable changes to this project are documented here. Each release on GitHub 
 - **Power button.** The remote's power button puts the Fire TV in standby again. The log line that the real remote produces was not being recognised, so the key was ignored.
 
 ### Changed
+- **Search tab removed.** Amazon's search screens can only be opened by Amazon's own apps (signature permission), and the voice assistant call did not show anything useful. The top bar is now Home, Library and Store. Use the voice button on the remote to search.
 - The Home shows "Made by CrackedNamless - vX.Y.Z" in the bottom right corner (localized, version read from the app).
 - The Home screenshot in the README shows the new top bar.
 

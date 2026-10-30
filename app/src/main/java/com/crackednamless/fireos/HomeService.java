@@ -418,12 +418,6 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     }
 
     @Override
-    public void openSearch() {
-        launchPackage = null;
-        begin(new Intent(Intent.ACTION_ASSIST).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
-    @Override
     public void openStore(Intent intent) {
         launchPackage = null;
         begin(intent);
