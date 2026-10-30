@@ -12,6 +12,7 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ### Fixed
 - **Profile icon.** The profile icon in the top bar now goes all the way to Amazon's "Who's Watching?" screen. Before, it stopped on "Account & Profile Settings". If you set a PIN for switching profiles, Amazon asks for it there; the launcher never sees or stores it. The service now declares the gesture capability (`canPerformGestures`) to press Amazon's rows, so after updating, turn the accessibility service off and on once (or restart the Fire TV) so Fire OS applies it.
+- **Power button.** The remote's power button puts the Fire TV in standby again. The log line that the real remote produces was not being recognised, so the key was ignored.
 
 ### Changed
 - The Home screenshot in the README shows the new top bar, and a new screenshot shows the store chooser.

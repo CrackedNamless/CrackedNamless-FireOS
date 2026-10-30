@@ -55,7 +55,7 @@ final class SystemLogWatcher {
             long startedAt = SystemClock.elapsedRealtime();
             try {
                 process = new ProcessBuilder("logcat", "-v", "brief", "-T", "1", "-e",
-                        "action=ACTION_DOWN, keyCode=KEYCODE_POWER|cat=\\[android.intent.category.HOME\\].* from uid 1000$")
+                        "action=ACTION_DOWN, keyCode=KEYCODE_POWER|Received Key name: POWER, code: 26, action: 0|cat=\\[android.intent.category.HOME\\].* from uid 1000$")
                         .redirectErrorStream(true).start();
                 BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
@@ -64,12 +64,12 @@ final class SystemLogWatcher {
                     if (now - startedAt < REPLAY_GUARD_MS) {
                         continue;
                     }
-                    if (line.contains("KEYCODE_POWER")) {
+                    if (!line.contains("START u0 {")) {
                         if (now - lastFired >= DEBOUNCE_MS) {
                             lastFired = now;
                             listener.onPowerKey();
                         }
-                    } else if (line.contains("START u0 {")) {
+                    } else {
                         listener.onHomeStart();
                     }
                 }
