@@ -86,6 +86,11 @@ public final class HomeScreen {
     private final TextView btCount;
     private final View btButton;
     private final View btPanel;
+    private final View storePanel;
+    private final View storeAptoide;
+    private final View storeAmazon;
+    private final TextView storeAptoideSub;
+    private final TextView storeAmazonSub;
     private final TextView btStatus;
     private final TextView btHint;
     private final LinearLayout btList;
@@ -200,14 +205,19 @@ public final class HomeScreen {
         View search = root.findViewById(R.id.tab_search);
         search.setOnClickListener(v -> host.openSearch());
         View tabStore = root.findViewById(R.id.tab_store);
-        tabStore.setOnClickListener(v -> {
-            Intent store = Store.intent(pm);
-            if (store == null) {
-                Toast.makeText(context, R.string.store_missing, Toast.LENGTH_LONG).show();
-            } else {
-                host.openStore(store);
-            }
-        });
+        tabStore.setOnClickListener(v -> showStore(true));
+        storePanel = root.findViewById(R.id.store_panel);
+        storeAptoide = root.findViewById(R.id.store_aptoide);
+        storeAmazon = root.findViewById(R.id.store_amazon);
+        storeAptoideSub = root.findViewById(R.id.store_aptoide_sub);
+        storeAmazonSub = root.findViewById(R.id.store_amazon_sub);
+        View storeClose = root.findViewById(R.id.store_close);
+        storeAptoide.setOnClickListener(v -> openStore(Store.APTOIDE));
+        storeAmazon.setOnClickListener(v -> openStore(Store.AMAZON));
+        storeClose.setOnClickListener(v -> showStore(false));
+        FocusScale.apply(storeAptoide, null);
+        FocusScale.apply(storeAmazon, null);
+        FocusScale.apply(storeClose, null);
         View settings = root.findViewById(R.id.settings);
         settings.setOnClickListener(v -> host.openSettings());
         settings.setOnLongClickListener(v -> {
@@ -326,6 +336,7 @@ public final class HomeScreen {
         bluetooth.stop();
         showBluetooth(false);
         showSpeed(false);
+        showStore(false);
     }
 
     private void bindMedia(MediaMonitor.State s) {
@@ -680,7 +691,42 @@ public final class HomeScreen {
         }
     }
 
+    public boolean isStoreShown() {
+        return storePanel.getVisibility() == View.VISIBLE;
+    }
+
+    public void showStore(boolean show) {
+        if (show == isStoreShown()) {
+            return;
+        }
+        storePanel.setVisibility(show ? View.VISIBLE : View.GONE);
+        blockUnderlying(show);
+        if (show) {
+            storeAptoideSub.setText(Store.intent(pm, Store.APTOIDE) == null
+                    ? R.string.store_not_installed : R.string.store_aptoide_sub);
+            storeAmazonSub.setText(Store.intent(pm, Store.AMAZON) == null
+                    ? R.string.store_not_installed : R.string.store_amazon_sub);
+            (Store.intent(pm, Store.APTOIDE) != null ? storeAptoide : storeAmazon).requestFocus();
+        } else {
+            focusDefault();
+        }
+    }
+
+    private void openStore(String pkg) {
+        Intent store = Store.intent(pm, pkg);
+        if (store == null) {
+            Toast.makeText(context, R.string.store_missing, Toast.LENGTH_LONG).show();
+            return;
+        }
+        showStore(false);
+        host.openStore(store);
+    }
+
     public boolean closePanel() {
+        if (isStoreShown()) {
+            showStore(false);
+            return true;
+        }
         if (isSpeedShown()) {
             showSpeed(false);
             return true;

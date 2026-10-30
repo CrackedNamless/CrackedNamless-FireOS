@@ -17,7 +17,14 @@
     <string name="tab_search">Search</string>
     <string name="tab_library">Library</string>
     <string name="tab_store">Store</string>
-    <string name="store_missing">No app store installed. Run tools/install.sh again to add one.</string>
+    <string name="store_title">STORE</string>
+    <string name="store_choose">Choose a store</string>
+    <string name="store_aptoide_name" translatable="false">Aptoide TV</string>
+    <string name="store_amazon_name" translatable="false">Amazon Appstore</string>
+    <string name="store_aptoide_sub">Open store with many apps Amazon does not list</string>
+    <string name="store_amazon_sub">Amazon\'s official store</string>
+    <string name="store_not_installed">Not installed</string>
+    <string name="store_missing">This store is not installed. To add Aptoide TV, run tools/install.sh again.</string>
     <string name="hero_featured">FEATURED</string>
     <string name="hero_last_opened">LAST APP OPENED</string>
     <string name="hero_installed">Installed app</string>
