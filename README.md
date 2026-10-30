@@ -33,13 +33,39 @@ A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Ama
 
 You need a PC (or any device that can run `adb`) on the same network as the Fire TV. The Fire TV does not need to be rooted.
 
-### 1. Prepare the Fire TV
+### Install it with Claude Code
+
+The easy way. [Claude Code](https://claude.com/claude-code) does the setup, and you press OK on the remote when the TV asks.
+
+**1. Turn on developer mode on the Fire TV.** Settings > My Fire TV > About. Highlight the device name and press OK 7 times. Go back, open Developer Options and turn on **ADB debugging**. Your Fire TV's IP address is under Settings > My Fire TV > About > Network.
+
+**2. Open Claude Code on a computer on the same Wi-Fi.** Then paste this:
+
+```text
+Install CrackedNamless-FireOS on my Fire TV: https://github.com/CrackedNamless/CrackedNamless-FireOS
+My Fire TV's IP address is <ip address>. It's a <model, from Settings > My Fire TV > About>.
+
+1. Clone the repo. Read README.md and tools/install.sh before running anything.
+2. Install what's missing (adb, and git if needed). The app is downloaded as a signed APK, nothing has to be built.
+3. Run tools/install.sh <ip>. Tell me when to accept the debugging prompt on the TV ("Always allow").
+4. Check that the Home accessibility service is enabled, then check that pressing Home opens
+   CrackedNamless-FireOS, and tell me what you see.
+5. Explain in plain words what the Tools menu does (long-press OK on the settings icon) and what Fast Home
+   needs from me on the TV. Ask me before turning anything off or on.
+6. Tell me how to undo everything.
+```
+
+Claude Code reads the script first, so you can see what it is about to do. Nothing is installed on the TV except this app, and `tools/undo.sh` removes it.
+
+### Install by hand
+
+#### 1. Prepare the Fire TV
 
 1. Go to **Settings > My Fire TV > About**, highlight the device name and press **OK seven times**. Developer options are now unlocked.
 2. Go to **Settings > My Fire TV > Developer options** and turn on **ADB debugging**. If you plan to use the Downloader app, also allow installs from unknown sources there.
 3. Note the IP address from **Settings > My Fire TV > About > Network**.
 
-### 2. Get the app
+#### 2. Get the app
 
 Pick one.
 
@@ -75,7 +101,7 @@ If you already use another accessibility service, append ours to the list with a
 > `https://github.com/CrackedNamless/CrackedNamless-FireOS/releases/latest/download/CrackedNamless-FireOS.apk`
 > The permissions and the Home service still have to be set with the `adb` commands above, because Fire OS does not let an app grant them to itself.
 
-### 3. Use it
+#### 3. Use it
 
 Press **Home** on the remote. The first time can take a few seconds while the service starts.
 
