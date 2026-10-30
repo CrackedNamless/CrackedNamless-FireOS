@@ -84,7 +84,7 @@ final class AdbClient {
                     return;
                 }
                 if (m.command != AUTH || m.arg0 != 1) {
-                    throw new IOException("risposta inattesa " + Integer.toHexString(m.command));
+                    throw new IOException("unexpected reply " + Integer.toHexString(m.command));
                 }
                 if (!signed) {
                     signed = true;
@@ -94,12 +94,12 @@ final class AdbClient {
                     send(AUTH, 3, 0, publicKeyText(keys));
                     socket.setSoTimeout(authWaitMs);
                 } else {
-                    throw new AuthException("chiave rifiutata");
+                    throw new AuthException("key rejected");
                 }
             }
         } catch (SocketTimeoutException e) {
             if (keySent) {
-                throw new AuthException("autorizzazione non concessa in tempo");
+                throw new AuthException("authorisation not granted in time");
             }
             throw e;
         }
@@ -153,7 +153,7 @@ final class AdbClient {
         int arg1 = b.getInt();
         int length = b.getInt();
         if (length < 0 || length > (1 << 20)) {
-            throw new IOException("messaggio troppo grande");
+            throw new IOException("message too large");
         }
         byte[] data = new byte[length];
         in.readFully(data);
@@ -168,7 +168,7 @@ final class AdbClient {
             s.update(token);
             return s.sign();
         } catch (GeneralSecurityException e) {
-            throw new IOException("firma non riuscita", e);
+            throw new IOException("signing failed", e);
         }
     }
 
@@ -222,7 +222,7 @@ final class AdbClient {
             while (done < data.length) {
                 int n = stream.read(data, done, data.length - done);
                 if (n < 0) {
-                    throw new IOException("file troncato");
+                    throw new IOException("truncated file");
                 }
                 done += n;
             }

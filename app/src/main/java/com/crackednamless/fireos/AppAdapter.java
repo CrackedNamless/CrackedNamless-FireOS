@@ -53,7 +53,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.Holder> {
     public void onBindViewHolder(Holder h, int position) {
         FocusScale.apply(h.itemView, null);
         if (getItemViewType(position) == TYPE_ALL) {
-            h.label.setText("Tutte");
+            h.label.setText(R.string.all_short);
             h.image.setImageResource(R.drawable.ic_grid);
             h.itemView.setOnClickListener(v -> onAll.run());
             return;

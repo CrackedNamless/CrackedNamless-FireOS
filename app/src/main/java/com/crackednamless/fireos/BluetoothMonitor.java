@@ -21,12 +21,12 @@ public final class BluetoothMonitor {
 
     public static final class Device {
         public final String name;
-        public final String kind;
+        public final int kind;
         public final boolean connected;
         final BluetoothDevice raw;
         public final String address;
 
-        Device(BluetoothDevice raw, String name, String kind, boolean connected) {
+        Device(BluetoothDevice raw, String name, int kind, boolean connected) {
             this.raw = raw;
             this.address = raw.getAddress();
             this.name = name;
@@ -207,21 +207,21 @@ public final class BluetoothMonitor {
         }
     }
 
-    static String kind(BluetoothClass c) {
+    static int kind(BluetoothClass c) {
         if (c == null) {
-            return "Dispositivo";
+            return R.string.bt_kind_device;
         }
         switch (c.getMajorDeviceClass()) {
             case BluetoothClass.Device.Major.AUDIO_VIDEO:
-                return "Audio";
+                return R.string.bt_kind_audio;
             case BluetoothClass.Device.Major.PERIPHERAL:
-                return "Tastiera, mouse o controller";
+                return R.string.bt_kind_input;
             case BluetoothClass.Device.Major.PHONE:
-                return "Telefono";
+                return R.string.bt_kind_phone;
             case BluetoothClass.Device.Major.COMPUTER:
-                return "Computer";
+                return R.string.bt_kind_computer;
             default:
-                return "Dispositivo";
+                return R.string.bt_kind_device;
         }
     }
 }

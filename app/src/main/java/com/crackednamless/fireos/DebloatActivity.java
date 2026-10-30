@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -42,10 +43,10 @@ public final class DebloatActivity extends Activity {
             "com.amazon.wirelessmetrics.service"
     };
     private static final String PRIME_TOGGLE = "if cmd appops get com.amazon.avod RUN_IN_BACKGROUND | grep -q ignore; "
-            + "then M=allow; T=permesso; else M=ignore; T=bloccato; fi; "
+            + "then M=allow; else M=ignore; fi; "
             + "for p in com.amazon.avod com.amazon.firebat; do "
             + "cmd appops set $p RUN_IN_BACKGROUND $M; cmd appops set $p RUN_ANY_IN_BACKGROUND $M; "
-            + "if [ $M = ignore ]; then am force-stop $p; fi; done; echo Prime Video in background: $T";
+            + "if [ $M = ignore ]; then am force-stop $p; fi; done; echo $M";
     private static final int REQUEST_VPN = 1;
     private static final int GREEN = 0xFF7CD992;
     private static final int DIM = 0xB3FFFFFF;
@@ -96,10 +97,10 @@ public final class DebloatActivity extends Activity {
         root.setBackgroundColor(Color.BLACK);
         root.setPadding(dp(64), dp(32), dp(64), dp(24));
 
-        TextView title = text("Strumenti", 28, Color.WHITE);
+        TextView title = text(getString(R.string.tools_title), 28, Color.WHITE);
         title.setTypeface(Typeface.DEFAULT_BOLD);
         root.addView(title);
-        status = text("OK per eseguire. Tutto reversibile: le app e i loro dati restano.", 15, DIM);
+        status = text(getString(R.string.tools_intro), 15, DIM);
         status.setPadding(0, dp(4), 0, dp(16));
         root.addView(status);
 
@@ -143,28 +144,38 @@ public final class DebloatActivity extends Activity {
 
         rows.clear();
         boolean fast = AdbBridge.isFastHome(this);
-        rows.add(new Row("Sblocco rapido Home", "Toglie l'attesa di 5 s dopo HOME, tiene aperto il tunnel",
-                fast ? "ATTIVO" : "SPENTO", fast ? GREEN : DIM, this::toggleFast));
-        rows.add(new Row("Disattiva tutti i servizi superflui", "Telemetria, pubblicita', tutorial, servizi inutili",
-                toDisable.isEmpty() ? "Gia' fatto" : toDisable.size() + " attivi",
+        Resources res = getResources();
+        String on = getString(R.string.tools_on);
+        String off = getString(R.string.tools_off);
+        rows.add(new Row(getString(R.string.tools_fast_home), getString(R.string.tools_fast_home_sub),
+                fast ? on : off, fast ? GREEN : DIM, this::toggleFast));
+        rows.add(new Row(getString(R.string.tools_disable_all), getString(R.string.tools_disable_all_sub),
+                toDisable.isEmpty() ? getString(R.string.tools_already_done)
+                        : res.getQuantityString(R.plurals.tools_count_active, toDisable.size(), toDisable.size()),
                 toDisable.isEmpty() ? GREEN : DIM,
-                () -> bulk(toDisable, "pm disable-user --user 0 ", "disattivati")));
-        rows.add(new Row("Riattiva tutti i servizi", "Rimette la lista com'era in origine",
-                toEnable.isEmpty() ? "Nessuno da riattivare" : toEnable.size() + " disattivati", DIM,
-                () -> bulk(toEnable, "pm enable --user 0 ", "riattivati")));
+                () -> bulk(toDisable, "pm disable-user --user 0 ", R.plurals.tools_done_disabled)));
+        rows.add(new Row(getString(R.string.tools_enable_all), getString(R.string.tools_enable_all_sub),
+                toEnable.isEmpty() ? getString(R.string.tools_none_to_enable)
+                        : res.getQuantityString(R.plurals.tools_count_disabled, toEnable.size(), toEnable.size()),
+                DIM, () -> bulk(toEnable, "pm enable --user 0 ", R.plurals.tools_done_enabled)));
         boolean perf = performanceOn();
-        rows.add(new Row("Prestazioni", "Animazioni a zero e tracciamento pubblicitario Amazon limitato",
-                perf ? "ATTIVO" : "SPENTO", perf ? GREEN : DIM, () -> setPerformance(!perf)));
-        rows.add(new Row("Prime Video in background", "Blocca o permette l'avvio automatico di Prime Video",
-                "Tocca per cambiare", DIM,
-                () -> exec(Collections.singletonList(PRIME_TOGGLE), outputs -> outputs.get(0))));
-        rows.add(new Row("Libera memoria ora", "Chiude le app inattive in cache, quelle in uso restano",
+        rows.add(new Row(getString(R.string.tools_performance), getString(R.string.tools_performance_sub),
+                perf ? on : off, perf ? GREEN : DIM, () -> setPerformance(!perf)));
+        rows.add(new Row(getString(R.string.tools_prime), getString(R.string.tools_prime_sub),
+                getString(R.string.tools_tap_to_change), DIM,
+                () -> exec(Collections.singletonList(PRIME_TOGGLE), outputs -> getString(
+                        "ignore".equals(outputs.get(0).trim()) ? R.string.tools_prime_blocked
+                                : R.string.tools_prime_allowed))));
+        rows.add(new Row(getString(R.string.tools_free_memory), getString(R.string.tools_free_memory_sub),
                 "", DIM, this::freeMemory));
         for (Service s : services) {
-            rows.add(new Row(s.label, s.pkg, s.disabled ? "Disattivato" : "Attivo", s.disabled ? GREEN : DIM,
+            rows.add(new Row(s.label, s.pkg,
+                    getString(s.disabled ? R.string.tools_service_disabled : R.string.tools_service_active),
+                    s.disabled ? GREEN : DIM,
                     () -> exec(Collections.singletonList(
                             (s.disabled ? "pm enable --user 0 " : "pm disable-user --user 0 ") + s.pkg),
-                            outputs -> outputs.get(0))));
+                            outputs -> getString(s.disabled ? R.string.tools_service_now_active
+                                    : R.string.tools_service_now_disabled, s.label))));
         }
         adapter.notifyDataSetChanged();
     }
@@ -193,27 +204,27 @@ public final class DebloatActivity extends Activity {
         commands.add("settings put global transition_animation_scale " + anim);
         commands.add("settings put secure amz_limit_ad_tracking " + ads);
         commands.add("settings put secure non_amz_limit_ad_tracking " + ads);
-        exec(commands, outputs -> on ? "Prestazioni attivate" : "Prestazioni disattivate");
+        exec(commands, outputs -> getString(on ? R.string.tools_performance_on : R.string.tools_performance_off));
     }
 
-    private void bulk(List<String> packages, String command, String verb) {
+    private void bulk(List<String> packages, String command, int donePlural) {
         if (packages.isEmpty()) {
-            status.setText("Niente da fare");
+            status.setText(R.string.tools_nothing_to_do);
             return;
         }
         List<String> commands = new ArrayList<>();
         for (String pkg : packages) {
             commands.add(command + pkg);
         }
-        exec(commands, outputs -> packages.size() + " servizi " + verb);
+        exec(commands, outputs -> getResources().getQuantityString(donePlural, packages.size(), packages.size()));
     }
 
     private void freeMemory() {
         long before = availableMb();
         exec(Collections.singletonList("am kill-all"), outputs -> {
-            status.postDelayed(() -> status.setText("Memoria libera: " + before + " MB, ora " + availableMb() + " MB"),
+            status.postDelayed(() -> status.setText(getString(R.string.tools_memory_result, before, availableMb())),
                     1500);
-            return "Chiudo le app inattive";
+            return getString(R.string.tools_closing_idle);
         });
     }
 
@@ -264,7 +275,7 @@ public final class DebloatActivity extends Activity {
             @Override
             public void onDone(List<String> outputs, String error) {
                 busy = false;
-                status.setText(error != null ? error : "Fatto");
+                status.setText(error != null ? error : getString(R.string.tools_done));
                 reload();
             }
         });
@@ -280,8 +291,7 @@ public final class DebloatActivity extends Activity {
         try {
             startActivityForResult(consent, REQUEST_VPN);
         } catch (ActivityNotFoundException e) {
-            status.setText("Questo Stick non mostra il consenso VPN. Da PC: adb shell appops set "
-                    + getPackageName() + " ACTIVATE_VPN allow");
+            status.setText(getString(R.string.tools_vpn_dialog_missing, getPackageName()));
         }
         return true;
     }
@@ -294,7 +304,7 @@ public final class DebloatActivity extends Activity {
             if (resultCode == RESULT_OK && retry != null) {
                 retry.run();
             } else {
-                status.setText("Consenso VPN non concesso");
+                status.setText(R.string.err_vpn_consent_denied);
             }
         }
     }

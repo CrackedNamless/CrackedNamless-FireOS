@@ -18,9 +18,9 @@ public class WeatherTest {
     }
 
     @Test
-    public void describesInItalian() {
-        assertEquals("Soleggiato", Weather.describe(0, true));
-        assertEquals("Sereno", Weather.describe(0, false));
-        assertEquals("Temporale", Weather.describe(99, true));
+    public void picksDescriptionResource() {
+        assertEquals(R.string.weather_sunny, Weather.description(0, true));
+        assertEquals(R.string.weather_clear, Weather.description(0, false));
+        assertEquals(R.string.weather_thunderstorm, Weather.description(99, true));
     }
 }

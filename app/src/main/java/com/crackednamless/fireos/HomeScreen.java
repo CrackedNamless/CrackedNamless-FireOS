@@ -89,7 +89,9 @@ public final class HomeScreen {
     private final View btClose;
     private final BluetoothMonitor bluetooth;
     private BluetoothMonitor.State btState;
-    private final Map<String, String> btNotes = new HashMap<>();
+    private static final int NOTE_CONNECTING = 1;
+    private static final int NOTE_FAILED = 2;
+    private final Map<String, Integer> btNotes = new HashMap<>();
     private final View rightCol;
     private final View weatherCard;
     private final TextView weatherCity;
@@ -252,7 +254,7 @@ public final class HomeScreen {
             AppEntry e = byKey.get(i.packageName);
             if (e != null) {
                 recents.add(new RecentAdapter.Entry(e, i.time));
-                key.append('|').append(e.packageName).append(Recents.ago(i.time, now));
+                key.append('|').append(e.packageName).append(Recents.ago(context.getResources(), i.time, now));
             }
         }
         // Stessi dati di prima: niente ricostruzione, cosi la Home non sfarfalla ne perde il focus.
@@ -267,11 +269,12 @@ public final class HomeScreen {
 
         if (!recents.isEmpty()) {
             RecentAdapter.Entry first = recents.get(0);
-            bindHero(first.app, "ULTIMA APP APERTA", "Aperta " + Recents.ago(first.time, now),
-                    "Riprendi da dove avevi lasciato.");
+            bindHero(first.app, context.getString(R.string.hero_last_opened),
+                    context.getString(R.string.opened_ago, Recents.ago(context.getResources(), first.time, now)),
+                    context.getString(R.string.hero_resume));
         } else if (!apps.isEmpty()) {
-            bindHero(apps.get(0), "IN EVIDENZA", "App installata",
-                    "Scegli un'app dalla riga qui sotto o dalla Libreria.");
+            bindHero(apps.get(0), context.getString(R.string.hero_featured), context.getString(R.string.hero_installed),
+                    context.getString(R.string.hero_pick));
         } else {
             bindHero(null, "", "", "");
         }
@@ -292,7 +295,7 @@ public final class HomeScreen {
         lastWeather = d;
         weatherCity.setText(d.city);
         weatherTemp.setText(Weather.temperature(d));
-        weatherDesc.setText(Weather.describe(d.code, d.day));
+        weatherDesc.setText(Weather.description(d.code, d.day));
         weatherIcon.setImageResource(Weather.icon(d));
         weatherCard.setVisibility(View.VISIBLE);
         updateRightColumn();
@@ -318,7 +321,7 @@ public final class HomeScreen {
             updateRightColumn();
             return;
         }
-        mediaLabel.setText("IN RIPRODUZIONE · " + appLabel(s.app).toUpperCase(Locale.ITALY));
+        mediaLabel.setText(context.getString(R.string.now_playing, appLabel(s.app).toUpperCase(Locale.getDefault())));
         mediaTitle.setText(s.title);
         mediaArtist.setText(s.artist);
         mediaArt.setImageBitmap(s.art);
@@ -505,15 +508,15 @@ public final class HomeScreen {
                 : state == NetworkMonitor.NO_INTERNET ? COLOR_NO_INTERNET : COLOR_OFFLINE;
         wifi.setColorFilter(color);
         if (state == NetworkMonitor.ONLINE) {
-            wifiPing.setText(pingMs + " ms");
+            wifiPing.setText(context.getString(R.string.ms_value, pingMs));
             wifiPing.setTextColor(color);
             wifiPing.setVisibility(View.VISIBLE);
         } else {
             wifiPing.setVisibility(View.GONE);
         }
-        wifiButton.setContentDescription(state == NetworkMonitor.ONLINE ? "Test di velocita"
-                : state == NetworkMonitor.NO_INTERNET ? "Rete senza internet, apri impostazioni Wi-Fi"
-                : "Non connesso, apri impostazioni Wi-Fi");
+        wifiButton.setContentDescription(context.getString(state == NetworkMonitor.ONLINE ? R.string.net_run_speed_test
+                : state == NetworkMonitor.NO_INTERNET ? R.string.net_no_internet
+                : R.string.net_offline));
     }
 
     private static final int COLOR_BT_CONNECTED = 0xFF60A5FA;
@@ -536,17 +539,17 @@ public final class HomeScreen {
     }
 
     private void connectDevice(BluetoothMonitor.Device dev) {
-        btNotes.put(dev.address, "Connessione in corso...");
+        btNotes.put(dev.address, NOTE_CONNECTING);
         bindBluetoothPanel();
         bluetooth.connect(dev, () -> {
-            btNotes.put(dev.address, "Non riuscito");
+            btNotes.put(dev.address, NOTE_FAILED);
             if (isBluetoothShown()) {
                 bindBluetoothPanel();
             }
         });
         btList.postDelayed(() -> {
-            if ("Connessione in corso...".equals(btNotes.get(dev.address))) {
-                btNotes.put(dev.address, "Non riuscito");
+            if (Integer.valueOf(NOTE_CONNECTING).equals(btNotes.get(dev.address))) {
+                btNotes.put(dev.address, NOTE_FAILED);
                 if (isBluetoothShown()) {
                     bindBluetoothPanel();
                 }
@@ -560,27 +563,27 @@ public final class HomeScreen {
         Object focusedTag = focusedRow != null ? focusedRow.getTag() : null;
         btList.removeAllViews();
         if (s == null || !s.supported) {
-            btStatus.setText("Bluetooth non disponibile");
-            btHint.setText("Questo dispositivo non ha il Bluetooth.");
+            btStatus.setText(R.string.bt_unavailable);
+            btHint.setText(R.string.bt_unavailable_hint);
             return;
         }
         if (!s.enabled) {
-            btStatus.setText("Bluetooth disattivato");
-            btHint.setText("Attivalo dalle impostazioni per collegare un dispositivo.");
+            btStatus.setText(R.string.bt_off);
+            btHint.setText(R.string.bt_off_hint);
             return;
         }
         btStatus.setText(s.connectedCount > 0
-                ? s.connectedCount + (s.connectedCount == 1 ? " dispositivo connesso" : " dispositivi connessi")
-                : "Nessun dispositivo connesso");
+                ? context.getResources().getQuantityString(R.plurals.bt_connected_count, s.connectedCount, s.connectedCount)
+                : context.getString(R.string.bt_none_connected));
         boolean hasIdle = s.connectedCount < s.devices.size();
         btHint.setText(s.devices.isEmpty()
-                ? "Premi Aggiungi dispositivo e metti il dispositivo in modalita di associazione."
-                : hasIdle ? "Seleziona un dispositivo non connesso per collegarlo" : "Dispositivi associati");
+                ? context.getString(R.string.bt_hint_pair)
+                : context.getString(hasIdle ? R.string.bt_hint_select : R.string.bt_hint_paired));
         int shown = Math.min(s.devices.size(), 5);
         float d = context.getResources().getDisplayMetrics().density;
         for (int i = 0; i < shown; i++) {
             final BluetoothMonitor.Device dev = s.devices.get(i);
-            final String note = dev.connected ? null : btNotes.get(dev.address);
+            final Integer note = dev.connected ? null : btNotes.get(dev.address);
             LinearLayout row = new LinearLayout(context);
             row.setOrientation(LinearLayout.HORIZONTAL);
             row.setGravity(android.view.Gravity.CENTER_VERTICAL);
@@ -628,9 +631,10 @@ public final class HomeScreen {
             texts.addView(kind);
 
             TextView state = new TextView(context);
-            state.setText(dev.connected ? "Connesso" : note != null ? note : "Tocca per collegare");
+            state.setText(dev.connected ? R.string.bt_connected : note == null ? R.string.bt_tap_to_connect
+                    : note == NOTE_CONNECTING ? R.string.bt_connecting : R.string.bt_failed);
             state.setTextColor(dev.connected ? COLOR_BT_CONNECTED
-                    : note != null && note.startsWith("Non") ? 0xFFF87171 : 0x99FFFFFF);
+                    : note != null && note == NOTE_FAILED ? 0xFFF87171 : 0x99FFFFFF);
             state.setTextSize(11);
             row.addView(state);
 
@@ -709,15 +713,15 @@ public final class HomeScreen {
     private void runSpeedTest() {
         cancelSpeedTest();
         speedValue.setText("0");
-        speedPhase.setText("Ping...");
+        speedPhase.setText(R.string.speed_ping);
         speedPing.setText("-");
         speedDown.setText("-");
         speedUp.setText("-");
         speedTest = new SpeedTest(new SpeedTest.Listener() {
             @Override
             public void onPhase(int phase) {
-                speedPhase.setText(phase == SpeedTest.PHASE_PING ? "Ping..."
-                        : phase == SpeedTest.PHASE_DOWN ? "Download in corso, Mbps" : "Upload in corso, Mbps");
+                speedPhase.setText(phase == SpeedTest.PHASE_PING ? R.string.speed_ping
+                        : phase == SpeedTest.PHASE_DOWN ? R.string.speed_download : R.string.speed_upload);
             }
 
             @Override
@@ -728,22 +732,22 @@ public final class HomeScreen {
             @Override
             public void onResult(int pingMs, double down, double up) {
                 speedValue.setText(formatMbps(down));
-                speedPhase.setText("Completato, velocita di download in Mbps");
-                speedPing.setText(pingMs + " ms");
-                speedDown.setText(formatMbps(down) + " Mbps");
-                speedUp.setText(formatMbps(up) + " Mbps");
+                speedPhase.setText(R.string.speed_done);
+                speedPing.setText(context.getString(R.string.ms_value, pingMs));
+                speedDown.setText(context.getString(R.string.mbps_value, formatMbps(down)));
+                speedUp.setText(context.getString(R.string.mbps_value, formatMbps(up)));
             }
 
             @Override
             public void onError() {
                 speedValue.setText("-");
-                speedPhase.setText("Test non riuscito: controlla la connessione");
+                speedPhase.setText(R.string.speed_failed);
             }
         });
         speedTest.start();
     }
 
     private static String formatMbps(double mbps) {
-        return mbps >= 100 ? String.format(Locale.US, "%.0f", mbps) : String.format(Locale.US, "%.1f", mbps);
+        return mbps >= 100 ? String.format(Locale.getDefault(), "%.0f", mbps) : String.format(Locale.getDefault(), "%.1f", mbps);
     }
 }

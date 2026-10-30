@@ -66,12 +66,12 @@ final class AdbBridge {
             if (error == null) {
                 try {
                     for (int i = 0; i < commands.size(); i++) {
-                        status(listener, "Comando " + (i + 1) + " di " + commands.size());
+                        status(listener, app.getString(R.string.adb_command_progress, i + 1, commands.size()));
                         outputs.add(session.shell(commands.get(i)));
                     }
                 } catch (IOException e) {
                     dropSession(app);
-                    error = "Connessione ADB persa: " + e;
+                    error = app.getString(R.string.err_adb_lost, String.valueOf(e));
                 }
                 if (!isFastHome(app)) {
                     dropSession(app);
@@ -156,21 +156,21 @@ final class AdbBridge {
             return null;
         }
         if (VpnService.prepare(app) != null) {
-            return "Consenso VPN non concesso";
+            return app.getString(R.string.err_vpn_consent_denied);
         }
         if (!waitNoVpn(app)) {
-            return "Un'altra VPN e' attiva";
+            return app.getString(R.string.err_other_vpn);
         }
         AdbClient client = new AdbClient();
         try {
-            status(listener, "Apro il tunnel");
+            status(listener, app.getString(R.string.adb_opening_tunnel));
             TunnelVpnService.start(app);
             if (!waitForTunnel()) {
                 TunnelVpnService.stop(app);
-                return "Tunnel non avviato: rete assente?";
+                return app.getString(R.string.err_tunnel_down);
             }
             KeyPair keys = AdbClient.loadKeys(app.getFilesDir());
-            status(listener, "Connessione: se compare la richiesta sulla TV, scegli Consenti sempre");
+            status(listener, app.getString(R.string.adb_connecting));
             client.connect(TunnelVpnService.VIRTUAL_HOST, ADB_PORT, keys, authWaitMs);
             session = client;
             prefs(app).edit().putBoolean(KEY_AUTHORIZED, true).apply();
@@ -178,11 +178,11 @@ final class AdbBridge {
         } catch (AdbClient.AuthException e) {
             client.close();
             TunnelVpnService.stop(app);
-            return "Autorizzazione ADB negata: " + e.getMessage();
+            return app.getString(R.string.err_adb_denied, String.valueOf(e.getMessage()));
         } catch (IOException | GeneralSecurityException e) {
             client.close();
             TunnelVpnService.stop(app);
-            return "Connessione ADB non riuscita: " + e;
+            return app.getString(R.string.err_adb_failed, String.valueOf(e));
         }
     }
 
@@ -195,12 +195,12 @@ final class AdbBridge {
                         + " app_process /system/bin com.crackednamless.fireos.AppSwitchProbe");
                 Matcher m = CODE.matcher(out);
                 if (!m.find()) {
-                    return "Codice di sblocco non trovato: " + out;
+                    return app.getString(R.string.err_code_not_found, out);
                 }
                 code = Integer.parseInt(m.group(1));
                 prefs(app).edit().putInt(KEY_CODE, code).apply();
             } catch (IOException e) {
-                return "Connessione ADB persa: " + e;
+                return app.getString(R.string.err_adb_lost, String.valueOf(e));
             }
         }
         resumeCode = code;

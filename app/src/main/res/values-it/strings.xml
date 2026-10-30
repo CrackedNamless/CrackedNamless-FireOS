@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service_description">Apre CrackedNamless-FireOS quando premi il tasto Home. Mostra la Home sopra quella di Amazon durante il caricamento e legge i tasti del telecomando solo in quel momento. Legge lo schermo solo dopo il tocco sull\'icona profilo, per aprire la voce Profili nelle Impostazioni di Amazon.</string>
+    <string name="vpn_session">Tunnel ADB</string>
+
+    <string name="no_apps">Nessuna app trovata</string>
+    <string name="app_unavailable">App non disponibile</string>
+    <string name="settings">Impostazioni</string>
+    <string name="profiles">Profili e account Amazon</string>
+    <string name="network">Rete</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_search">Cerca</string>
+    <string name="tab_library">Libreria</string>
+    <string name="hero_featured">IN EVIDENZA</string>
+    <string name="hero_last_opened">ULTIMA APP APERTA</string>
+    <string name="hero_installed">App installata</string>
+    <string name="hero_resume">Riprendi da dove avevi lasciato.</string>
+    <string name="hero_pick">Scegli un\'app dalla riga qui sotto o dalla Libreria.</string>
+    <string name="open">Apri</string>
+    <string name="all_apps">Tutte le app</string>
+    <string name="all_short">Tutte</string>
+    <string name="app_info">Informazioni app</string>
+    <string name="play_pause">Riproduci o metti in pausa</string>
+    <string name="your_apps">LE TUE APP</string>
+    <string name="continue_watching">CONTINUA A GUARDARE</string>
+    <string name="now_playing">IN RIPRODUZIONE · %1$s</string>
+    <string name="opened_ago">Aperta %1$s</string>
+    <string name="close">Chiudi</string>
+    <string name="repeat">Ripeti</string>
+
+    <string name="ago_now">adesso</string>
+    <string name="ago_minutes">%1$d min fa</string>
+    <string name="ago_yesterday">ieri</string>
+    <plurals name="ago_hours">
+        <item quantity="one">%1$d ora fa</item>
+        <item quantity="other">%1$d ore fa</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="one">%1$d giorno fa</item>
+        <item quantity="other">%1$d giorni fa</item>
+    </plurals>
+
+    <string name="weather_default_city">Roma</string>
+    <string name="weather_sunny">Soleggiato</string>
+    <string name="weather_clear">Sereno</string>
+    <string name="weather_mostly_clear">Poco nuvoloso</string>
+    <string name="weather_partly_cloudy">Parzialmente nuvoloso</string>
+    <string name="weather_cloudy">Nuvoloso</string>
+    <string name="weather_fog">Nebbia</string>
+    <string name="weather_rain">Pioggia</string>
+    <string name="weather_showers">Rovesci</string>
+    <string name="weather_snow">Neve</string>
+    <string name="weather_thunderstorm">Temporale</string>
+
+    <string name="net_run_speed_test">Test di velocità</string>
+    <string name="net_no_internet">Rete senza internet, apri impostazioni Wi-Fi</string>
+    <string name="net_offline">Non connesso, apri impostazioni Wi-Fi</string>
+    <string name="speed_title">TEST DI VELOCITÀ</string>
+    <string name="speed_download">Download in corso, Mbps</string>
+    <string name="speed_upload">Upload in corso, Mbps</string>
+    <string name="speed_done">Completato, velocità di download in Mbps</string>
+    <string name="speed_failed">Test non riuscito: controlla la connessione</string>
+
+    <string name="bt_add">Aggiungi dispositivo</string>
+    <string name="bt_unavailable">Bluetooth non disponibile</string>
+    <string name="bt_unavailable_hint">Questo dispositivo non ha il Bluetooth.</string>
+    <string name="bt_off">Bluetooth disattivato</string>
+    <string name="bt_off_hint">Attivalo dalle impostazioni per collegare un dispositivo.</string>
+    <string name="bt_none_connected">Nessun dispositivo connesso</string>
+    <plurals name="bt_connected_count">
+        <item quantity="one">%1$d dispositivo connesso</item>
+        <item quantity="other">%1$d dispositivi connessi</item>
+    </plurals>
+    <string name="bt_hint_pair">Premi Aggiungi dispositivo e metti il dispositivo in modalità di associazione.</string>
+    <string name="bt_hint_select">Seleziona un dispositivo non connesso per collegarlo</string>
+    <string name="bt_hint_paired">Dispositivi associati</string>
+    <string name="bt_connected">Connesso</string>
+    <string name="bt_connecting">Connessione in corso…</string>
+    <string name="bt_failed">Non riuscito</string>
+    <string name="bt_tap_to_connect">Tocca per collegare</string>
+    <string name="bt_kind_device">Dispositivo</string>
+    <string name="bt_kind_audio">Audio</string>
+    <string name="bt_kind_input">Tastiera, mouse o controller</string>
+    <string name="bt_kind_phone">Telefono</string>
+    <string name="bt_kind_computer">Computer</string>
+
+    <string name="tools_title">Strumenti</string>
+    <string name="tools_intro">OK per eseguire. Tutto reversibile: le app e i loro dati restano.</string>
+    <string name="tools_on">ATTIVO</string>
+    <string name="tools_off">SPENTO</string>
+    <string name="tools_fast_home">Sblocco rapido Home</string>
+    <string name="tools_fast_home_sub">Toglie l\'attesa di 5 s dopo HOME, tiene aperto il tunnel</string>
+    <string name="tools_disable_all">Disattiva tutti i servizi superflui</string>
+    <string name="tools_disable_all_sub">Telemetria, pubblicità, tutorial, servizi inutili</string>
+    <string name="tools_enable_all">Riattiva tutti i servizi</string>
+    <string name="tools_enable_all_sub">Rimette la lista com\'era in origine</string>
+    <string name="tools_already_done">Già fatto</string>
+    <string name="tools_none_to_enable">Nessuno da riattivare</string>
+    <plurals name="tools_count_active">
+        <item quantity="one">%1$d attivo</item>
+        <item quantity="other">%1$d attivi</item>
+    </plurals>
+    <plurals name="tools_count_disabled">
+        <item quantity="one">%1$d disattivato</item>
+        <item quantity="other">%1$d disattivati</item>
+    </plurals>
+    <plurals name="tools_done_disabled">
+        <item quantity="one">%1$d servizio disattivato</item>
+        <item quantity="other">%1$d servizi disattivati</item>
+    </plurals>
+    <plurals name="tools_done_enabled">
+        <item quantity="one">%1$d servizio riattivato</item>
+        <item quantity="other">%1$d servizi riattivati</item>
+    </plurals>
+    <string name="tools_nothing_to_do">Niente da fare</string>
+    <string name="tools_performance">Prestazioni</string>
+    <string name="tools_performance_sub">Animazioni a zero e tracciamento pubblicitario Amazon limitato</string>
+    <string name="tools_performance_on">Prestazioni attivate</string>
+    <string name="tools_performance_off">Prestazioni disattivate</string>
+    <string name="tools_prime">Prime Video in background</string>
+    <string name="tools_prime_sub">Blocca o permette l\'avvio automatico di Prime Video</string>
+    <string name="tools_prime_blocked">Prime Video in background: bloccato</string>
+    <string name="tools_prime_allowed">Prime Video in background: permesso</string>
+    <string name="tools_tap_to_change">Tocca per cambiare</string>
+    <string name="tools_free_memory">Libera memoria ora</string>
+    <string name="tools_free_memory_sub">Chiude le app inattive in cache, quelle in uso restano</string>
+    <string name="tools_closing_idle">Chiudo le app inattive</string>
+    <string name="tools_memory_result">Memoria libera: %1$d MB, ora %2$d MB</string>
+    <string name="tools_service_active">Attivo</string>
+    <string name="tools_service_disabled">Disattivato</string>
+    <string name="tools_service_now_active">%1$s riattivato</string>
+    <string name="tools_service_now_disabled">%1$s disattivato</string>
+    <string name="tools_done">Fatto</string>
+    <string name="tools_vpn_dialog_missing">Questo Stick non mostra il consenso VPN. Da PC: adb shell appops set %1$s ACTIVATE_VPN allow</string>
+
+    <string name="adb_command_progress">Comando %1$d di %2$d</string>
+    <string name="adb_opening_tunnel">Apro il tunnel</string>
+    <string name="adb_connecting">Connessione: se compare la richiesta sulla TV, scegli Consenti sempre</string>
+    <string name="err_vpn_consent_denied">Consenso VPN non concesso</string>
+    <string name="err_other_vpn">Un\'altra VPN è attiva</string>
+    <string name="err_tunnel_down">Tunnel non avviato: rete assente?</string>
+    <string name="err_adb_denied">Autorizzazione ADB negata: %1$s</string>
+    <string name="err_adb_failed">Connessione ADB non riuscita: %1$s</string>
+    <string name="err_adb_lost">Connessione ADB persa: %1$s</string>
+    <string name="err_code_not_found">Codice di sblocco non trovato: %1$s</string>
+</resources>

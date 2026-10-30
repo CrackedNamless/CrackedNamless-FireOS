@@ -78,7 +78,7 @@ public final class TunnelVpnService extends VpnService {
             return START_NOT_STICKY;
         }
         Builder builder = new Builder()
-                .setSession("Tunnel ADB")
+                .setSession(getString(R.string.vpn_session))
                 .addAddress("10.113.77.1", 24)
                 .addRoute("10.113.77.0", 24)
                 .setMtu(1500)

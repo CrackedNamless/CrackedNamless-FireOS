@@ -42,7 +42,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private static final long BOOT_WINDOW_MS = 180000L;
     private static final long BOOT_COVER_MAX_MS = 12000L;
     private static final int PROFILE_TRIES = 12;
-    private static final String[] PROFILE_LABELS = {"Profili", "Profiles"};
+    private static final String[] PROFILE_LABELS = {"Profiles", "Profili", "Profile", "Perfiles", "Profils", "Perfis", "Profielen"};
     private int profileTries;
 
     private static HomeService instance;

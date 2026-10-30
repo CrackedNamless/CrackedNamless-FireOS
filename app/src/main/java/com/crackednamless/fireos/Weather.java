@@ -36,7 +36,6 @@ public final class Weather {
         void onWeather(Data data);
     }
 
-    static final String DEFAULT_CITY = "Roma";
     static final double DEFAULT_LAT = 41.89;
     static final double DEFAULT_LON = 12.48;
     private static final long TTL_MS = 30 * 60 * 1000L;
@@ -76,22 +75,22 @@ public final class Weather {
         return Kind.CLOUD;
     }
 
-    public static String describe(int code, boolean day) {
+    public static int description(int code, boolean day) {
         switch (kind(code)) {
             case CLEAR:
-                return code == 0 ? (day ? "Soleggiato" : "Sereno") : "Poco nuvoloso";
+                return code == 0 ? (day ? R.string.weather_sunny : R.string.weather_clear) : R.string.weather_mostly_clear;
             case PARTLY:
-                return "Parzialmente nuvoloso";
+                return R.string.weather_partly_cloudy;
             case FOG:
-                return "Nebbia";
+                return R.string.weather_fog;
             case RAIN:
-                return code >= 80 ? "Rovesci" : "Pioggia";
+                return code >= 80 ? R.string.weather_showers : R.string.weather_rain;
             case SNOW:
-                return "Neve";
+                return R.string.weather_snow;
             case STORM:
-                return "Temporale";
+                return R.string.weather_thunderstorm;
             default:
-                return "Nuvoloso";
+                return R.string.weather_cloudy;
         }
     }
 
@@ -114,13 +113,13 @@ public final class Weather {
     }
 
     public static String temperature(Data d) {
-        return String.format(Locale.ITALY, "%d°", d.temp);
+        return String.format(Locale.getDefault(), "%d°", d.temp);
     }
 
     public static void load(Context context, Callback callback) {
         Context app = context.getApplicationContext();
         SharedPreferences prefs = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        String city = prefs.getString("city", DEFAULT_CITY);
+        String city = prefs.getString("city", app.getString(R.string.weather_default_city));
         Handler main = new Handler(Looper.getMainLooper());
 
         String cached = prefs.getString("json", null);

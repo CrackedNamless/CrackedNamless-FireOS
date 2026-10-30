@@ -2,6 +2,7 @@ package com.crackednamless.fireos;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,20 +72,20 @@ public final class Recents {
         return sb.toString();
     }
 
-    public static String ago(long time, long now) {
+    public static String ago(Resources res, long time, long now) {
         long minutes = Math.max(0, now - time) / 60000L;
         if (minutes < 1) {
-            return "adesso";
+            return res.getString(R.string.ago_now);
         }
         if (minutes < 60) {
-            return minutes + " min fa";
+            return res.getString(R.string.ago_minutes, (int) minutes);
         }
-        long hours = minutes / 60;
+        int hours = (int) (minutes / 60);
         if (hours < 24) {
-            return hours + (hours == 1 ? " ora fa" : " ore fa");
+            return res.getQuantityString(R.plurals.ago_hours, hours, hours);
         }
-        long days = hours / 24;
-        return days == 1 ? "ieri" : days + " giorni fa";
+        int days = hours / 24;
+        return days == 1 ? res.getString(R.string.ago_yesterday) : res.getQuantityString(R.plurals.ago_days, days, days);
     }
 
     private static SharedPreferences prefs(Context context) {

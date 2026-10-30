@@ -19,7 +19,7 @@ A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Ama
 
 ![Tools menu](docs/screenshots/tools.png)
 
-> The interface is currently in Italian. Translations are welcome as pull requests.
+> The interface follows the Fire TV system language automatically: English and Italian are included, anything else shows English. To add a language, copy `app/src/main/res/values/strings.xml` to `values-xx/strings.xml` and translate it; pull requests are welcome.
 
 ## Compatibility
 
@@ -85,7 +85,7 @@ Press **Home** on the remote. The first time can take a few seconds while the se
 | --- | --- |
 | Open an app | Select its tile and press OK |
 | App info | **i** button on the hero card |
-| All apps | **Tutte le app**, or the Library tab |
+| All apps | **All apps**, or the Library tab |
 | Tools menu | Long-press OK on the settings icon in the top bar |
 | Amazon settings | Short press OK on the settings icon |
 
@@ -93,7 +93,7 @@ Press **Home** on the remote. The first time can take a few seconds while the se
 
 The first row of the Tools menu turns on Fast Home. Android blocks background app launches for 5 seconds after Home is pressed; Fast Home lifts that block as soon as you press Home. To work, the app opens a local ADB session to the Stick itself:
 
-1. Select **Sblocco rapido Home** and press OK.
+1. Select **Fast Home** and press OK.
 2. Accept the **VPN connection request**. The VPN is local only: it uses the private range `10.113.77.0/24` and no traffic leaves the device.
 3. Accept **Allow USB debugging?** with **Always allow**.
 
@@ -103,11 +103,11 @@ Switch the row off at any time to close the session and the tunnel.
 
 | Row | What it does |
 | --- | --- |
-| Disattiva tutti i servizi superflui | Disables 33 Amazon telemetry, advertising, tutorial and unused services in one go |
-| Riattiva tutti i servizi | Puts every one of them back |
-| Prestazioni | Window and transition animations off, Amazon ad tracking limited |
+| Disable all unneeded services | Disables 33 Amazon telemetry, advertising, tutorial and unused services in one go |
+| Re-enable all services | Puts every one of them back |
+| Performance | Window and transition animations off, Amazon ad tracking limited |
 | Prime Video in background | Blocks or allows Prime Video starting by itself at boot |
-| Libera memoria ora | Closes cached background apps and shows the memory freed |
+| Free memory now | Closes cached background apps and shows the memory freed |
 | Service list | One toggle per service |
 
 Services are turned off with `pm disable-user`: the APK and its data stay on the device, and a single tap brings them back. System updates can re-enable some of them. Open the Tools menu and run the bulk action again.
@@ -135,7 +135,7 @@ tools/undo.sh 192.168.1.50                # give Home back to Amazon, keep the a
 tools/undo.sh 192.168.1.50 --uninstall    # and remove the app
 ```
 
-Without the script: `adb uninstall com.crackednamless.fireos`. If you turned services off from the Tools menu, use **Riattiva tutti i servizi** first.
+Without the script: `adb uninstall com.crackednamless.fireos`. If you turned services off from the Tools menu, use **Re-enable all services** first.
 
 ## Build from source
 
@@ -155,7 +155,7 @@ The APK is in `app/build/outputs/apk/debug/`. For a signed release build, create
 - The app holds an ADB key that you authorised with **Always allow**. That gives it shell-level access on this Fire TV, which is how the Tools menu works. Turn **ADB debugging** off in Developer options to cut that access, or uninstall the app, which deletes the key.
 - `READ_LOGS` is used to detect the Home and power buttons from the system log. Logs are not stored or sent anywhere.
 - The only network request is the weather lookup to Open-Meteo. There is no analytics, no tracking and no account.
-- The weather location defaults to Rome. Change `DEFAULT_CITY`, `DEFAULT_LAT` and `DEFAULT_LON` in `Weather.java`.
+- The weather location defaults to Rome. Change `weather_default_city` in `strings.xml` and `DEFAULT_LAT` and `DEFAULT_LON` in `Weather.java`.
 
 ## Troubleshooting
 

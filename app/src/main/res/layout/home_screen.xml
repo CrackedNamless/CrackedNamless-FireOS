@@ -48,7 +48,7 @@
                 android:gravity="center"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="Home"
+                android:text="@string/tab_home"
                 android:textColor="@color/tab_text"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -66,7 +66,7 @@
                 android:gravity="center"
                 android:paddingLeft="14dp"
                 android:paddingRight="16dp"
-                android:text="Cerca"
+                android:text="@string/tab_search"
                 android:textColor="@color/tab_text"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -82,7 +82,7 @@
                 android:gravity="center"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="Libreria"
+                android:text="@string/tab_library"
                 android:textColor="@color/tab_text"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -98,7 +98,7 @@
                 android:layout_height="34dp"
                 android:background="@drawable/pill_bg"
                 android:clickable="true"
-                android:contentDescription="Rete"
+                android:contentDescription="@string/network"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -129,7 +129,7 @@
                 android:layout_marginLeft="8dp"
                 android:background="@drawable/pill_bg"
                 android:clickable="true"
-                android:contentDescription="Bluetooth"
+                android:contentDescription="@string/bluetooth"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -248,7 +248,7 @@
                             android:paddingLeft="9dp"
                             android:paddingRight="9dp"
                             android:paddingTop="3dp"
-                            android:text="IN EVIDENZA"
+                            android:text="@string/hero_featured"
                             android:textColor="#FFFFFFFF"
                             android:textSize="9sp"
                             android:textStyle="bold" />
@@ -304,7 +304,7 @@
                                 android:gravity="center"
                                 android:paddingLeft="18dp"
                                 android:paddingRight="20dp"
-                                android:text="Apri"
+                                android:text="@string/open"
                                 android:textColor="#FF111827"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -322,7 +322,7 @@
                                 android:gravity="center"
                                 android:paddingLeft="16dp"
                                 android:paddingRight="20dp"
-                                android:text="Tutte le app"
+                                android:text="@string/all_apps"
                                 android:textColor="#FFFFFFFF"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -334,7 +334,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:background="@drawable/btn_bg"
                                 android:clickable="true"
-                                android:contentDescription="Informazioni app"
+                                android:contentDescription="@string/app_info"
                                 android:focusable="true"
                                 android:padding="8dp"
                                 android:src="@drawable/ic_info" />
@@ -481,7 +481,7 @@
                                 android:layout_height="30dp"
                                 android:background="@drawable/btn_bg"
                                 android:clickable="true"
-                                android:contentDescription="Riproduci o metti in pausa"
+                                android:contentDescription="@string/play_pause"
                                 android:focusable="true"
                                 android:padding="6dp"
                                 android:src="@drawable/ic_pause" />
@@ -505,7 +505,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:letterSpacing="0.12"
-                android:text="LE TUE APP"
+                android:text="@string/your_apps"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -527,7 +527,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:letterSpacing="0.12"
-                android:text="CONTINUA A GUARDARE"
+                android:text="@string/continue_watching"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -588,7 +588,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.12"
-                android:text="BLUETOOTH"
+                android:text="@string/bt_title"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -635,7 +635,7 @@
                     android:gravity="center"
                     android:paddingLeft="22dp"
                     android:paddingRight="22dp"
-                    android:text="Aggiungi dispositivo"
+                    android:text="@string/bt_add"
                     android:textColor="#FF111827"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -651,7 +651,7 @@
                     android:gravity="center"
                     android:paddingLeft="22dp"
                     android:paddingRight="22dp"
-                    android:text="Chiudi"
+                    android:text="@string/close"
                     android:textColor="#FFFFFFFF"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -682,7 +682,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.12"
-                android:text="TEST DI VELOCITA"
+                android:text="@string/speed_title"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -703,7 +703,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Mbps"
+                android:text="@string/mbps"
                 android:textColor="#B3FFFFFF"
                 android:textSize="12sp" />
 
@@ -723,7 +723,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="PING"
+                        android:text="@string/speed_label_ping"
                         android:textColor="#99FFFFFF"
                         android:textSize="9sp"
                         android:textStyle="bold" />
@@ -748,7 +748,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DOWNLOAD"
+                        android:text="@string/speed_label_download"
                         android:textColor="#99FFFFFF"
                         android:textSize="9sp"
                         android:textStyle="bold" />
@@ -773,7 +773,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UPLOAD"
+                        android:text="@string/speed_label_upload"
                         android:textColor="#99FFFFFF"
                         android:textSize="9sp"
                         android:textStyle="bold" />
@@ -806,7 +806,7 @@
                     android:gravity="center"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="Ripeti"
+                    android:text="@string/repeat"
                     android:textColor="#FFFFFFFF"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -822,7 +822,7 @@
                     android:gravity="center"
                     android:paddingLeft="22dp"
                     android:paddingRight="22dp"
-                    android:text="Chiudi"
+                    android:text="@string/close"
                     android:textColor="#FF111827"
                     android:textSize="13sp"
                     android:textStyle="bold" />

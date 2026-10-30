@@ -59,7 +59,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.Holder> {
     public void onBindViewHolder(Holder h, int position) {
         Entry e = items.get(position);
         h.label.setText(e.app.label);
-        h.time.setText("Aperta " + Recents.ago(e.time, System.currentTimeMillis()));
+        h.time.setText(h.itemView.getResources().getString(R.string.opened_ago, Recents.ago(h.itemView.getResources(), e.time, System.currentTimeMillis())));
 
         AppArt art = AppArt.banner(pm, h.art.getResources(), e.app);
         if (art.isBanner) {
