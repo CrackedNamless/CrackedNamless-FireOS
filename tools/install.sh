@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Installs CrackedNamless-FireOS on a Fire TV over the network and switches it on.
 # It also installs Aptoide TV, the app store behind the "Store" tab.
+# On the first install it also turns off Amazon's FireTV Troubleshooting app (undo: adb shell pm enable com.amazon.firetv.troubleshooting).
 # Usage: tools/install.sh <fire-tv-ip> [path/to/CrackedNamless-FireOS.apk] [--no-store]
 # Needs adb (Android Platform Tools) and "ADB debugging" enabled on the Fire TV.
 # Without an APK path it downloads the latest release.
@@ -55,6 +56,9 @@ adb connect "$IP:5555" >/dev/null
 A="adb -s $IP:5555"
 $A wait-for-device
 
+FIRST=1
+if $A shell pm list packages "$PKG" | grep -q "^package:$PKG"; then FIRST=0; fi
+
 echo "Installing..."
 $A install -r "$APK"
 
@@ -82,6 +86,11 @@ if [ "$STORE" = 1 ]; then
       echo "Could not download the store. Run this script again later, or pass --no-store to skip it."
     fi
   fi
+fi
+
+if [ "$FIRST" = 1 ]; then
+  echo "First install: turning off Amazon's FireTV Troubleshooting app..."
+  $A shell pm disable-user --user 0 com.amazon.firetv.troubleshooting >/dev/null 2>&1 || true
 fi
 
 $A shell am start -n "$PKG/.HomeActivity" >/dev/null

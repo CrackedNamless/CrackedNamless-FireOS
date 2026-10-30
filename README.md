@@ -82,7 +82,7 @@ cd CrackedNamless-FireOS
 tools/install.sh 192.168.1.50      # use your Fire TV's IP
 ```
 
-The script downloads the latest release, installs it, grants the two permissions it needs and turns the Home service on. It then installs [Aptoide TV](https://tv.aptoide.com) for the Store tab: it fetches the current build from Aptoide's API and refuses to install it if the MD5 does not match the one Aptoide publishes. Add `--no-store` to skip this step. When the TV shows **Allow USB debugging?**, choose **Always allow**.
+The script downloads the latest release, installs it, grants the two permissions it needs and turns the Home service on. It then installs [Aptoide TV](https://tv.aptoide.com) for the Store tab: it fetches the current build from Aptoide's API and refuses to install it if the MD5 does not match the one Aptoide publishes. Add `--no-store` to skip this step. On the first install only, it also turns off Amazon's FireTV Troubleshooting app so it stops showing in your apps; bring it back with `adb shell pm enable com.amazon.firetv.troubleshooting`. When the TV shows **Allow USB debugging?**, choose **Always allow**.
 
 **B. By hand (any OS, plain `adb`)**
 
