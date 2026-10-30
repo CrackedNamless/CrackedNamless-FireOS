@@ -65,7 +65,11 @@ final class ProfileAvatars {
                 continue;
             }
             Bitmap crop = Bitmap.createBitmap(full, r.left, r.top, r.width(), r.height());
-            Bitmap round = circle(Bitmap.createScaledBitmap(crop, SIZE, SIZE, true));
+            Bitmap scaled = Bitmap.createScaledBitmap(crop, SIZE, SIZE, true);
+            if (isBlack(scaled)) {
+                continue;
+            }
+            Bitmap round = circle(scaled);
             try (FileOutputStream out = new FileOutputStream(new File(context.getFilesDir(), fileName(entry.name)))) {
                 round.compress(Bitmap.CompressFormat.PNG, 100, out);
             } catch (IOException ignored) {
@@ -77,6 +81,19 @@ final class ProfileAvatars {
         if (activeName != null) {
             setActive(context, activeName);
         }
+    }
+
+    // Con lo schermo spento screencap restituisce nero: non deve sostituire un avatar buono.
+    private static boolean isBlack(Bitmap bitmap) {
+        for (int y = 0; y < bitmap.getHeight(); y += 8) {
+            for (int x = 0; x < bitmap.getWidth(); x += 8) {
+                int c = bitmap.getPixel(x, y);
+                if (android.graphics.Color.red(c) + android.graphics.Color.green(c) + android.graphics.Color.blue(c) > 60) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private static Bitmap circle(Bitmap square) {

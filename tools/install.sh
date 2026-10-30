@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Installs CrackedNamless-FireOS on a Fire TV over the network and switches it on.
 # On the first install it also turns off Amazon's FireTV Troubleshooting app (undo: adb shell pm enable com.amazon.firetv.troubleshooting).
+# It always turns off Amazon's screensaver (undo: adb shell pm enable com.amazon.ftv.screensaver; adb shell settings put secure screensaver_enabled 1).
 # Usage: tools/install.sh <fire-tv-ip> [path/to/CrackedNamless-FireOS.apk]
 # Needs adb (Android Platform Tools) and "ADB debugging" enabled on the Fire TV.
 # Without an APK path it downloads the latest release.
@@ -34,6 +35,7 @@ $A install -r "$APK"
 
 echo "Granting permissions..."
 $A shell pm grant "$PKG" android.permission.READ_LOGS
+$A shell pm grant "$PKG" android.permission.WRITE_SECURE_SETTINGS
 $A shell cmd notification allow_listener "$PKG/$PKG.MediaListener" >/dev/null
 
 echo "Turning on the Home service..."
@@ -49,6 +51,10 @@ if [ "$FIRST" = 1 ]; then
   echo "First install: turning off Amazon's FireTV Troubleshooting app..."
   $A shell pm disable-user --user 0 com.amazon.firetv.troubleshooting >/dev/null 2>&1 || true
 fi
+
+echo "Turning off the screensaver..."
+$A shell settings put secure screensaver_enabled 0
+$A shell pm disable-user --user 0 com.amazon.ftv.screensaver >/dev/null 2>&1 || true
 
 $A shell am start -n "$PKG/.HomeActivity" >/dev/null
 echo "Done. Press the Home button on the remote."

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Turns the Home takeover off and gives the Home button back to Amazon. The app stays installed.
+# Turns the Home takeover off, gives the Home button back to Amazon and brings the screensaver back. The app stays installed.
 # Usage: tools/undo.sh <fire-tv-ip> [--uninstall]
 set -euo pipefail
 export MSYS_NO_PATHCONV=1
@@ -21,6 +21,8 @@ if [ -z "$NEW" ]; then
 else
   $A shell settings put secure enabled_accessibility_services "$NEW"
 fi
+$A shell pm enable com.amazon.ftv.screensaver >/dev/null 2>&1 || true
+$A shell settings put secure screensaver_enabled 1
 $A shell input keyevent KEYCODE_HOME
 
 if [ "${2:-}" = "--uninstall" ]; then

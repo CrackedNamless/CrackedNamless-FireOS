@@ -227,10 +227,22 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         adbKeeper.run();
     }
 
+    // Amazon puo' riattivare lo screensaver (aggiornamenti, impostazioni): qui si rimette sempre a zero.
+    private void keepScreensaverOff() {
+        try {
+            if (Settings.Secure.getInt(getContentResolver(), "screensaver_enabled", 0) != 0) {
+                Settings.Secure.putInt(getContentResolver(), "screensaver_enabled", 0);
+            }
+        } catch (SecurityException ignored) {
+            // Permesso WRITE_SECURE_SETTINGS non ancora concesso (tools/install.sh lo concede).
+        }
+    }
+
     private final Runnable adbKeeper = new Runnable() {
         @Override
         public void run() {
             AdbBridge.maintain(HomeService.this);
+            keepScreensaverOff();
             handler.postDelayed(this, ADB_CHECK_MS);
         }
     };
@@ -279,6 +291,9 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
 
     // Dal selettore profili: nomi e posizione degli avatar si leggono dall'accessibilita', l'immagine dallo screenshot.
     private void readProfilePicker() {
+        if (!((PowerManager) getSystemService(POWER_SERVICE)).isInteractive()) {
+            return;
+        }
         AccessibilityNodeInfo root = getRootInActiveWindow();
         if (root == null) {
             return;
