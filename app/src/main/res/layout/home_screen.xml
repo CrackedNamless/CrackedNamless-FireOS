@@ -87,6 +87,22 @@
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tab_store"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/tab_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/tab_store"
+                android:textColor="@color/tab_text"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"

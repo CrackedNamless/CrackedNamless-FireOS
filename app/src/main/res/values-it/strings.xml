@@ -11,6 +11,8 @@
     <string name="tab_home">Home</string>
     <string name="tab_search">Cerca</string>
     <string name="tab_library">Libreria</string>
+    <string name="tab_store">Store</string>
+    <string name="store_missing">Nessuno store installato. Rilancia tools/install.sh per aggiungerne uno.</string>
     <string name="hero_featured">IN EVIDENZA</string>
     <string name="hero_last_opened">ULTIMA APP APERTA</string>
     <string name="hero_installed">App installata</string>

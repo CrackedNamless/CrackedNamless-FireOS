@@ -394,6 +394,12 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     }
 
     @Override
+    public void openStore(Intent intent) {
+        launchPackage = null;
+        begin(intent);
+    }
+
+    @Override
     public void openInfo(AppEntry entry) {
         launchPackage = null;
         begin(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,

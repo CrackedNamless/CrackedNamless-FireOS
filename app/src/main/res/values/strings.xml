@@ -16,6 +16,8 @@
     <string name="tab_home">Home</string>
     <string name="tab_search">Search</string>
     <string name="tab_library">Library</string>
+    <string name="tab_store">Store</string>
+    <string name="store_missing">No app store installed. Run tools/install.sh again to add one.</string>
     <string name="hero_featured">FEATURED</string>
     <string name="hero_last_opened">LAST APP OPENED</string>
     <string name="hero_installed">Installed app</string>

@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Each release on GitHub carries the signed APK and the matching source code.
 
+## [0.2.0] - 2026-10-30
+
+### Added
+- **Store tab.** A new "Store" tab next to Library in the top bar opens the app store from the Home, so you can download apps without leaving the launcher. If no store is installed it shows a message instead.
+- `tools/install.sh` now also installs [Aptoide TV](https://tv.aptoide.com) (`cm.aptoidetv.pt`), the store behind the tab. The script asks Aptoide's public API for the current build, downloads it and compares its MD5 with the hash Aptoide publishes before installing; if the check fails nothing is installed. Run it with `--no-store` to skip the store. This also applies to the "Install it with Claude Code" prompt.
+
+### Changed
+- The Home screenshot in the README shows the new top bar.
+- `tools/undo.sh` leaves the store installed; remove it with `adb uninstall cm.aptoidetv.pt`.
+
 ## [0.1.1] - 2026-10-30
 
 ### Added

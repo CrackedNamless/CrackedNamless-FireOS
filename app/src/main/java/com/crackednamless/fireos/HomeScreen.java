@@ -2,6 +2,7 @@ package com.crackednamless.fireos;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +39,8 @@ public final class HomeScreen {
         void openBluetooth();
 
         void openSearch();
+
+        void openStore(Intent intent);
 
         void openInfo(AppEntry entry);
     }
@@ -195,6 +199,15 @@ public final class HomeScreen {
         tabLibrary.setOnClickListener(v -> showLibrary(true));
         View search = root.findViewById(R.id.tab_search);
         search.setOnClickListener(v -> host.openSearch());
+        View tabStore = root.findViewById(R.id.tab_store);
+        tabStore.setOnClickListener(v -> {
+            Intent store = Store.intent(pm);
+            if (store == null) {
+                Toast.makeText(context, R.string.store_missing, Toast.LENGTH_LONG).show();
+            } else {
+                host.openStore(store);
+            }
+        });
         View settings = root.findViewById(R.id.settings);
         settings.setOnClickListener(v -> host.openSettings());
         settings.setOnLongClickListener(v -> {
@@ -233,7 +246,7 @@ public final class HomeScreen {
         FocusScale.apply(speedClose, null);
         onNetwork(NetworkMonitor.OFFLINE, -1);
 
-        for (View v : new View[]{profile, tabHome, tabLibrary, search, settings, wifiButton, btButton, heroPlay,
+        for (View v : new View[]{profile, tabHome, tabLibrary, tabStore, search, settings, wifiButton, btButton, heroPlay,
                 root.findViewById(R.id.hero_all), heroInfo}) {
             FocusScale.apply(v, null);
         }

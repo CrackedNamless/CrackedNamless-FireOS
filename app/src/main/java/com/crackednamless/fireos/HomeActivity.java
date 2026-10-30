@@ -178,6 +178,11 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     }
 
     @Override
+    public void openStore(Intent intent) {
+        start(intent);
+    }
+
+    @Override
     public void openInfo(AppEntry entry) {
         start(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", entry.packageName, null))
