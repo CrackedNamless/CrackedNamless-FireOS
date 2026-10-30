@@ -6,6 +6,7 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ### Added
 - **Store tab.** A new "Store" tab next to Library in the top bar opens the Amazon Appstore that comes with Fire OS, so you can download apps without leaving the launcher.
+- **Real profile icon.** The top-left icon shows the avatar of the active Amazon profile. Amazon gives apps no way to read it, so when "Who's Watching?" is open the launcher reads the profile names through accessibility, takes one screenshot over its own local ADB link (only if the VPN and ADB permissions were already granted) and crops each avatar. The focused profile when the screen opens is the active one, and choosing another profile switches the icon. Until you open the profile screen once, the generic icon stays.
 - On the first install, `tools/install.sh` turns off Amazon's FireTV Troubleshooting app (`pm disable-user`, it stays on the device) so it no longer clutters the app list. Undo with `adb shell pm enable com.amazon.firetv.troubleshooting`. Later runs of the script leave it alone.
 
 ### Fixed

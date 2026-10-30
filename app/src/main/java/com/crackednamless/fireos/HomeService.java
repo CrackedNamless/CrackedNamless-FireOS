@@ -47,6 +47,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private static final String AMAZON_SETTINGS = "com.amazon.tv.settings.v2";
     private static final String PROFILE_PICKER = "com.amazon.ftv.profilepicker";
     private static final int PROFILE_TRIES = 20;
+    private static final long PICKER_READ_MS = 1200L;
     private static final String PARENTAL_CONTROLS = "com.amazon.tv.parentalcontrols";
     private static final String[] PROFILE_LABELS = {"Profiles", "Profili", "Profile", "Perfiles", "Profils", "Perfis", "Profielen"};
     private int profileTries;
@@ -201,6 +202,11 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         packages.addAction(Intent.ACTION_PACKAGE_CHANGED);
         packages.addDataScheme("package");
         registerReceiver(packageChanged, packages);
+        android.accessibilityservice.AccessibilityServiceInfo info = getServiceInfo();
+        if (info != null) {
+            info.eventTypes |= AccessibilityEvent.TYPE_VIEW_CLICKED;
+            setServiceInfo(info);
+        }
         buildOverlay();
         attachOverlay();
         buildVolumeWindow();
@@ -236,6 +242,17 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         if (pkg == null) {
             return;
         }
+        if (PROFILE_PICKER.contentEquals(pkg)) {
+            if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+                onProfileClicked(event);
+            } else {
+                handler.removeCallbacks(readPicker);
+                handler.postDelayed(readPicker, PICKER_READ_MS);
+            }
+        }
+        if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+            return;
+        }
         if (launching) {
             boolean amazonSettings = AMAZON_LAUNCHER.contentEquals(pkg) && cls != null && cls.toString().contains("Settings");
             if (amazonSettings || (launchPackage != null ? launchPackage.contentEquals(pkg) : isForeignWindow(pkg))) {
@@ -256,6 +273,66 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
             return;
         }
         cover();
+    }
+
+    private final Runnable readPicker = this::readProfilePicker;
+
+    // Dal selettore profili: nomi e posizione degli avatar si leggono dall'accessibilita', l'immagine dallo screenshot.
+    private void readProfilePicker() {
+        AccessibilityNodeInfo root = getRootInActiveWindow();
+        if (root == null) {
+            return;
+        }
+        if (!PROFILE_PICKER.contentEquals(String.valueOf(root.getPackageName()))) {
+            root.recycle();
+            return;
+        }
+        List<ProfileAvatars.Entry> entries = new java.util.ArrayList<>();
+        String active = null;
+        for (AccessibilityNodeInfo group : root.findAccessibilityNodeInfosByViewId(PROFILE_PICKER + ":id/profile_group")) {
+            String name = pickerText(group, "profile_name");
+            Rect bounds = pickerBounds(group, "avatar");
+            if (name != null && bounds != null) {
+                entries.add(new ProfileAvatars.Entry(name, bounds));
+                if (group.isFocused()) {
+                    active = name;
+                }
+            }
+        }
+        root.recycle();
+        if (entries.isEmpty()) {
+            return;
+        }
+        java.io.File shot = ProfileAvatars.shotFile(this);
+        String activeName = active;
+        AdbBridge.screenshot(this, shot, () -> launcher.execute(() -> ProfileAvatars.save(this, shot, entries, activeName)));
+    }
+
+    private void onProfileClicked(AccessibilityEvent event) {
+        AccessibilityNodeInfo source = event.getSource();
+        if (source == null) {
+            return;
+        }
+        String name = pickerText(source, "profile_name");
+        if (name != null) {
+            ProfileAvatars.setActive(this, name);
+        }
+        source.recycle();
+    }
+
+    private static String pickerText(AccessibilityNodeInfo node, String id) {
+        List<AccessibilityNodeInfo> found = node.findAccessibilityNodeInfosByViewId(PROFILE_PICKER + ":id/" + id);
+        return found.isEmpty() || found.get(0).getText() == null ? null : found.get(0).getText().toString();
+    }
+
+    private static Rect pickerBounds(AccessibilityNodeInfo node, String id) {
+        List<AccessibilityNodeInfo> found = node.findAccessibilityNodeInfosByViewId(PROFILE_PICKER + ":id/" + id);
+        if (found.isEmpty()) {
+            return null;
+        }
+        Rect bounds = new Rect();
+        found.get(0).getBoundsInScreen(bounds);
+        return bounds;
     }
 
     private boolean amazonIsActive() {

@@ -48,6 +48,7 @@ public final class HomeScreen {
     private static final int RECENT_SPAN = 5;
 
     private final Context context;
+    private final ImageView profileView;
     private final PackageManager pm;
     private final TextView credit;
     private final Host host;
@@ -207,7 +208,8 @@ public final class HomeScreen {
             host.openTools();
             return true;
         });
-        View profile = root.findViewById(R.id.profile);
+        profileView = root.findViewById(R.id.profile);
+        View profile = profileView;
         profile.setOnClickListener(v -> host.openProfiles());
         root.findViewById(R.id.hero_all).setOnClickListener(v -> showLibrary(true));
         heroPlay.setOnClickListener(v -> {
@@ -307,7 +309,17 @@ public final class HomeScreen {
         updateRightColumn();
     }
 
+    public void refreshProfile() {
+        android.graphics.Bitmap avatar = ProfileAvatars.activeAvatar(context);
+        if (avatar != null) {
+            profileView.setImageBitmap(avatar);
+        } else {
+            profileView.setImageResource(R.drawable.profile_avatar);
+        }
+    }
+
     public void start() {
+        refreshProfile();
         media.start();
         network.start();
         bluetooth.start();
@@ -504,6 +516,7 @@ public final class HomeScreen {
 
     // La Home sovrapposta non avvia i monitor: riprende l'ultimo stato noto, cosi' icone e meteo non si ricaricano al passaggio all'activity.
     public void restoreStatus() {
+        refreshProfile();
         if (lastNetState >= 0) {
             onNetwork(lastNetState, lastPing);
         }

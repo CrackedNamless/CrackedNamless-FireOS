@@ -7,6 +7,7 @@ import android.net.VpnService;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -145,6 +146,30 @@ final class AdbBridge {
             try {
                 session.shell("for i in 1 2 3 4 5 6 7 8 9 10 11 12; do service call activity " + code + "; done");
             } catch (IOException e) {
+                dropSession(app);
+            }
+        });
+    }
+
+    // Salva lo schermo in un file leggibile dall'app. Apre una sessione breve solo se VPN e ADB sono gia' autorizzati, senza mai chiedere nulla.
+    static void screenshot(Context context, File target, Runnable done) {
+        Context app = context.getApplicationContext();
+        if (target == null) {
+            return;
+        }
+        WORKER.execute(() -> {
+            if (session == null && (!prefs(app).getBoolean(KEY_AUTHORIZED, false) || VpnService.prepare(app) != null
+                    || connect(app, null, QUIET_AUTH_WAIT_MS) != null)) {
+                return;
+            }
+            try {
+                session.shell("screencap -p '" + target.getPath() + "'");
+                done.run();
+            } catch (IOException e) {
+                dropSession(app);
+                return;
+            }
+            if (!isFastHome(app)) {
                 dropSession(app);
             }
         });
