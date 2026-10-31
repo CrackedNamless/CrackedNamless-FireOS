@@ -52,6 +52,11 @@ final class Updater {
     private static final int TIMEOUT_MS = 20_000;
     private static final int NOTES_MAX = 500;
     private static final long WAKE_MS = 3 * 60 * 1000L;
+    private static final String RESUME_PREFS = "update_resume";
+    private static final String KEY_RESUME_PACKAGE = "package";
+    private static final String KEY_RESUME_PAUSED = "paused";
+    private static final String KEY_RESUME_AT = "at";
+    private static final long RESUME_MAX_MS = 2 * 60 * 1000L;
 
     private static final ExecutorService WORKER = Executors.newSingleThreadExecutor();
     private static Handler main;
@@ -156,6 +161,32 @@ final class Updater {
             apk.delete();
         }
         prefs(context).edit().clear().apply();
+    }
+
+    // Prima di aggiornare: l'app in primo piano (da riaprire dopo il riavvio) e se la riproduzione era attiva (da rimettere in play).
+    static void saveResume(Context context, String packageName, boolean paused) {
+        context.getApplicationContext().getSharedPreferences(RESUME_PREFS, Context.MODE_PRIVATE).edit()
+                .putString(KEY_RESUME_PACKAGE, packageName).putBoolean(KEY_RESUME_PAUSED, paused)
+                .putLong(KEY_RESUME_AT, System.currentTimeMillis()).commit();
+    }
+
+    static void clearResume(Context context) {
+        context.getApplicationContext().getSharedPreferences(RESUME_PREFS, Context.MODE_PRIVATE).edit().clear().apply();
+    }
+
+    // Pacchetto da riaprire dopo l'aggiornamento, o null se non c'e' (o e' troppo vecchio).
+    static String resumePackage(Context context) {
+        SharedPreferences p = context.getApplicationContext().getSharedPreferences(RESUME_PREFS, Context.MODE_PRIVATE);
+        boolean fresh = System.currentTimeMillis() - p.getLong(KEY_RESUME_AT, 0) < RESUME_MAX_MS;
+        return fresh ? p.getString(KEY_RESUME_PACKAGE, null) : null;
+    }
+
+    // Restituisce true se bisogna rimettere in play; azzera lo stato.
+    static boolean takeResumePaused(Context context) {
+        SharedPreferences p = context.getApplicationContext().getSharedPreferences(RESUME_PREFS, Context.MODE_PRIVATE);
+        boolean pause = p.getBoolean(KEY_RESUME_PAUSED, false) && resumePackage(context) != null;
+        clearResume(context);
+        return pause;
     }
 
     static void clearListener() {

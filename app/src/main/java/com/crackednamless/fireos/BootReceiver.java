@@ -20,8 +20,15 @@ public class BootReceiver extends BroadcastReceiver {
         if (updated && power != null && !power.isInteractive()) {
             return;
         }
-        context.startActivity(new Intent(context, HomeActivity.class)
+        Intent resume = updated ? resumeIntent(context) : null;
+        context.startActivity((resume != null ? resume : new Intent(context, HomeActivity.class))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    // Se l'aggiornamento e' partito da un'altra app, la si riporta in primo piano invece di aprire la Home.
+    private static Intent resumeIntent(Context context) {
+        String pkg = Updater.resumePackage(context);
+        return pkg == null ? null : context.getPackageManager().getLaunchIntentForPackage(pkg);
     }
 
     // Dopo un aggiornamento il servizio Accessibilita' puo' risultare spento: lo si rimette nell'elenco (serve WRITE_SECURE_SETTINGS).

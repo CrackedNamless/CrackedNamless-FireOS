@@ -21,8 +21,6 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     private HomeScreen screen;
     private View emptyView;
     private StartupSplash splash;
-    private android.app.AlertDialog updateDialog;
-    private boolean resumed;
     private static final int REQUEST_VPN = 1;
     private static boolean consentAsked;
     private final android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
@@ -104,15 +102,12 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     @Override
     protected void onResume() {
         super.onResume();
-        resumed = true;
         HomeService.setHomeResumed(true);
-        Updater.checkIfDue(this, this::offerUpdate);
         setUpFirstRun();
     }
 
     @Override
     protected void onPause() {
-        resumed = false;
         HomeService.setHomeResumed(false);
         super.onPause();
     }
@@ -130,10 +125,6 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     protected void onStop() {
         handler.removeCallbacks(startMonitors);
         screen.stop();
-        Updater.clearListener();
-        if (updateDialog != null) {
-            updateDialog.dismiss();
-        }
         unregisterReceiver(packageReceiver);
         super.onStop();
     }
@@ -162,57 +153,6 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_VPN && resultCode == RESULT_OK) {
             setUpFirstRun();
-        }
-    }
-
-    private void offerUpdate() {
-        String version = Updater.pendingVersion(this);
-        if (!resumed || isFinishing() || version == null || Updater.isPostponed(this) || updateDialog != null) {
-            return;
-        }
-        updateDialog = new android.app.AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-                .setTitle(R.string.update_title)
-                .setMessage(getString(R.string.update_message, version, Updater.pendingNotes(this)))
-                .setPositiveButton(R.string.update_now, null)
-                .setNegativeButton(R.string.update_later, (d, w) -> Updater.postpone(this))
-                .setOnCancelListener(d -> Updater.postpone(this))
-                .setOnDismissListener(d -> updateDialog = null)
-                .create();
-        updateDialog.show();
-        android.widget.Button now = updateDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
-        now.setOnClickListener(v -> startUpdate());
-        now.requestFocus();
-    }
-
-    private void startUpdate() {
-        android.app.AlertDialog dialog = updateDialog;
-        if (dialog == null) {
-            return;
-        }
-        dialog.setMessage(getString(R.string.update_installing));
-        dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        dialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
-        dialog.setCancelable(false);
-        boolean started = Updater.install(this, false, new AdbBridge.Listener() {
-            @Override
-            public void onStatus(String message) {
-                if (updateDialog == dialog) {
-                    dialog.setMessage(message);
-                }
-            }
-
-            @Override
-            public void onDone(List<String> outputs, String error) {
-                if (error != null) {
-                    Toast.makeText(HomeActivity.this, error, Toast.LENGTH_LONG).show();
-                }
-                if (updateDialog == dialog) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        if (!started) {
-            dialog.dismiss();
         }
     }
 

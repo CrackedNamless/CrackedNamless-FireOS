@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/panel_bg"
+    android:orientation="vertical"
+    android:paddingBottom="12dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="14dp">
+
+    <TextView
+        android:id="@+id/update_card_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#FFFFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/update_card_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="#A6FFFFFF"
+        android:textSize="11sp" />
+
+    <LinearLayout
+        android:id="@+id/update_card_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chip_bg"
+            android:paddingBottom="2dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="2dp"
+            android:text="@string/update_key_ok"
+            android:textColor="#FFFFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/update_now"
+            android:textColor="#FFFFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/chip_bg"
+            android:paddingBottom="2dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="2dp"
+            android:text="@string/update_key_back"
+            android:textColor="#FFFFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/update_later"
+            android:textColor="#A6FFFFFF"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/update_card_timer"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="12dp"
+        android:background="#66FFFFFF" />
+</LinearLayout>

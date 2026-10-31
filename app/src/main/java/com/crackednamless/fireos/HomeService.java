@@ -41,6 +41,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private static final long HANDOFF_MS = 150L;
     private static final long SAVED_FOCUS_MS = 3000L;
     private static final long ADB_CHECK_MS = 30_000L;
+    private static final long RESUME_PLAY_MS = 4000L;
     private static final long ALREADY_HOME_MS = 900L;
     private static final long BOOT_WINDOW_MS = 180000L;
     private static final long BOOT_COVER_MAX_MS = 12000L;
@@ -72,6 +73,8 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
             | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
     private FrameLayout volumeWindow;
     private VolumeStrip volume;
+    private UpdateCard updateCard;
+    private String offerApp;
     private HomeScreen screen;
     private boolean covering;
     private boolean launching;
@@ -211,6 +214,18 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         buildOverlay();
         attachOverlay();
         buildVolumeWindow();
+        updateCard = new UpdateCard(this, windowManager, new UpdateCard.Callback() {
+            @Override
+            public void onUpdateNow() {
+                startUpdate();
+            }
+
+            @Override
+            public void onLater() {
+                Updater.postpone(HomeService.this);
+            }
+        });
+        handler.postDelayed(resumeAfterUpdate, RESUME_PLAY_MS);
         registerReceiver(screenState, new IntentFilter(Intent.ACTION_SCREEN_OFF));
         logWatcher = new SystemLogWatcher(new SystemLogWatcher.Listener() {
             @Override
@@ -244,7 +259,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         public void run() {
             AdbBridge.maintain(HomeService.this);
             keepScreensaverOff();
-            Updater.checkIfDue(HomeService.this, null);
+            Updater.checkIfDue(HomeService.this, HomeService.this::offerUpdate);
             handler.postDelayed(this, ADB_CHECK_MS);
         }
     };
@@ -382,6 +397,11 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     public void onDestroy() {
         instance = null;
         handler.removeCallbacks(adbKeeper);
+        handler.removeCallbacks(resumeAfterUpdate);
+        Updater.clearListener();
+        if (updateCard != null) {
+            updateCard.dismiss();
+        }
         launcher.shutdownNow();
         if (logWatcher != null) {
             logWatcher.stop();
@@ -638,6 +658,78 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         frame.addView(curtain, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         overlay = frame;
+    }
+
+    private final Runnable resumeAfterUpdate = () -> {
+        if (Updater.takeResumePaused(this)) {
+            sendMediaKey(KeyEvent.KEYCODE_MEDIA_PLAY);
+        }
+    };
+
+    private void sendMediaKey(int keyCode) {
+        AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
+        if (audio != null) {
+            audio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+            audio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyCode));
+        }
+    }
+
+    private void offerUpdate() {
+        String version = Updater.pendingVersion(this);
+        PowerManager power = (PowerManager) getSystemService(POWER_SERVICE);
+        if (version == null || updateCard == null || updateCard.isShowing() || Updater.isPostponed(this)
+                || (power != null && !power.isInteractive())) {
+            return;
+        }
+        offerApp = foregroundApp();
+        updateCard.offer(version);
+    }
+
+    // App in primo piano (da riaprire dopo l'aggiornamento); null se si e' nella Home o in una schermata di sistema.
+    // Va letta prima di mostrare l'avviso: con l'avviso a fuoco la finestra attiva e' la nostra.
+    private String foregroundApp() {
+        AccessibilityNodeInfo root = getRootInActiveWindow();
+        if (root == null) {
+            return null;
+        }
+        CharSequence pkg = root.getPackageName();
+        root.recycle();
+        return pkg != null && isForeignWindow(pkg) ? pkg.toString() : null;
+    }
+
+    // Mette in pausa quel che sta andando, aggiorna, e dopo il riavvio BootReceiver riapre l'app e resumeAfterUpdate rimette in play.
+    private void startUpdate() {
+        String app = offerApp;
+        AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
+        boolean playing = app != null && audio != null && audio.isMusicActive();
+        if (playing) {
+            sendMediaKey(KeyEvent.KEYCODE_MEDIA_PAUSE);
+        }
+        Updater.saveResume(this, app, playing);
+        updateCard.showMessage(getString(R.string.update_installing), false);
+        boolean started = Updater.install(this, false, new AdbBridge.Listener() {
+            @Override
+            public void onStatus(String message) {
+            }
+
+            @Override
+            public void onDone(List<String> outputs, String error) {
+                if (error == null) {
+                    updateCard.dismiss();
+                    return;
+                }
+                Updater.clearResume(HomeService.this);
+                if (playing) {
+                    sendMediaKey(KeyEvent.KEYCODE_MEDIA_PLAY);
+                }
+                Updater.postpone(HomeService.this);
+                updateCard.showMessage(error, true);
+            }
+        });
+        if (!started) {
+            Updater.clearResume(this);
+            updateCard.dismiss();
+        }
     }
 
     // Stessa sospensione di Impostazioni > La mia Fire TV > Standby. Si risveglia con un tasto del telecomando.
