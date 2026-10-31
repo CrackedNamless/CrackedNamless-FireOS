@@ -130,6 +130,7 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     protected void onStop() {
         handler.removeCallbacks(startMonitors);
         screen.stop();
+        Updater.clearListener();
         if (updateDialog != null) {
             updateDialog.dismiss();
         }

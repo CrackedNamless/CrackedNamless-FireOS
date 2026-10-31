@@ -55,6 +55,8 @@ final class Updater {
 
     private static final ExecutorService WORKER = Executors.newSingleThreadExecutor();
     private static Handler main;
+    // Chi mostra il popup (la Home in primo piano); il controllo puo' essere partito da altri, ad esempio dal servizio.
+    private static volatile Runnable listener;
     private static final AtomicBoolean CHECKING = new AtomicBoolean();
     private static final AtomicBoolean INSTALLING = new AtomicBoolean();
 
@@ -156,12 +158,20 @@ final class Updater {
         prefs(context).edit().clear().apply();
     }
 
+    static void clearListener() {
+        listener = null;
+    }
+
     // Controlla GitHub se e' ora; ready viene chiamato sul thread principale quando c'e' un aggiornamento scaricato.
     static void checkIfDue(Context context, Runnable ready) {
         Context app = context.getApplicationContext();
+        if (ready != null) {
+            listener = ready;
+        }
         if (hasPending(app)) {
-            if (ready != null) {
-                main().post(ready);
+            Runnable r = listener;
+            if (r != null) {
+                main().post(r);
             }
             return;
         }
@@ -178,8 +188,9 @@ final class Updater {
                 prefs(app).edit().putLong(KEY_NEXT_CHECK, next).apply();
                 CHECKING.set(false);
             }
-            if (ready != null && hasPending(app)) {
-                main().post(ready);
+            Runnable r = listener;
+            if (r != null && hasPending(app)) {
+                main().post(r);
             }
         });
     }
@@ -246,7 +257,9 @@ final class Updater {
         if (!hasPending(app) || apk == null || !INSTALLING.compareAndSet(false, true)) {
             return false;
         }
-        List<String> commands = Collections.singletonList("pm install -r '" + apk.getPath() + "'");
+        // Il package manager non legge la cartella privata dell'app (SELinux): l'APK passa da /data/local/tmp, scrivibile dalla shell.
+        String staged = "/data/local/tmp/fireos-update.apk";
+        List<String> commands = Collections.singletonList("cp '" + apk.getPath() + "' " + staged + " && pm install -r " + staged + "; rm -f " + staged);
         AdbBridge.run(app, commands, quiet, new AdbBridge.Listener() {
             @Override
             public void onStatus(String message) {

@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here. Each release on GitHub carries the signed APK and the matching source code.
 
-## [0.3.0] - Unreleased
+## [0.3.0] - 2026-10-31
 
 ### Added
 - **Ready out of the box.** The first time the launcher opens, it turns on Fast Home, Performance and Disable all unneeded services by itself (you only choose "Always allow" for USB debugging once). It does this once, so settings you switch off later stay off. `tools/install.sh` also pre-approves the local VPN so no consent screen appears.
