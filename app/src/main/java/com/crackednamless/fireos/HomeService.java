@@ -135,6 +135,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private final BroadcastReceiver screenState = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Updater.installOnStandby(context);
             if (!homeResumed) {
                 openHome();
             }
@@ -243,6 +244,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         public void run() {
             AdbBridge.maintain(HomeService.this);
             keepScreensaverOff();
+            Updater.checkIfDue(HomeService.this, null);
             handler.postDelayed(this, ADB_CHECK_MS);
         }
     };

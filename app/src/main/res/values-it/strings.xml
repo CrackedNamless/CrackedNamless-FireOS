@@ -145,4 +145,17 @@
     <string name="err_adb_failed">Connessione ADB non riuscita: %1$s</string>
     <string name="err_adb_lost">Connessione ADB persa: %1$s</string>
     <string name="err_code_not_found">Codice di sblocco non trovato: %1$s</string>
+
+    <!-- Aggiornamenti -->
+    <string name="update_title">Aggiornamento disponibile</string>
+    <string name="update_message">La versione %1$s è pronta.\n\n%2$s\n\nIl launcher si riavvia in pochi secondi. Se scegli Più tardi, si aggiorna quando la Fire TV va in standby.</string>
+    <string name="update_now">Aggiorna ora</string>
+    <string name="update_later">Più tardi</string>
+    <string name="update_installing">Installazione dell\'aggiornamento…</string>
+    <string name="update_failed">Aggiornamento non riuscito: %1$s</string>
+    <string name="err_adb_not_ready">ADB non è ancora autorizzato: apri una volta il menu strumenti e consentilo</string>
+
+    <!-- Prima configurazione -->
+    <string name="first_run_start">Configurazione: Sblocco rapido Home, prestazioni e servizi superflui. Se compare una richiesta, scegli Consenti sempre</string>
+    <string name="first_run_done">Pronto: Sblocco rapido Home, prestazioni e servizi superflui sono attivi. Puoi cambiarli quando vuoi dal menu strumenti</string>
 </resources>

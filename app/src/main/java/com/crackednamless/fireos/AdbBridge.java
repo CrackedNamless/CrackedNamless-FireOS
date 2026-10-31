@@ -60,10 +60,20 @@ final class AdbBridge {
     }
 
     static void run(Context context, List<String> commands, Listener listener) {
+        run(context, commands, false, listener);
+    }
+
+    // quiet: non chiede mai nulla all'utente (utile con lo schermo spento); fallisce se VPN o ADB non sono gia' autorizzati.
+    static void run(Context context, List<String> commands, boolean quiet, Listener listener) {
         Context app = context.getApplicationContext();
         WORKER.execute(() -> {
             List<String> outputs = new ArrayList<>();
-            String error = connect(app, listener, AUTH_WAIT_MS);
+            String error;
+            if (quiet && session == null && (!prefs(app).getBoolean(KEY_AUTHORIZED, false) || VpnService.prepare(app) != null)) {
+                error = app.getString(R.string.err_adb_not_ready);
+            } else {
+                error = connect(app, listener, quiet ? QUIET_AUTH_WAIT_MS : AUTH_WAIT_MS);
+            }
             if (error == null) {
                 try {
                     for (int i = 0; i < commands.size(); i++) {

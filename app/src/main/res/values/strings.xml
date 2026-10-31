@@ -164,4 +164,17 @@
     <string name="err_adb_failed">ADB connection failed: %1$s</string>
     <string name="err_adb_lost">ADB connection lost: %1$s</string>
     <string name="err_code_not_found">Unlock code not found: %1$s</string>
+
+    <!-- Updates -->
+    <string name="update_title">Update available</string>
+    <string name="update_message">Version %1$s is ready.\n\n%2$s\n\nThe launcher restarts in a few seconds. If you choose Later, it updates when the Fire TV goes to standby.</string>
+    <string name="update_now">Update now</string>
+    <string name="update_later">Later</string>
+    <string name="update_installing">Installing the update…</string>
+    <string name="update_failed">Update failed: %1$s</string>
+    <string name="err_adb_not_ready">ADB is not authorised yet: open the tools menu once and allow it</string>
+
+    <!-- First run -->
+    <string name="first_run_start">Setting up: Fast Home, performance and unneeded services. If a prompt appears, choose Always allow</string>
+    <string name="first_run_done">Ready: Fast Home, performance mode and unneeded services are set. Change them any time in the tools menu</string>
 </resources>

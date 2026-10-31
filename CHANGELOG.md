@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here. Each release on GitHub carries the signed APK and the matching source code.
 
+## [0.3.0] - Unreleased
+
+### Added
+- **Ready out of the box.** The first time the launcher opens, it turns on Fast Home, Performance and Disable all unneeded services by itself (you only choose "Always allow" for USB debugging once). It does this once, so settings you switch off later stay off. `tools/install.sh` also pre-approves the local VPN so no consent screen appears.
+- **Automatic updates.** The launcher checks the latest GitHub Release every few hours and downloads a newer APK in the background. A pop-up offers "Update now" (installs and restarts only the launcher, a few seconds) or "Later" (installs when the Fire TV goes to standby). After an update the accessibility service is switched on again by the app.
+
+### Changed
+- The Tools menu and the first-run setup share one list of services and performance settings (`Tweaks`).
+
 ## [0.2.0] - 2026-10-30
 
 ### Added

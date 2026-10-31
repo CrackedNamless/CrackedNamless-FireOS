@@ -2,6 +2,7 @@
 # Installs CrackedNamless-FireOS on a Fire TV over the network and switches it on.
 # On the first install it also turns off Amazon's FireTV Troubleshooting app (undo: adb shell pm enable com.amazon.firetv.troubleshooting).
 # It always turns off Amazon's screensaver (undo: adb shell pm enable com.amazon.ftv.screensaver; adb shell settings put secure screensaver_enabled 1).
+# On first launch the app turns on Fast Home, performance mode and disables Amazon's unneeded services by itself (accept "Always allow" on the TV once). All reversible from the tools menu.
 # Usage: tools/install.sh <fire-tv-ip> [path/to/CrackedNamless-FireOS.apk]
 # Needs adb (Android Platform Tools) and "ADB debugging" enabled on the Fire TV.
 # Without an APK path it downloads the latest release.
@@ -37,6 +38,9 @@ echo "Granting permissions..."
 $A shell pm grant "$PKG" android.permission.READ_LOGS
 $A shell pm grant "$PKG" android.permission.WRITE_SECURE_SETTINGS
 $A shell cmd notification allow_listener "$PKG/$PKG.MediaListener" >/dev/null
+
+# Pre-approves the local VPN the app uses for Fast Home, so no consent screen is needed on the TV.
+$A shell appops set "$PKG" ACTIVATE_VPN allow >/dev/null 2>&1 || true
 
 echo "Turning on the Home service..."
 CUR="$($A shell settings get secure enabled_accessibility_services | tr -d '\r')"

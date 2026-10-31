@@ -28,20 +28,6 @@ import java.util.List;
 // Tutto reversibile: "pm disable-user" lascia APK e dati, le impostazioni tornano ai valori di prima.
 public final class DebloatActivity extends Activity {
 
-    // Gli stessi pacchetti dei nostri script firestick_clean_extra.sh e firestick_optimize.sh.
-    private static final String[] PACKAGES = {
-            "com.amazon.hybridadidservice", "com.amazon.sneakpeek", "com.amazon.tv.turnstile", "com.amazon.logan",
-            "com.amazon.fireos.cirruscloud", "com.amazon.ods.kindleconnect", "com.amazon.aria", "com.amazon.hedwig",
-            "com.amazon.tv.support", "com.amazon.ceviche", "com.amazon.d3", "com.amazon.spiderpork",
-            "com.amazon.tv.easyupgrade", "com.amazon.sharingservice.android.client.proxy",
-            "com.amazon.privacypassservice", "com.amazon.tv.legal.notices", "com.amazon.whisperplay.service.install",
-            "com.amazon.bueller.music", "com.amazon.bueller.photos", "com.amazon.gamehub",
-            "com.amazon.imdb.tv.android.app", "com.amazon.minitv.android.app", "com.amazon.naatyam",
-            "com.amazon.perfcollection", "com.amazon.recess", "com.amazon.shoptv.client",
-            "com.amazon.shoptv.firetv.client", "com.amazon.storm.lightning.tutorial", "com.amazon.tmm.tutorial",
-            "com.amazon.tv.acr", "com.amazon.tv.fw.metrics", "com.amazon.tv.releasenotes",
-            "com.amazon.wirelessmetrics.service"
-    };
     private static final String PRIME_TOGGLE = "if cmd appops get com.amazon.avod RUN_IN_BACKGROUND | grep -q ignore; "
             + "then M=allow; else M=ignore; fi; "
             + "for p in com.amazon.avod com.amazon.firebat; do "
@@ -123,7 +109,7 @@ public final class DebloatActivity extends Activity {
     private void reload() {
         List<Service> services = new ArrayList<>();
         PackageManager pm = getPackageManager();
-        for (String pkg : PACKAGES) {
+        for (String pkg : Tweaks.PACKAGES) {
             try {
                 ApplicationInfo info = pm.getApplicationInfo(pkg, PackageManager.GET_DISABLED_COMPONENTS);
                 int state = pm.getApplicationEnabledSetting(pkg);
@@ -197,14 +183,7 @@ public final class DebloatActivity extends Activity {
     }
 
     private void setPerformance(boolean on) {
-        String anim = on ? "0" : "0.5";
-        String ads = on ? "1" : "0";
-        List<String> commands = new ArrayList<>();
-        commands.add("settings put global window_animation_scale " + anim);
-        commands.add("settings put global transition_animation_scale " + anim);
-        commands.add("settings put secure amz_limit_ad_tracking " + ads);
-        commands.add("settings put secure non_amz_limit_ad_tracking " + ads);
-        exec(commands, outputs -> getString(on ? R.string.tools_performance_on : R.string.tools_performance_off));
+        exec(Tweaks.performanceCommands(on), outputs -> getString(on ? R.string.tools_performance_on : R.string.tools_performance_off));
     }
 
     private void bulk(List<String> packages, String command, int donePlural) {

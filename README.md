@@ -119,13 +119,17 @@ Press **Home** on the remote. The first time can take a few seconds while the se
 
 ### Fast Home
 
-The first row of the Tools menu turns on Fast Home. Android blocks background app launches for 5 seconds after Home is pressed; Fast Home lifts that block as soon as you press Home. To work, the app opens a local ADB session to the Stick itself:
+Fast Home is on from the first launch (see "Set up on first launch" below); the first row of the Tools menu switches it off or on again. Android blocks background app launches for 5 seconds after Home is pressed; Fast Home lifts that block as soon as you press Home. To work, the app opens a local ADB session to the Stick itself:
 
-1. Select **Fast Home** and press OK.
-2. Accept the **VPN connection request**. The VPN is local only: it uses the private range `10.113.77.0/24` and no traffic leaves the device.
+1. On first launch the app sets it up by itself. To switch it back on later, select **Fast Home** and press OK.
+2. The **VPN connection request** is approved by `tools/install.sh`; if you installed the APK by hand, accept it on the TV. The VPN is local only: it uses the private range `10.113.77.0/24` and no traffic leaves the device.
 3. Accept **Allow USB debugging?** with **Always allow**.
 
 Switch the row off at any time to close the session and the tunnel.
+
+### Set up on first launch
+
+The first time the launcher opens, it turns on **Fast Home**, **Performance** and **Disable all unneeded services** by itself, so you do not have to open the Tools menu. The only thing you do is choose **Always allow** when the Stick asks about USB debugging. It only happens once: if you switch one of them off later, it stays off. Every setting can be undone from the Tools menu.
 
 ### Tools menu
 
