@@ -4,6 +4,11 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-02
+
+### Fixed
+- **Standby during a movie.** With the Amazon screensaver off, Fire OS put the Fire TV to sleep after 5 minutes without a remote key even while a video was playing, because many players (YouTube, sideloaded apps) do not keep the screen awake themselves. The launcher now keeps the screen on while any app is playing audio or video and gives control back to the normal timeout as soon as playback is paused or stopped, so an unused Fire TV still goes to standby. It does nothing while the launcher itself is on screen, and the power button still works as usual.
+
 ## [0.4.0] - 2026-11-02
 
 ### Changed

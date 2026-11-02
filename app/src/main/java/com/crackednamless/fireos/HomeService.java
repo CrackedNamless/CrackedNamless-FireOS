@@ -41,6 +41,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private static final long HANDOFF_MS = 150L;
     private static final long SAVED_FOCUS_MS = 3000L;
     private static final long ADB_CHECK_MS = 30_000L;
+    private static final long PLAYBACK_LOCK_MS = 90_000L;
     private static final long RESUME_PLAY_MS = 4000L;
     private static final long ALREADY_HOME_MS = 900L;
     private static final long BOOT_WINDOW_MS = 180000L;
@@ -55,6 +56,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
 
     private static HomeService instance;
     private static boolean homeResumed;
+    private PowerManager.WakeLock playbackLock;
     private static boolean homeSeen;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -138,6 +140,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     private final BroadcastReceiver screenState = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            releasePlaybackLock();
             Updater.installOnStandby(context);
             MemoryGuard.onStandby(context);
             if (!homeResumed) {
@@ -255,11 +258,40 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         }
     }
 
+    // Fire OS spegne lo schermo dopo 5 minuti senza tasti anche se un film e' in riproduzione (con lo screensaver spento
+    // non c'e' piu' nulla che lo eviti): finche' un'app riproduce audio/video lo schermo resta acceso, in pausa torna il timeout normale.
+    private void keepAwakeWhilePlaying() {
+        try {
+            PowerManager power = (PowerManager) getSystemService(POWER_SERVICE);
+            AudioManager audio = (AudioManager) getSystemService(AUDIO_SERVICE);
+            boolean playing = power != null && audio != null && power.isInteractive() && !homeResumed && audio.isMusicActive();
+            if (playing) {
+                if (playbackLock == null) {
+                    playbackLock = power.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "fireos:playback");
+                    playbackLock.setReferenceCounted(false);
+                }
+                playbackLock.acquire(PLAYBACK_LOCK_MS);
+            } else {
+                releasePlaybackLock();
+            }
+        } catch (RuntimeException ignored) {
+            // Servizio di sistema non disponibile: resta il timeout di Fire OS.
+        }
+    }
+
+    private void releasePlaybackLock() {
+        PowerManager.WakeLock lock = playbackLock;
+        if (lock != null && lock.isHeld()) {
+            lock.release();
+        }
+    }
+
     private final Runnable adbKeeper = new Runnable() {
         @Override
         public void run() {
             AdbBridge.maintain(HomeService.this);
             keepScreensaverOff();
+            keepAwakeWhilePlaying();
             MemoryGuard.checkLow(HomeService.this);
             Updater.checkIfDue(HomeService.this, HomeService.this::offerUpdate);
             handler.postDelayed(this, ADB_CHECK_MS);
@@ -399,6 +431,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     public void onDestroy() {
         instance = null;
         handler.removeCallbacks(adbKeeper);
+        releasePlaybackLock();
         handler.removeCallbacks(resumeAfterUpdate);
         Updater.clearListener();
         if (updateCard != null) {
