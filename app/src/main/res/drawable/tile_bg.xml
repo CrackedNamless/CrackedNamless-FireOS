@@ -2,16 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <solid android:color="#40FFFFFF" />
+            <gradient android:angle="270" android:endColor="#33FFFFFF" android:startColor="#59FFFFFF" />
             <corners android:radius="14dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <gradient
-                android:angle="270"
-                android:endColor="#12FFFFFF"
-                android:startColor="#22FFFFFF" />
+            <gradient android:angle="270" android:endColor="#0FFFFFFF" android:startColor="#26FFFFFF" />
             <corners android:radius="14dp" />
         </shape>
     </item>

@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
@@ -108,7 +107,7 @@ public final class HealthActivity extends Activity {
         super.onCreate(savedInstanceState);
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(0xFF0B0E14);
+        root.setBackground(GlassBackground.create(getResources()));
         root.setPadding(dp(64), dp(28), dp(64), dp(20));
 
         TextView title = text(getString(R.string.health_title), 26, Color.WHITE);
@@ -401,11 +400,7 @@ public final class HealthActivity extends Activity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         LinearLayout box = new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
-        GradientDrawable panel = new GradientDrawable();
-        panel.setColor(0xFF151A24);
-        panel.setCornerRadius(dp(18));
-        panel.setStroke(dp(1), 0x40FFFFFF);
-        box.setBackground(panel);
+        box.setBackgroundResource(R.drawable.panel_bg);
         box.setPadding(dp(22), dp(18), dp(22), dp(18));
         TextView name = text(item.title, 18, Color.WHITE);
         name.setTypeface(Typeface.DEFAULT_BOLD);

@@ -88,7 +88,7 @@ public final class DebloatActivity extends Activity {
         super.onCreate(savedInstanceState);
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(0xFF0B0E14);
+        root.setBackground(GlassBackground.create(getResources()));
         root.setPadding(dp(64), dp(28), dp(64), dp(20));
 
         TextView title = text(getString(R.string.tools_title), 26, Color.WHITE);
