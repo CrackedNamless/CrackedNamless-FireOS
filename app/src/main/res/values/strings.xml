@@ -183,6 +183,45 @@
     <string name="tools_done">Done</string>
     <string name="tools_vpn_dialog_missing">This Stick does not show the VPN consent. From a PC: adb shell appops set %1$s ACTIVATE_VPN allow</string>
 
+    <!-- Fire Health -->
+    <string name="health_title">Fire Health</string>
+    <string name="health_tools_sub">Memory, storage and apps running in the background</string>
+    <string name="mem_chip" translatable="false">%1$d MB</string>
+    <string name="health_loading">Reading memory and running apps…</string>
+    <string name="health_card_memory">MEMORY</string>
+    <string name="health_card_storage">STORAGE</string>
+    <string name="health_card_uptime">ON FOR</string>
+    <string name="health_mb_free">%1$d MB free</string>
+    <string name="health_of_total">of %1$d MB · %2$d%% used</string>
+    <string name="health_storage_free">%1$s free</string>
+    <string name="health_of_total_size">of %1$s · %2$d%% used</string>
+    <string name="health_uptime_days" translatable="false">%1$d d %2$d h</string>
+    <string name="health_uptime_hours" translatable="false">%1$d h %2$d min</string>
+    <string name="health_uptime_ok">since the last restart</string>
+    <string name="health_uptime_restart">a restart would help</string>
+    <string name="health_free_now">Free memory now</string>
+    <string name="health_auto">Auto-clean: %1$s</string>
+    <string name="health_auto_hint">Frees memory by itself on standby and when it runs low</string>
+    <string name="health_auto_last">Last auto-clean %1$s · freed %2$d MB</string>
+    <string name="health_mb" translatable="false">%1$d MB</string>
+    <string name="health_blocked">Blocked</string>
+    <string name="health_section_running">RUNNING IN THE BACKGROUND · %1$d</string>
+    <string name="health_section_blocked">BLOCKED FROM STARTING BY ITSELF · %1$d</string>
+    <string name="health_summary">%1$d apps can be closed, about %2$d MB</string>
+    <string name="health_group_foreground">In use</string>
+    <string name="health_group_visible">Visible</string>
+    <string name="health_group_active">Active in the background</string>
+    <string name="health_group_previous">Previous app</string>
+    <string name="health_group_service">Idle service</string>
+    <string name="health_group_cached">Idle</string>
+    <string name="health_dialog_hint">Nothing is uninstalled. You can undo this any time.</string>
+    <string name="health_close_now">Close now</string>
+    <string name="health_block">Block from starting by itself</string>
+    <string name="health_allow">Allow in the background again</string>
+    <string name="health_closed">%1$s closed</string>
+    <string name="health_now_blocked">%1$s is blocked in the background</string>
+    <string name="health_now_allowed">%1$s can run in the background again</string>
+
     <!-- ADB tunnel progress and errors -->
     <string name="adb_command_progress">Command %1$d of %2$d</string>
     <string name="adb_opening_tunnel">Opening the tunnel</string>

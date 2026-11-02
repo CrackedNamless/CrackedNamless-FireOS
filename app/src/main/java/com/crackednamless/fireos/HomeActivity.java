@@ -181,6 +181,11 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
     }
 
     @Override
+    public void openHealth() {
+        start(new Intent(this, HealthActivity.class));
+    }
+
+    @Override
     public void openTools() {
         start(new Intent(this, DebloatActivity.class));
     }

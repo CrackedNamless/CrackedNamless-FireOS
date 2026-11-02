@@ -144,6 +144,8 @@ public final class DebloatActivity extends Activity {
         String on = getString(R.string.tools_on);
         String off = getString(R.string.tools_off);
         rows.add(Row.section(getString(R.string.tools_section_speed)));
+        rows.add(new Row(getString(R.string.health_title), getString(R.string.health_tools_sub), "", DIM,
+                () -> startActivity(new Intent(this, HealthActivity.class))));
         rows.add(new Row(getString(R.string.tools_fast_home), getString(R.string.tools_fast_home_sub),
                 fast ? on : off, fast ? GREEN : DIM, this::toggleFast));
         boolean perf = performanceOn();

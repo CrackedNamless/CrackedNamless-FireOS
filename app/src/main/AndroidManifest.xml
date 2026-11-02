@@ -46,6 +46,11 @@
             android:exported="false"
             android:screenOrientation="landscape" />
 
+        <activity
+            android:name=".HealthActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+
         <service
             android:name=".TunnelVpnService"
             android:exported="false"

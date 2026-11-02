@@ -16,6 +16,7 @@ A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Ama
 - **Fast.** Fire OS normally delays app launches for 5 seconds after Home. Fast Home removes that wait, so Home appears in about 1.2 s.
 - **Status at a glance.** Wi-Fi latency, Bluetooth, clock and weather ([Open-Meteo](https://open-meteo.com)).
 - **A Tools menu** to switch off Amazon telemetry and background services in bulk, stop Prime Video from starting by itself, free memory and set a performance preset. Everything is reversible.
+- **Fire Health.** The memory chip in the top bar opens a dashboard with free RAM, storage and uptime, a list of the apps that stay alive in the background (close them, or block them from starting by themselves) and an Auto-clean switch that frees idle memory on standby and when RAM runs low.
 - **Light on memory.** Plain Android views, no heavy frameworks, no analytics, no resident helper process.
 
 ![Tools menu](docs/screenshots/tools.png)

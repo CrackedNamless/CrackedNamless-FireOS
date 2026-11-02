@@ -33,6 +33,8 @@ public final class HomeScreen {
 
         void openTools();
 
+        void openHealth();
+
         void openProfiles();
 
         void openWifi();
@@ -74,6 +76,9 @@ public final class HomeScreen {
     private final ImageView wifi;
     private final View wifiButton;
     private final TextView wifiPing;
+    private final View memButton;
+    private final TextView memText;
+    private boolean memRunning;
     private final NetworkMonitor network;
     private int netState = NetworkMonitor.OFFLINE;
     private final View safeArea;
@@ -158,6 +163,8 @@ public final class HomeScreen {
         wifi = root.findViewById(R.id.wifi);
         wifiButton = root.findViewById(R.id.wifi_btn);
         wifiPing = root.findViewById(R.id.wifi_ping);
+        memButton = root.findViewById(R.id.mem_btn);
+        memText = root.findViewById(R.id.mem_text);
         safeArea = root.findViewById(R.id.safe_area);
         speedPanel = root.findViewById(R.id.speed_panel);
         speedValue = root.findViewById(R.id.speed_value);
@@ -253,6 +260,7 @@ public final class HomeScreen {
                 host.openWifi();
             }
         });
+        memButton.setOnClickListener(v -> host.openHealth());
         btButton.setOnClickListener(v -> showBluetooth(true));
         btAdd.setOnClickListener(v -> host.openBluetooth());
         btClose.setOnClickListener(v -> showBluetooth(false));
@@ -264,7 +272,7 @@ public final class HomeScreen {
         FocusScale.apply(speedClose, null);
         onNetwork(NetworkMonitor.OFFLINE, -1);
 
-        for (View v : new View[]{profile, tabHome, tabLibrary, tabStore, settings, wifiButton, btButton, heroPlay,
+        for (View v : new View[]{profile, tabHome, tabLibrary, tabStore, settings, memButton, wifiButton, btButton, heroPlay,
                 root.findViewById(R.id.hero_all), heroInfo}) {
             FocusScale.apply(v, null);
         }
@@ -347,9 +355,26 @@ public final class HomeScreen {
         media.start();
         network.start();
         bluetooth.start();
+        memRunning = true;
+        refreshMemory();
     }
 
+    private void refreshMemory() {
+        if (!memRunning) {
+            return;
+        }
+        long free = MemoryGuard.availableMb(context);
+        memText.setText(context.getString(R.string.mem_chip, free));
+        memText.setTextColor(free < MemoryGuard.LOW_MB ? 0xFFFF7A7A : free < 250 ? 0xFFFFC857 : 0xFF7CD992);
+        memButton.removeCallbacks(memTick);
+        memButton.postDelayed(memTick, 10_000L);
+    }
+
+    private final Runnable memTick = this::refreshMemory;
+
     public void stop() {
+        memRunning = false;
+        memButton.removeCallbacks(memTick);
         media.stop();
         network.stop();
         bluetooth.stop();

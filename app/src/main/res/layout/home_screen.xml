@@ -91,6 +91,35 @@
                 android:layout_weight="1" />
 
             <LinearLayout
+                android:id="@+id/mem_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/pill_bg"
+                android:clickable="true"
+                android:contentDescription="@string/health_title"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="9dp"
+                android:paddingRight="11dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_memory" />
+
+                <TextView
+                    android:id="@+id/mem_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:textColor="#FF7CD992"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/wifi_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="34dp"

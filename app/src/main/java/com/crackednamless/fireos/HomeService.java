@@ -139,6 +139,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         @Override
         public void onReceive(Context context, Intent intent) {
             Updater.installOnStandby(context);
+            MemoryGuard.onStandby(context);
             if (!homeResumed) {
                 openHome();
             }
@@ -259,6 +260,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
         public void run() {
             AdbBridge.maintain(HomeService.this);
             keepScreensaverOff();
+            MemoryGuard.checkLow(HomeService.this);
             Updater.checkIfDue(HomeService.this, HomeService.this::offerUpdate);
             handler.postDelayed(this, ADB_CHECK_MS);
         }
@@ -437,6 +439,12 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
     public void openSettings() {
         launchPackage = null;
         begin(SystemIntents.settings(this));
+    }
+
+    @Override
+    public void openHealth() {
+        launchPackage = null;
+        begin(new Intent(this, HealthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     @Override
