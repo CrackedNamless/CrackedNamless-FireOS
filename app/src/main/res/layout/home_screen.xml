@@ -640,7 +640,7 @@
         android:id="@+id/bt_panel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#CC05070B"
+        android:background="#B3000000"
         android:visibility="gone">
 
         <LinearLayout
@@ -733,7 +733,7 @@
         android:id="@+id/speed_panel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#CC05070B"
+        android:background="#B3000000"
         android:visibility="gone">
 
         <LinearLayout

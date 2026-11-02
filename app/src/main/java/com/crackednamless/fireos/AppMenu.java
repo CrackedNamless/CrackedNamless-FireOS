@@ -62,7 +62,7 @@ final class AppMenu {
         this.d = context.getResources().getDisplayMetrics().density;
 
         overlay = new FrameLayout(context);
-        overlay.setBackgroundColor(0xA605070B);
+        overlay.setBackgroundColor(0xA6000000);
         overlay.setClickable(true);
         overlay.setVisibility(View.GONE);
 

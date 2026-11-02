@@ -426,7 +426,7 @@ public final class HomeScreen {
 
     private void rebuildLibrary() {
         FolderLayout layout = FolderLayout.build(allApps, folders.assignment());
-        rowAdapter.submit(layout.loose.subList(0, Math.min(layout.loose.size(), LIBRARY_SPAN - 1)));
+        rowAdapter.submit(allApps.subList(0, Math.min(allApps.size(), LIBRARY_SPAN - 1)));
 
         List<AppEntry> inside = openFolder != null ? layout.folders.get(openFolder) : null;
         if (openFolder != null && inside == null) {

@@ -23,12 +23,12 @@ public final class GlassBackground {
         Canvas c = new Canvas(bmp);
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
-        p.setShader(new LinearGradient(0, 0, W, H, 0xFF08090C, 0xFF14161B, Shader.TileMode.CLAMP));
+        p.setShader(new LinearGradient(0, 0, W, H, 0xFF050506, 0xFF0F0F11, Shader.TileMode.CLAMP));
         c.drawRect(0, 0, W, H, p);
 
-        blob(c, p, W * 0.15f, H * 0.10f, W * 0.55f, 0x30475A80);
-        blob(c, p, W * 0.90f, H * 0.30f, W * 0.45f, 0x26566078);
-        blob(c, p, W * 0.55f, H * 1.05f, W * 0.55f, 0x1F4A5568);
+        blob(c, p, W * 0.15f, H * 0.10f, W * 0.55f, 0x2E8A8A94);
+        blob(c, p, W * 0.90f, H * 0.30f, W * 0.45f, 0x1E7A7A84);
+        blob(c, p, W * 0.55f, H * 1.05f, W * 0.55f, 0x18707078);
 
         BitmapDrawable d = new BitmapDrawable(res, bmp);
         d.setFilterBitmap(true);

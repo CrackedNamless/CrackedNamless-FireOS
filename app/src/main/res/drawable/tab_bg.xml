@@ -19,7 +19,7 @@
     </item>
     <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <gradient android:angle="270" android:endColor="#E6D5DCEE" android:startColor="#FAFFFFFF" />
+            <gradient android:angle="270" android:endColor="#E6D8D8DC" android:startColor="#FAFFFFFF" />
             <corners android:radius="16dp" />
         </shape>
     </item>
