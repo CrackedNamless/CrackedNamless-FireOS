@@ -1,6 +1,6 @@
 # CrackedNamless-FireOS
 
-A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Amazon launcher with a clean one that opens in about a second on a 1 GB Fire TV Stick, and ships a set of tools to remove Amazon background services.
+A fast, cinematic Home screen for Amazon Fire TV. It replaces the ad-heavy Amazon launcher with a clean one that opens in about a second on a 1 GB Fire TV Stick, and ships a set of tools to remove Amazon background services.
 
 [![Latest release](https://img.shields.io/github/v/release/CrackedNamless/CrackedNamless-FireOS?style=flat-square)](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases/latest)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square)](LICENSE)
@@ -10,7 +10,7 @@ A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Ama
 
 ## What you get
 
-- **A clean Home.** Frosted-glass top bar, a card for the last app you opened, your apps, a "continue watching" row and a full library. No ads, no promoted content. Every app card is filled with the app's own banner or icon.
+- **A clean Home.** A full-bleed backdrop of the last app you opened, a frameless top bar, your apps, a "continue watching" row and a full library. No ads, no promoted content. Every app card is filled with the app's own banner or icon.
 - **It really replaces Home.** Pressing the Home button on the remote shows this launcher, even though Fire OS pins Amazon's.
 - **A Store tab.** The **Store** tab in the top bar opens the Amazon Appstore that is already on the Fire TV, so you can get new apps without leaving the launcher.
 - **A real Library.** Hold OK on an app to put it in a folder (Streaming, Games, Music, Tools, Kids or one you name) or to uninstall it. System apps are never removed.
