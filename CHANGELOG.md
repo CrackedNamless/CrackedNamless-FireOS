@@ -8,6 +8,9 @@ All notable changes to this project are documented here. Each release on GitHub 
 - **Ready out of the box.** The first time the launcher opens, it turns on Fast Home, Performance and Disable all unneeded services by itself (you only choose "Always allow" for USB debugging once). It does this once, so settings you switch off later stay off. `tools/install.sh` also pre-approves the local VPN so no consent screen appears.
 - **Automatic updates.** The launcher checks the latest GitHub Release every few hours and downloads a newer APK in the background. A small card appears in the bottom right corner, over whatever app is on screen: press OK to update now (installs and restarts only the launcher, a few seconds) or Back to postpone (any other navigation key also postpones it; with no answer it closes after 20 seconds and installs when the Fire TV goes to standby). If a video or a show is playing, it is paused first; after the update the app you were in comes back and playback resumes at the same point. After an update the accessibility service is switched on again by the app.
 
+### Fixed
+- **Random standby.** The Fire TV could go to standby by itself, even seconds after waking up. The power-key watcher reads the system log, and when that log reader restarted, its own error message ("read: unexpected EOF!") was taken for a press of the power button. Only real power-key and Home lines are accepted now.
+
 ### Changed
 - The Tools menu and the first-run setup share one list of services and performance settings (`Tweaks`).
 

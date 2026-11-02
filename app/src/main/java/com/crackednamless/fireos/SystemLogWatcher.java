@@ -15,6 +15,10 @@ final class SystemLogWatcher {
         void onHomeStart();
     }
 
+    static final int NONE = 0;
+    static final int POWER = 1;
+    static final int HOME = 2;
+
     private static final long REPLAY_GUARD_MS = 1500L;
     private static final long DEBOUNCE_MS = 800L;
     private static final long RESTART_MS = 5000L;
@@ -26,6 +30,17 @@ final class SystemLogWatcher {
 
     SystemLogWatcher(Listener listener) {
         this.listener = listener;
+    }
+
+    // Con redirectErrorStream anche gli errori di logcat (es. "read: unexpected EOF!") arrivano qui: non sono tasti.
+    static int classify(String line) {
+        if (line.contains("START u0 {")) {
+            return HOME;
+        }
+        if (line.contains("KEYCODE_POWER") || line.contains("Received Key name: POWER, code: 26, action: 0")) {
+            return POWER;
+        }
+        return NONE;
     }
 
     void start() {
@@ -64,12 +79,13 @@ final class SystemLogWatcher {
                     if (now - startedAt < REPLAY_GUARD_MS) {
                         continue;
                     }
-                    if (!line.contains("START u0 {")) {
+                    int kind = classify(line);
+                    if (kind == POWER) {
                         if (now - lastFired >= DEBOUNCE_MS) {
                             lastFired = now;
                             listener.onPowerKey();
                         }
-                    } else {
+                    } else if (kind == HOME) {
                         listener.onHomeStart();
                     }
                 }
