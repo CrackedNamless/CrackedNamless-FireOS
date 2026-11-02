@@ -3,13 +3,13 @@
     <item android:state_focused="true">
         <shape android:shape="rectangle">
             <gradient android:angle="270" android:endColor="#33FFFFFF" android:startColor="#59FFFFFF" />
-            <corners android:radius="14dp" />
+            <corners android:radius="18dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <gradient android:angle="270" android:endColor="#0FFFFFFF" android:startColor="#26FFFFFF" />
-            <corners android:radius="14dp" />
+            <corners android:radius="18dp" />
         </shape>
     </item>
 </selector>

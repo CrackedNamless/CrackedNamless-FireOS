@@ -96,7 +96,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.Holder> {
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app, parent, false);
-        final float radius = 14 * parent.getResources().getDisplayMetrics().density;
+        final float radius = 18 * parent.getResources().getDisplayMetrics().density;
         v.setOutlineProvider(new ViewOutlineProvider() {
             @Override
             public void getOutline(View view, Outline outline) {

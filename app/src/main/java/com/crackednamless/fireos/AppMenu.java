@@ -77,7 +77,7 @@ final class AppMenu {
         title = new TextView(context);
         title.setTextColor(0xFFFFFFFF);
         title.setTextSize(20);
-        title.setTypeface(null, Typeface.BOLD);
+        title.setTypeface(Type.MEDIUM);
         title.setSingleLine();
         title.setEllipsize(TextUtils.TruncateAt.END);
         panel.addView(title);
@@ -271,7 +271,7 @@ final class AppMenu {
         row.setText(text);
         row.setTextColor(color);
         row.setTextSize(13);
-        row.setTypeface(null, Typeface.BOLD);
+        row.setTypeface(Type.MEDIUM);
         row.setSingleLine();
         row.setEllipsize(TextUtils.TruncateAt.END);
         row.setGravity(Gravity.CENTER_VERTICAL);

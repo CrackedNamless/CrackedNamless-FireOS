@@ -92,7 +92,7 @@ public final class DebloatActivity extends Activity {
         root.setPadding(dp(64), dp(28), dp(64), dp(20));
 
         TextView title = text(getString(R.string.tools_title), 26, Color.WHITE);
-        title.setTypeface(Typeface.DEFAULT_BOLD);
+        title.setTypeface(Type.MEDIUM);
         root.addView(title);
         status = text(getString(R.string.tools_intro), 14, DIM);
         status.setPadding(0, dp(2), 0, dp(12));
@@ -350,7 +350,7 @@ public final class DebloatActivity extends Activity {
                 TextView header = convertView instanceof TextView ? (TextView) convertView
                         : text("", 10, 0x99FFFFFF);
                 header.setText(item.title);
-                header.setTypeface(Typeface.DEFAULT_BOLD);
+                header.setTypeface(Type.MEDIUM);
                 header.setLetterSpacing(0.12f);
                 header.setPadding(dp(4), position == 0 ? dp(2) : dp(18), 0, dp(6));
                 return header;
@@ -366,7 +366,7 @@ public final class DebloatActivity extends Activity {
                 LinearLayout names = new LinearLayout(DebloatActivity.this);
                 names.setOrientation(LinearLayout.VERTICAL);
                 TextView title = text("", 17, Color.WHITE);
-                title.setTypeface(Typeface.DEFAULT_BOLD);
+                title.setTypeface(Type.MEDIUM);
                 title.setSingleLine();
                 title.setEllipsize(android.text.TextUtils.TruncateAt.END);
                 TextView sub = text("", 12, 0x80FFFFFF);
@@ -376,7 +376,7 @@ public final class DebloatActivity extends Activity {
                 names.addView(sub);
                 row.addView(names, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
                 TextView state = text("", 14, DIM);
-                state.setTypeface(Typeface.DEFAULT_BOLD);
+                state.setTypeface(Type.MEDIUM);
                 state.setPadding(dp(16), 0, 0, 0);
                 row.addView(state);
                 v = new RowViews(row, title, sub, state);

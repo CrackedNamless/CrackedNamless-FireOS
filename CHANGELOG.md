@@ -6,6 +6,10 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ### Changed
 - **Premium glass look.** Buttons, tabs, pills, rows, cards and panels now use soft top-to-bottom gradients, a thin inner highlight and a brighter focus ring with a glow. The primary button is a polished pearl gradient. Fire Health, Tools and the app menu share the same glass background as the Home, and the menu panel is more translucent. All done with lightweight drawables, no runtime blur, so Home return time is unchanged.
+- **New "Aurora" look.** Neutral black palette with a soft glow behind the Home that follows the colour of the featured app, thin line icons, medium-weight typography instead of bold, and rounder 18 dp tiles.
+
+### Fixed
+- Apps moved into a folder now still appear in the Home "Your Apps" row.
 
 ## [0.3.0] - 2026-11-02
 

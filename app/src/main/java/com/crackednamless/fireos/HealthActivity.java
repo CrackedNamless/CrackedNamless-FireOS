@@ -111,7 +111,7 @@ public final class HealthActivity extends Activity {
         root.setPadding(dp(64), dp(28), dp(64), dp(20));
 
         TextView title = text(getString(R.string.health_title), 26, Color.WHITE);
-        title.setTypeface(Typeface.DEFAULT_BOLD);
+        title.setTypeface(Type.MEDIUM);
         root.addView(title);
         status = text(getString(R.string.health_loading), 14, DIM);
         status.setPadding(0, dp(2), 0, dp(12));
@@ -403,7 +403,7 @@ public final class HealthActivity extends Activity {
         box.setBackgroundResource(R.drawable.panel_bg);
         box.setPadding(dp(22), dp(18), dp(22), dp(18));
         TextView name = text(item.title, 18, Color.WHITE);
-        name.setTypeface(Typeface.DEFAULT_BOLD);
+        name.setTypeface(Type.MEDIUM);
         name.setSingleLine();
         name.setEllipsize(TextUtils.TruncateAt.END);
         box.addView(name);
@@ -442,7 +442,7 @@ public final class HealthActivity extends Activity {
 
     private View option(LinearLayout box, Dialog dialog, String label, Runnable action) {
         TextView t = text(label, 16, Color.WHITE);
-        t.setTypeface(Typeface.DEFAULT_BOLD);
+        t.setTypeface(Type.MEDIUM);
         t.setBackgroundResource(R.drawable.row_bg);
         t.setPadding(dp(16), dp(10), dp(16), dp(10));
         t.setFocusable(true);
@@ -525,12 +525,12 @@ public final class HealthActivity extends Activity {
         box.setBackgroundResource(R.drawable.glass_card);
         box.setPadding(dp(18), dp(14), dp(18), dp(14));
         TextView name = text(label, 10, 0x99FFFFFF);
-        name.setTypeface(Typeface.DEFAULT_BOLD);
+        name.setTypeface(Type.MEDIUM);
         name.setLetterSpacing(0.12f);
         box.addView(name);
         Card c = new Card();
         c.value = text("", 26, Color.WHITE);
-        c.value.setTypeface(Typeface.DEFAULT_BOLD);
+        c.value.setTypeface(Type.MEDIUM);
         c.value.setPadding(0, dp(2), 0, dp(6));
         box.addView(c.value);
         c.bar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
@@ -551,7 +551,7 @@ public final class HealthActivity extends Activity {
 
     private TextView button(String label) {
         TextView b = text(label, 14, Color.WHITE);
-        b.setTypeface(Typeface.DEFAULT_BOLD);
+        b.setTypeface(Type.MEDIUM);
         b.setBackgroundResource(R.drawable.btn_secondary);
         b.setGravity(Gravity.CENTER);
         b.setPadding(dp(22), dp(9), dp(22), dp(9));
@@ -602,7 +602,7 @@ public final class HealthActivity extends Activity {
             if (item.isSection()) {
                 TextView header = convertView instanceof TextView ? (TextView) convertView : text("", 10, 0x99FFFFFF);
                 header.setText(item.title);
-                header.setTypeface(Typeface.DEFAULT_BOLD);
+                header.setTypeface(Type.MEDIUM);
                 header.setLetterSpacing(0.12f);
                 header.setPadding(dp(4), position == 0 ? dp(2) : dp(18), 0, dp(6));
                 return header;
@@ -621,7 +621,7 @@ public final class HealthActivity extends Activity {
                 names.setOrientation(LinearLayout.VERTICAL);
                 names.setPadding(dp(14), 0, 0, 0);
                 TextView title = text("", 16, Color.WHITE);
-                title.setTypeface(Typeface.DEFAULT_BOLD);
+                title.setTypeface(Type.MEDIUM);
                 title.setSingleLine();
                 title.setEllipsize(TextUtils.TruncateAt.END);
                 TextView sub = text("", 12, 0x80FFFFFF);
@@ -631,7 +631,7 @@ public final class HealthActivity extends Activity {
                 names.addView(sub);
                 row.addView(names, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
                 TextView right = text("", 14, DIM);
-                right.setTypeface(Typeface.DEFAULT_BOLD);
+                right.setTypeface(Type.MEDIUM);
                 right.setPadding(dp(16), 0, 0, 0);
                 row.addView(right);
                 v = new RowViews(row, icon, title, sub, right);

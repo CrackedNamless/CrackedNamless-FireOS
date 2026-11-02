@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:clipChildren="false">
 
+    <View
+        android:id="@+id/ambient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no" />
+
     <LinearLayout
         android:id="@+id/safe_area"
         android:layout_width="match_parent"
@@ -51,7 +57,7 @@
                 android:text="@string/tab_home"
                 android:textColor="@color/tab_text"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tab_library"
@@ -67,7 +73,7 @@
                 android:text="@string/tab_library"
                 android:textColor="@color/tab_text"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tab_store"
@@ -83,7 +89,7 @@
                 android:text="@string/tab_store"
                 android:textColor="@color/tab_text"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <View
                 android:layout_width="0dp"
@@ -116,7 +122,7 @@
                     android:layout_marginLeft="6dp"
                     android:textColor="#FF7CD992"
                     android:textSize="11sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
             </LinearLayout>
 
             <LinearLayout
@@ -145,7 +151,7 @@
                     android:layout_marginLeft="6dp"
                     android:textColor="#FFFFFFFF"
                     android:textSize="11sp"
-                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -175,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:textSize="11sp"
-                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -206,7 +212,7 @@
                     android:includeFontPadding="false"
                     android:textColor="#FFFFFFFF"
                     android:textSize="19sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextClock
                     android:layout_width="wrap_content"
@@ -278,7 +284,7 @@
                             android:text="@string/hero_featured"
                             android:textColor="#FFFFFFFF"
                             android:textSize="9sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="sans-serif-medium" />
 
                         <TextView
                             android:id="@+id/hero_title"
@@ -289,7 +295,7 @@
                             android:maxLines="1"
                             android:textColor="#FFFFFFFF"
                             android:textSize="30sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="sans-serif-medium" />
 
                         <TextView
                             android:id="@+id/hero_subtitle"
@@ -334,7 +340,7 @@
                                 android:text="@string/open"
                                 android:textColor="#FF111827"
                                 android:textSize="13sp"
-                                android:textStyle="bold" />
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/hero_all"
@@ -352,7 +358,7 @@
                                 android:text="@string/all_apps"
                                 android:textColor="#FFFFFFFF"
                                 android:textSize="13sp"
-                                android:textStyle="bold" />
+                                android:fontFamily="sans-serif-medium" />
 
                             <ImageView
                                 android:id="@+id/hero_info"
@@ -420,7 +426,7 @@
                                 android:includeFontPadding="false"
                                 android:textColor="#FFFFFFFF"
                                 android:textSize="34sp"
-                                android:textStyle="bold" />
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/weather_desc"
@@ -490,7 +496,7 @@
                                     android:maxLines="1"
                                     android:textColor="#FFFFFFFF"
                                     android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:fontFamily="sans-serif-medium" />
 
                                 <TextView
                                     android:id="@+id/media_artist"
@@ -535,7 +541,7 @@
                 android:text="@string/your_apps"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/apps_row"
@@ -557,7 +563,7 @@
                 android:text="@string/continue_watching"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recent_row"
@@ -596,7 +602,7 @@
                     android:maxLines="1"
                     android:textColor="#CCFFFFFF"
                     android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
 
                 <View
                     android:layout_width="0dp"
@@ -661,7 +667,7 @@
                 android:text="@string/bt_title"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/bt_status"
@@ -670,7 +676,7 @@
                 android:layout_marginTop="6dp"
                 android:textColor="#FFFFFFFF"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/bt_hint"
@@ -708,7 +714,7 @@
                     android:text="@string/bt_add"
                     android:textColor="#FF111827"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/bt_close"
@@ -724,7 +730,7 @@
                     android:text="@string/close"
                     android:textColor="#FFFFFFFF"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
@@ -755,7 +761,7 @@
                 android:text="@string/speed_title"
                 android:textColor="#99FFFFFF"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/speed_value"
@@ -766,7 +772,7 @@
                 android:text="0"
                 android:textColor="#FFFFFFFF"
                 android:textSize="56sp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/speed_phase"
@@ -796,7 +802,7 @@
                         android:text="@string/speed_label_ping"
                         android:textColor="#99FFFFFF"
                         android:textSize="9sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:id="@+id/speed_ping"
@@ -805,7 +811,7 @@
                         android:text="-"
                         android:textColor="#FFFFFFFF"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -821,7 +827,7 @@
                         android:text="@string/speed_label_download"
                         android:textColor="#99FFFFFF"
                         android:textSize="9sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:id="@+id/speed_down"
@@ -830,7 +836,7 @@
                         android:text="-"
                         android:textColor="#FFFFFFFF"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -846,7 +852,7 @@
                         android:text="@string/speed_label_upload"
                         android:textColor="#99FFFFFF"
                         android:textSize="9sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:id="@+id/speed_up"
@@ -855,7 +861,7 @@
                         android:text="-"
                         android:textColor="#FFFFFFFF"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -879,7 +885,7 @@
                     android:text="@string/repeat"
                     android:textColor="#FFFFFFFF"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/speed_close"
@@ -895,7 +901,7 @@
                     android:text="@string/close"
                     android:textColor="#FF111827"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

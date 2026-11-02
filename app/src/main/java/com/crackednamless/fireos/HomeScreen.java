@@ -65,6 +65,7 @@ public final class HomeScreen {
     private final View hero;
     private final ImageView heroArt;
     private final View heroFade;
+    private final View ambient;
     private final TextView heroChip;
     private final TextView heroTitle;
     private final TextView heroSubtitle;
@@ -147,6 +148,7 @@ public final class HomeScreen {
         hero = root.findViewById(R.id.hero);
         heroArt = root.findViewById(R.id.hero_art);
         heroFade = root.findViewById(R.id.hero_fade);
+        ambient = root.findViewById(R.id.ambient);
         heroChip = root.findViewById(R.id.hero_chip);
         heroTitle = root.findViewById(R.id.hero_title);
         heroSubtitle = root.findViewById(R.id.hero_subtitle);
@@ -659,6 +661,14 @@ public final class HomeScreen {
         GradientDrawable fade = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
                 new int[]{edge, (edge & 0x00FFFFFF) | 0x99000000, edge & 0x00FFFFFF});
         heroFade.setBackground(fade);
+
+        float glowR = 560 * density;
+        GradientDrawable glow = new GradientDrawable();
+        glow.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+        glow.setGradientCenter(0.32f, 0.3f);
+        glow.setGradientRadius(glowR);
+        glow.setColors(new int[]{(AppArt.shade(accent, 0.75f, 0.5f) & 0x00FFFFFF) | 0x80000000, AppArt.shade(accent, 0.75f, 0.3f) & 0x00FFFFFF});
+        ambient.setBackground(glow);
     }
 
     private static final int COLOR_ONLINE = 0xFF34D399;
@@ -802,7 +812,7 @@ public final class HomeScreen {
             name.setText(dev.name);
             name.setTextColor(0xFFFFFFFF);
             name.setTextSize(13);
-            name.setTypeface(null, android.graphics.Typeface.BOLD);
+            name.setTypeface(Type.MEDIUM);
             name.setSingleLine();
             name.setEllipsize(android.text.TextUtils.TruncateAt.END);
             texts.addView(name);

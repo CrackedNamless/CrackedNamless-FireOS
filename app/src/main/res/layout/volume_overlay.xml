@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFFFF"
         android:textSize="13sp"
-        android:textStyle="bold" />
+        android:fontFamily="sans-serif-medium" />
 
     <FrameLayout
         android:id="@+id/volume_track"
