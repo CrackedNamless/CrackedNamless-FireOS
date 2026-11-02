@@ -16,7 +16,7 @@
     <string name="tab_home">Home</string>
     <string name="tab_library">Library</string>
     <string name="tab_store">Store</string>
-    <string name="made_by">Made by CrackedNamless - v%1$s</string>
+    <string name="made_by">v%1$s</string>
     <string name="store_missing">The Amazon Appstore is not available on this device.</string>
     <string name="hero_featured">FEATURED</string>
     <string name="hero_last_opened">LAST APP OPENED</string>

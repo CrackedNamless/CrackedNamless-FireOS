@@ -11,8 +11,8 @@ public final class Scaling {
 
     private static final float DESIGN_W_DP = 960f;
     private static final float DESIGN_H_DP = 540f;
-    private static final float SAFE_X = 0.058f;
-    private static final float SAFE_Y = 0.052f;
+    private static final float SAFE_X = 0.015f;
+    private static final float SAFE_Y = 0.019f;
 
     private Scaling() {
     }

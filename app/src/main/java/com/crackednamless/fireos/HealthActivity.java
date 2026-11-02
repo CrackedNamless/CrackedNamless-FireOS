@@ -108,7 +108,7 @@ public final class HealthActivity extends Activity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackground(GlassBackground.create(getResources()));
-        root.setPadding(dp(64), dp(28), dp(64), dp(20));
+        root.setPadding(dp(24), dp(14), dp(24), dp(10));
 
         TextView title = text(getString(R.string.health_title), 26, Color.WHITE);
         title.setTypeface(Type.MEDIUM);
