@@ -4,6 +4,11 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-11-02
+
+### Changed
+- **Updates are noticed faster.** The launcher now checks the latest GitHub Release every 10 minutes instead of every 6 hours (one small request, well under GitHub's limit), and the first check after installing a new version happens right away.
+
 ## [0.4.1] - 2026-11-02
 
 ### Fixed

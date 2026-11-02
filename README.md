@@ -161,7 +161,7 @@ Services are turned off with `pm disable-user`: the APK and its data stay on the
 
 ## Update
 
-The launcher updates itself: it checks the latest release every few hours, downloads a newer APK and shows a small card in the bottom right corner. Press OK to install it (only the launcher restarts) or Back to postpone. By hand, download the new APK from the [releases page](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases) and run:
+The launcher updates itself: it checks the latest release every 10 minutes, downloads a newer APK and shows a small card in the bottom right corner. Press OK to install it (only the launcher restarts) or Back to postpone. By hand, download the new APK from the [releases page](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases) and run:
 
 ```bash
 adb install -r CrackedNamless-FireOS.apk

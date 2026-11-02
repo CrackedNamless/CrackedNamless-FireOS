@@ -47,7 +47,7 @@ final class Updater {
     private static final String KEY_NOTES = "pending_notes";
     private static final String KEY_LATER = "later_version";
     private static final String KEY_NEXT_CHECK = "next_check";
-    private static final long CHECK_EVERY_MS = 6 * 60 * 60 * 1000L;
+    private static final long CHECK_EVERY_MS = 10 * 60 * 1000L;
     private static final long RETRY_MS = 5 * 60 * 1000L;
     private static final int TIMEOUT_MS = 20_000;
     private static final int NOTES_MAX = 500;
@@ -206,7 +206,11 @@ final class Updater {
             }
             return;
         }
-        if (System.currentTimeMillis() < prefs(app).getLong(KEY_NEXT_CHECK, 0) || !CHECKING.compareAndSet(false, true)) {
+        long nextCheck = prefs(app).getLong(KEY_NEXT_CHECK, 0);
+        if (nextCheck - System.currentTimeMillis() > CHECK_EVERY_MS) {
+            nextCheck = 0;
+        }
+        if (System.currentTimeMillis() < nextCheck || !CHECKING.compareAndSet(false, true)) {
             return;
         }
         WORKER.execute(() -> {
