@@ -3,7 +3,7 @@
 A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Amazon launcher with a clean one that opens in about a second on a 1 GB Fire TV Stick, and ships a set of tools to remove Amazon background services.
 
 [![Latest release](https://img.shields.io/github/v/release/CrackedNamless/CrackedNamless-FireOS?style=flat-square)](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases/latest)
-[![License: PolyForm Noncommercial](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-blue?style=flat-square)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square)](LICENSE)
 ![Fire OS 7](https://img.shields.io/badge/Fire%20OS-7%20(Android%209)-orange?style=flat-square)
 
 ![Home screen](docs/screenshots/home.png)
@@ -217,8 +217,6 @@ This project is not affiliated with or endorsed by Amazon. Fire TV and Alexa are
 
 ## License
 
-[PolyForm Noncommercial License 1.0.0](LICENSE). You can read, use, modify and share the source for personal, hobby, educational, research and non-profit use. **Commercial use is not allowed.** Anyone who gets a copy from you must also get the license and the credit line in [NOTICE](NOTICE) (`Required Notice: Copyright (c) 2026 CrackedNamless`), so the original author always stays named. For commercial use, ask for a separate written license.
-
-This is a source-available license, not an OSI-approved open source license.
+[Apache License 2.0](LICENSE). You can use, modify and share the source freely, including inside a product that is sold, as long as you keep the credit: anyone who redistributes this code, modified or not, must include the license and the [NOTICE](NOTICE) file, which names the original author, **CrackedNamless**, and links to this repository, and must mark the files they changed.
 
 Versions up to 0.3.0 were published under the plain MIT license; copies you already received keep those terms.
