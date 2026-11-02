@@ -1,16 +1,23 @@
-MIT License with Attribution
+CrackedNamless-FireOS Non-Commercial License with Attribution
 
 Copyright (c) 2026 CrackedNamless
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, merge, publish and distribute the Software, and to permit
+persons to whom the Software is furnished to do so, for NON-COMMERCIAL
+purposes only, subject to the following conditions:
 
-1. The above copyright notice and this permission notice shall be included in
-   all copies or substantial portions of the Software.
+1. Non-commercial use only. You may not use the Software, or any work based
+   on it, for commercial purposes. Commercial purposes means anything
+   primarily intended for or directed towards commercial advantage or monetary
+   compensation, including: selling the Software or a work based on it;
+   charging for access, support, installation or hosting of it; bundling it
+   in, or preinstalling it on, a product or device that is sold; and
+   distributing it with advertising, paid features or in-app purchases.
+   Personal use, hobby projects, education, research and use by non-profit
+   organisations are not commercial purposes. For any other use, ask the
+   author for a separate written licence.
 
 2. Attribution. Any product, project or service that uses, is based on, or
    contains all or part of the Software (in source or binary form, modified or
@@ -21,6 +28,17 @@ furnished to do so, subject to the following conditions:
    application that includes it. The credit must not be removed, hidden or
    replaced, and must not suggest that the original author endorses the
    derived work.
+
+3. Same terms. Anyone you give the Software, or a work based on it, must also
+   receive this licence text and be bound by it. You may not sublicense under
+   different terms.
+
+4. The above copyright notice and this licence text shall be included in all
+   copies or substantial portions of the Software.
+
+Versions of the Software published before the date of this licence under the
+MIT License remain available under that licence for the copies already
+distributed.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
