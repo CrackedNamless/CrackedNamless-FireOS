@@ -1,4 +1,4 @@
-MIT License
+MIT License with Attribution
 
 Copyright (c) 2026 CrackedNamless
 
@@ -9,8 +9,18 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+
+2. Attribution. Any product, project or service that uses, is based on, or
+   contains all or part of the Software (in source or binary form, modified or
+   not) must credit the original author, "CrackedNamless", and link to the
+   original repository, https://github.com/CrackedNamless/CrackedNamless-FireOS,
+   in a place that users can easily see: at least in the README or the website
+   or store page of the project, and in the "about" or credits screen of any
+   application that includes it. The credit must not be removed, hidden or
+   replaced, and must not suggest that the original author endorses the
+   derived work.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

@@ -3,7 +3,7 @@
 A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Amazon launcher with a clean one that opens in about a second on a 1 GB Fire TV Stick, and ships a set of tools to remove Amazon background services.
 
 [![Latest release](https://img.shields.io/github/v/release/CrackedNamless/CrackedNamless-FireOS?style=flat-square)](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases/latest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![License: MIT with Attribution](https://img.shields.io/badge/license-MIT%20with%20Attribution-blue?style=flat-square)](LICENSE)
 ![Fire OS 7](https://img.shields.io/badge/Fire%20OS-7%20(Android%209)-orange?style=flat-square)
 
 ![Home screen](docs/screenshots/home.png)
@@ -217,4 +217,6 @@ This project is not affiliated with or endorsed by Amazon. Fire TV and Alexa are
 
 ## License
 
-[MIT](LICENSE)
+[MIT with Attribution](LICENSE). You are free to use, modify and redistribute the source, including in commercial projects, but you must always credit the original author, **CrackedNamless**, and link to this repository: in your README or project page, and in the credits or about screen of any app that contains this code. See the license for the exact wording.
+
+Versions up to 0.3.0 were published under the plain MIT license; copies you already received keep those terms.
