@@ -42,6 +42,53 @@ final class Tweaks {
             + "cmd appops set $p RUN_IN_BACKGROUND ignore; cmd appops set $p RUN_ANY_IN_BACKGROUND ignore; "
             + "am force-stop $p; done; echo ignore";
 
+    // Essenziali: restano sempre libere di partire da sole (Home, Appstore, profili, impostazioni, voce Alexa, sistema Android).
+    private static final String[] ESSENTIAL_EXACT = {
+            "android", "com.amazon.tv.launcher", "com.amazon.venezia", "com.amazon.ftv.profilepicker", "com.amazon.ssm"
+    };
+    private static final String[] ESSENTIAL_PREFIX = {
+            "com.android.", "com.amazon.tv.settings", "com.amazon.device.", "com.amazon.vizzini", "com.amazon.alexa",
+            "com.amazon.firetv.inputmethod", "com.amazon.bluetooth", "com.google.android."
+    };
+
+    static boolean isEssential(String pkg, String self) {
+        if (pkg.equals(self)) {
+            return true;
+        }
+        for (String exact : ESSENTIAL_EXACT) {
+            if (pkg.equals(exact)) {
+                return true;
+            }
+        }
+        for (String prefix : ESSENTIAL_PREFIX) {
+            if (pkg.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // App con icona che non sono essenziali: non possono piu' avviarsi o restare attive da sole (si aprono solo quando le scegli tu).
+    static List<String> nonEssentialApps(PackageManager pm, String self) {
+        java.util.Set<String> found = new java.util.TreeSet<>();
+        for (String category : new String[]{android.content.Intent.CATEGORY_LEANBACK_LAUNCHER, android.content.Intent.CATEGORY_LAUNCHER}) {
+            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_MAIN).addCategory(category);
+            for (android.content.pm.ResolveInfo info : pm.queryIntentActivities(intent, 0)) {
+                String pkg = info.activityInfo.packageName;
+                if (!isEssential(pkg, self)) {
+                    found.add(pkg);
+                }
+            }
+        }
+        return new ArrayList<>(found);
+    }
+
+    static String autoStartBlockCommand(List<String> packages) {
+        return "for p in " + String.join(" ", packages) + "; do "
+                + "cmd appops set $p RUN_IN_BACKGROUND ignore; cmd appops set $p RUN_ANY_IN_BACKGROUND ignore; "
+                + "am force-stop $p; done; echo ignore";
+    }
+
     // Un comando pm disable-user per ogni servizio presente su questo Stick e ancora attivo.
     static List<String> disableCommands(PackageManager pm) {
         List<String> commands = new ArrayList<>();
