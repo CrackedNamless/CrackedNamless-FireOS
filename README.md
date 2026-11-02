@@ -10,14 +10,20 @@ A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Ama
 
 ## What you get
 
-- **A clean Home.** Frosted-glass top bar, a card for the last app you opened, your apps, a "continue watching" row and a full library. No ads, no promoted content.
+- **A clean Home.** Frosted-glass top bar, a card for the last app you opened, your apps, a "continue watching" row and a full library. No ads, no promoted content. Every app card is filled with the app's own banner or icon.
 - **It really replaces Home.** Pressing the Home button on the remote shows this launcher, even though Fire OS pins Amazon's.
 - **A Store tab.** The **Store** tab in the top bar opens the Amazon Appstore that is already on the Fire TV, so you can get new apps without leaving the launcher.
+- **A real Library.** Hold OK on an app to put it in a folder (Streaming, Games, Music, Tools, Kids or one you name) or to uninstall it. System apps are never removed.
 - **Fast.** Fire OS normally delays app launches for 5 seconds after Home. Fast Home removes that wait, so Home appears in about 1.2 s.
 - **Status at a glance.** Wi-Fi latency, Bluetooth, clock and weather ([Open-Meteo](https://open-meteo.com)).
 - **A Tools menu** to switch off Amazon telemetry and background services in bulk, stop Prime Video from starting by itself, free memory and set a performance preset. Everything is reversible.
-- **Fire Health.** The memory chip in the top bar opens a dashboard with free RAM, storage and uptime, a list of the apps that stay alive in the background (close them, or block them from starting by themselves) and an Auto-clean switch that frees idle memory on standby and when RAM runs low.
+- **Fire Health.** The memory chip in the top bar opens a dashboard with free RAM, storage and uptime, the apps that stay alive in the background (close them, or block them from starting by themselves) and an Auto-clean switch that frees idle memory on standby and when RAM runs low. The launcher, the Appstore, profiles, settings, Alexa and Android itself are never listed, so they cannot be blocked by mistake.
+- **Automatic updates.** The launcher checks the latest GitHub Release and installs a newer APK in seconds, after you press OK on a small card in the bottom right corner. Playback is paused and resumes at the same point.
 - **Light on memory.** Plain Android views, no heavy frameworks, no analytics, no resident helper process.
+
+![Library](docs/screenshots/library.png)
+
+![Fire Health](docs/screenshots/health.png)
 
 ![Tools menu](docs/screenshots/tools.png)
 
@@ -115,6 +121,8 @@ Press **Home** on the remote. The first time can take a few seconds while the se
 | App info | **i** button on the hero card |
 | All apps | **All apps**, or the Library tab |
 | Get new apps | **Store** tab (opens the Amazon Appstore) |
+| Folder, uninstall or app info | Hold OK on an app in the Library |
+| Memory, storage, background apps | Memory chip in the top bar (Fire Health) |
 | Tools menu | Long-press OK on the settings icon in the top bar |
 | Amazon settings | Short press OK on the settings icon |
 
@@ -130,7 +138,7 @@ Switch the row off at any time to close the session and the tunnel.
 
 ### Set up on first launch
 
-The first time the launcher opens, it turns on **Fast Home**, **Performance** and **Disable all unneeded services** by itself, so you do not have to open the Tools menu. The only thing you do is choose **Always allow** when the Stick asks about USB debugging. It only happens once: if you switch one of them off later, it stays off. Every setting can be undone from the Tools menu.
+The first time the launcher opens, it turns on **Fast Home**, **Performance** and **Disable all unneeded services** by itself, so you do not have to open the Tools menu. It also stops Prime Video from running in the background (it slows a small Fire TV down) and stops every non-essential app that has an icon (streaming apps, Silk, Kids and so on) from starting or staying alive by itself. Those apps still open normally when you choose them. The launcher, the Appstore, profiles, settings, Alexa voice and Android itself are never touched. The only thing you do is choose **Always allow** when the Stick asks about USB debugging. It only happens once: if you switch one of them off later, it stays off. Every setting can be undone from the Tools menu or from Fire Health.
 
 ### Tools menu
 
@@ -153,7 +161,7 @@ Services are turned off with `pm disable-user`: the APK and its data stay on the
 
 ## Update
 
-Download the new APK from the [releases page](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases) and run:
+The launcher updates itself: it checks the latest release every few hours, downloads a newer APK and shows a small card in the bottom right corner. Press OK to install it (only the launcher restarts) or Back to postpone. By hand, download the new APK from the [releases page](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases) and run:
 
 ```bash
 adb install -r CrackedNamless-FireOS.apk
