@@ -127,6 +127,9 @@ final class AdbBridge {
             if (session != null) {
                 try {
                     session.shell("true");
+                    if (!ready) {
+                        discoverCode(app);
+                    }
                 } catch (IOException e) {
                     dropSession(app);
                 }
@@ -208,6 +211,11 @@ final class AdbBridge {
             status(listener, app.getString(R.string.adb_connecting));
             client.connect(TunnelVpnService.VIRTUAL_HOST, ADB_PORT, keys, authWaitMs);
             session = client;
+            int cachedCode = prefs(app).getInt(KEY_CODE, 0);
+            if (cachedCode > 0 && isFastHome(app)) {
+                resumeCode = cachedCode;
+                ready = true;
+            }
             prefs(app).edit().putBoolean(KEY_AUTHORIZED, true).apply();
             return null;
         } catch (AdbClient.AuthException e) {
