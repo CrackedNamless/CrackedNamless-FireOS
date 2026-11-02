@@ -17,6 +17,7 @@ public final class AppArt {
 
     public final Drawable drawable;
     public final boolean isBanner;
+    private boolean retry;
 
     private AppArt(Drawable drawable, boolean isBanner) {
         this.drawable = drawable;
@@ -26,6 +27,9 @@ public final class AppArt {
     private static final java.util.Map<String, Drawable.ConstantState> BANNERS =
             java.util.Collections.synchronizedMap(new java.util.HashMap<>());
     private static final java.util.Map<String, Drawable.ConstantState> ICONS =
+            java.util.Collections.synchronizedMap(new java.util.HashMap<>());
+    // Icone per le anteprime delle cartelle: separate da ICONS, che vale solo per le app senza banner.
+    private static final java.util.Map<String, Drawable.ConstantState> PLAIN_ICONS =
             java.util.Collections.synchronizedMap(new java.util.HashMap<>());
     private static final java.util.Map<String, Integer> ACCENTS =
             java.util.Collections.synchronizedMap(new java.util.HashMap<>());
@@ -42,9 +46,16 @@ public final class AppArt {
     public static void clear() {
         BANNERS.clear();
         ICONS.clear();
+        PLAIN_ICONS.clear();
         HEROES.clear();
         HERO_BANNER.clear();
         ACCENTS.clear();
+    }
+
+    // I banner grandi della Home sono i piu' pesanti e si rigenerano al volo: sono i primi da liberare.
+    public static void trim() {
+        HEROES.clear();
+        HERO_BANNER.clear();
     }
 
     private static Drawable fresh(java.util.Map<String, Drawable.ConstantState> cache, String key, Resources res) {
@@ -77,6 +88,13 @@ public final class AppArt {
                 return new AppArt(d, true);
             }
             Drawable d = scaled(res, pm.getActivityIcon(cn), MAX_ICON);
+            android.content.pm.ActivityInfo ai = pm.getActivityInfo(cn, 0);
+            if (ai.banner != 0 || ai.applicationInfo.banner != 0) {
+                // Il banner esiste ma il sistema non l'ha restituito (memoria scarsa, app in aggiornamento): icona provvisoria, non in cache.
+                AppArt temporary = new AppArt(d, false);
+                temporary.retry = true;
+                return temporary;
+            }
             keep(ICONS, key, d);
             ACCENTS.put(key, accent(d));
             return new AppArt(d, false);
@@ -88,13 +106,13 @@ public final class AppArt {
     public static Drawable icon(PackageManager pm, Resources res, AppEntry e) {
         ComponentName cn = new ComponentName(e.packageName, e.className);
         String key = cn.flattenToString();
-        Drawable hit = fresh(ICONS, key, res);
+        Drawable hit = fresh(PLAIN_ICONS, key, res);
         if (hit != null) {
             return hit;
         }
         try {
             Drawable d = scaled(res, pm.getActivityIcon(cn), MAX_ICON);
-            keep(ICONS, key, d);
+            keep(PLAIN_ICONS, key, d);
             return d;
         } catch (PackageManager.NameNotFoundException ignored) {
             return null;
@@ -177,9 +195,18 @@ public final class AppArt {
 
     // Decodifica in coda su un thread a bassa priorita' e consegna il risultato sul thread principale.
     public static void load(PackageManager pm, Resources res, AppEntry e, Done<AppArt> done) {
+        load(pm, res, e, done, 3);
+    }
+
+    private static void load(PackageManager pm, Resources res, AppEntry e, Done<AppArt> done, int retries) {
         LOADER.execute(() -> {
             AppArt art = banner(pm, res, e);
-            MAIN.post(() -> done.done(art));
+            MAIN.post(() -> {
+                done.done(art);
+                if (art.retry && retries > 0) {
+                    MAIN.postDelayed(() -> load(pm, res, e, done, retries - 1), 3000);
+                }
+            });
         });
     }
 

@@ -156,6 +156,17 @@
     <string name="tools_free_memory">Libera memoria ora</string>
     <string name="tools_free_memory_sub">Chiude le app inattive in cache, quelle in uso restano</string>
     <string name="tools_closing_idle">Chiudo le app inattive</string>
+    <string name="tools_clear_cache">Svuota la cache delle app</string>
+    <string name="tools_clear_cache_sub">Libera spazio; le app ricreano la cache quando serve</string>
+    <string name="tools_clear_cache_result">Spazio liberato: %1$s</string>
+    <string name="tools_frame_rate">Frame rate dei contenuti</string>
+    <string name="tools_frame_rate_sub">Meno scatti nei film a 24 fps; su alcune TV lo schermo sfarfalla al cambio</string>
+    <string name="tools_frame_rate_on">Frame rate dei contenuti attivato</string>
+    <string name="tools_frame_rate_off">Frame rate dei contenuti disattivato</string>
+    <string name="tools_adblock_dns">DNS anti-pubblicità</string>
+    <string name="tools_adblock_dns_sub">DNS privato AdGuard: meno pubblicità e tracker, può dare problemi ad alcune app</string>
+    <string name="tools_adblock_dns_on">DNS anti-pubblicità attivato</string>
+    <string name="tools_adblock_dns_off">DNS anti-pubblicità disattivato</string>
     <string name="tools_memory_result">Memoria libera: %1$d MB, ora %2$d MB</string>
     <string name="tools_service_active">Attivo</string>
     <string name="tools_service_disabled">Disattivato</string>

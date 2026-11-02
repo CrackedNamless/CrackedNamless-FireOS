@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.PowerManager;
 import android.provider.Settings;
 
 public class BootReceiver extends BroadcastReceiver {
@@ -15,10 +14,6 @@ public class BootReceiver extends BroadcastReceiver {
         if (updated) {
             Updater.cleanup(context);
             enableService(context);
-        }
-        PowerManager power = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (updated && power != null && !power.isInteractive()) {
-            return;
         }
         Intent resume = updated ? resumeIntent(context) : null;
         context.startActivity((resume != null ? resume : new Intent(context, HomeActivity.class))

@@ -10,8 +10,8 @@ android {
         applicationId 'com.crackednamless.fireos'
         minSdk 22
         targetSdk 28
-        versionCode 30
-        versionName '0.4.2'
+        versionCode 31
+        versionName '0.4.3'
     }
 
     def keystoreFile = rootProject.file('keystore.properties')

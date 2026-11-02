@@ -15,6 +15,7 @@ import java.util.List;
 final class MemoryGuard {
 
     static final long LOW_MB = 150;
+    private static final long LOW_STORAGE_BYTES = 500L * 1024 * 1024;
     private static final long COOLDOWN_MS = 10 * 60_000L;
     private static final long SETTLE_MS = 1500L;
     private static final String PREFS = "memory_guard";
@@ -82,7 +83,12 @@ final class MemoryGuard {
         running = true;
         lastRunUptime = now;
         long before = availableMb(app);
-        AdbBridge.run(app, Collections.singletonList("am kill-all"), true, new AdbBridge.Listener() {
+        List<String> commands = new java.util.ArrayList<>();
+        commands.add("am kill-all");
+        if (new android.os.StatFs(android.os.Environment.getDataDirectory().getPath()).getAvailableBytes() < LOW_STORAGE_BYTES) {
+            commands.add(Tweaks.TRIM_CACHES);
+        }
+        AdbBridge.run(app, commands, true, new AdbBridge.Listener() {
             @Override
             public void onStatus(String message) {
             }

@@ -175,6 +175,17 @@
     <string name="tools_free_memory">Free memory now</string>
     <string name="tools_free_memory_sub">Closes idle cached apps, apps in use stay open</string>
     <string name="tools_closing_idle">Closing idle apps</string>
+    <string name="tools_clear_cache">Clear app caches</string>
+    <string name="tools_clear_cache_sub">Frees storage; apps rebuild their cache as needed</string>
+    <string name="tools_clear_cache_result">Storage freed: %1$s</string>
+    <string name="tools_frame_rate">Match content frame rate</string>
+    <string name="tools_frame_rate_sub">Less judder on 24 fps films; some TVs flicker when switching</string>
+    <string name="tools_frame_rate_on">Frame rate matching on</string>
+    <string name="tools_frame_rate_off">Frame rate matching off</string>
+    <string name="tools_adblock_dns">Ad-blocking DNS</string>
+    <string name="tools_adblock_dns_sub">AdGuard private DNS: fewer ads and trackers, may affect some apps</string>
+    <string name="tools_adblock_dns_on">Ad-blocking DNS on</string>
+    <string name="tools_adblock_dns_off">Ad-blocking DNS off</string>
     <string name="tools_memory_result">Free memory: %1$d MB, now %2$d MB</string>
     <string name="tools_service_active">Active</string>
     <string name="tools_service_disabled">Disabled</string>

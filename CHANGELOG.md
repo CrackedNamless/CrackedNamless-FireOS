@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-11-02
+
+### Added
+- **Tools: "Clear app caches"** (`pm trim-caches`). Frees storage on demand; the automatic memory clean-up on standby also does it when storage drops under 500 MB.
+- **Tools: "Match content frame rate"**, off by default (fewer judder on 24 fps films, some TVs flicker when the refresh rate switches).
+- **Tools: "Ad-blocking DNS"**, off by default. Switches Android Private DNS to AdGuard (`dns.adguard-dns.com`), which also reaches the Amazon loggers that cannot be disabled.
+
+### Changed
+- **18 more useless Amazon packages are disabled** by the clean-up: "Still watching?" prompt, website launcher, multi-room audio helpers (`whad`, `whasettings`, `wha.mediabrowserservice`) and telemetry/promo services (`client.metrics.api`, `neo.minerva`, `neo.minerva.logcat`, `perfc`, `dp.logger`, `tv.developer.dataservice`, `livedeviceservice`, `wifilocker`, `kso.blackbird`, `uxnotification`, `systemnotices`, `cloud9`, `whisperjoin.middleware.np`). Each was tested on a Fire TV Stick Lite; revert any with `pm enable <package>` over ADB or from Tools. Live TV, Matter, notification center and the Alexa packages stay enabled on purpose.
+- **Less memory under pressure.** When Android asks apps to free memory, the launcher drops its large Home banner images (regenerated on demand).
+
+### Fixed
+- **Update installed during standby now brings back the Home.** When an update was installed while the Fire was asleep ("Later" on the update card), waking it showed the stock Amazon Home instead of the launcher. The launcher now restarts its Home right after the update, still without turning the screen on.
+- **App cards keep their full-card banner.** If the system briefly failed to hand over an app's banner (low memory, app being updated), the small icon was remembered until the launcher restarted. The icon is now only kept for apps that really have no banner, and the banner is retried a few seconds later.
+
 ## [0.4.2] - 2026-11-02
 
 ### Changed

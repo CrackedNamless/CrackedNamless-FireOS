@@ -153,6 +153,17 @@ public final class DebloatActivity extends Activity {
                 perf ? on : off, perf ? GREEN : DIM, () -> setPerformance(!perf)));
         rows.add(new Row(getString(R.string.tools_free_memory), getString(R.string.tools_free_memory_sub),
                 "", DIM, this::freeMemory));
+        rows.add(new Row(getString(R.string.tools_clear_cache), getString(R.string.tools_clear_cache_sub),
+                "", DIM, this::clearCaches));
+        boolean frames = "1".equals(Settings.Global.getString(getContentResolver(), "match_content_frame_rate"));
+        rows.add(new Row(getString(R.string.tools_frame_rate), getString(R.string.tools_frame_rate_sub),
+                frames ? on : off, frames ? GREEN : DIM, () -> exec(Tweaks.frameRateCommands(!frames),
+                        outputs -> getString(frames ? R.string.tools_frame_rate_off : R.string.tools_frame_rate_on))));
+        boolean dns = "hostname".equals(Settings.Global.getString(getContentResolver(), "private_dns_mode"))
+                && Tweaks.ADGUARD_DNS.equals(Settings.Global.getString(getContentResolver(), "private_dns_specifier"));
+        rows.add(new Row(getString(R.string.tools_adblock_dns), getString(R.string.tools_adblock_dns_sub),
+                dns ? on : off, dns ? GREEN : DIM, () -> exec(Tweaks.adblockDnsCommands(!dns),
+                        outputs -> getString(dns ? R.string.tools_adblock_dns_off : R.string.tools_adblock_dns_on))));
 
         rows.add(Row.section(getString(R.string.tools_section_amazon)));
         rows.add(new Row(getString(R.string.tools_disable_all), getString(R.string.tools_disable_all_sub),
@@ -224,6 +235,16 @@ public final class DebloatActivity extends Activity {
                     1500);
             return getString(R.string.tools_closing_idle);
         });
+    }
+
+    private void clearCaches() {
+        long before = freeStorageBytes();
+        exec(Collections.singletonList(Tweaks.TRIM_CACHES), outputs -> getString(R.string.tools_clear_cache_result,
+                android.text.format.Formatter.formatFileSize(this, Math.max(0, freeStorageBytes() - before))));
+    }
+
+    private long freeStorageBytes() {
+        return new android.os.StatFs(android.os.Environment.getDataDirectory().getPath()).getAvailableBytes();
     }
 
     private long availableMb() {

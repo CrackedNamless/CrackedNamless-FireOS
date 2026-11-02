@@ -20,8 +20,35 @@ final class Tweaks {
             "com.amazon.perfcollection", "com.amazon.recess", "com.amazon.shoptv.client",
             "com.amazon.shoptv.firetv.client", "com.amazon.storm.lightning.tutorial", "com.amazon.tmm.tutorial",
             "com.amazon.tv.acr", "com.amazon.tv.fw.metrics", "com.amazon.tv.releasenotes",
-            "com.amazon.wirelessmetrics.service"
+            "com.amazon.wirelessmetrics.service", "com.amazon.stillwatching.activity", "com.amazon.tv.website_launcher",
+            "com.amazon.whad", "com.amazon.whasettings", "com.amazon.wha.mediabrowserservice",
+            "com.amazon.client.metrics.api", "com.amazon.neo.minerva", "com.amazon.neo.minerva.logcat",
+            "com.amazon.perfc", "com.amazon.dp.logger", "com.amazon.tv.developer.dataservice",
+            "com.amazon.livedeviceservice", "com.amazon.wifilocker", "com.amazon.kso.blackbird",
+            "com.amazon.uxnotification", "com.amazon.systemnotices", "com.amazon.cloud9",
+            "com.amazon.whisperjoin.middleware.np"
     };
+
+    // Svuota tutte le cache delle app: lo spazio richiesto e' enorme, cosi' il sistema le libera tutte.
+    static final String TRIM_CACHES = "pm trim-caches 100G";
+
+    static List<String> frameRateCommands(boolean on) {
+        return java.util.Collections.singletonList("settings put global match_content_frame_rate " + (on ? "1" : "0"));
+    }
+
+    static final String ADGUARD_DNS = "dns.adguard-dns.com";
+
+    static List<String> adblockDnsCommands(boolean on) {
+        List<String> commands = new ArrayList<>();
+        if (on) {
+            commands.add("settings put global private_dns_specifier " + ADGUARD_DNS);
+            commands.add("settings put global private_dns_mode hostname");
+        } else {
+            commands.add("settings put global private_dns_mode opportunistic");
+            commands.add("settings delete global private_dns_specifier");
+        }
+        return commands;
+    }
 
     private Tweaks() {
     }
