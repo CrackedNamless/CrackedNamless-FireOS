@@ -630,6 +630,15 @@ public final class HomeScreen {
             return;
         }
         heroTitle.setText(app.label);
+        applyHeroArt(art);
+        AppArt.loadHero(pm, context.getResources(), app, hi -> {
+            if (heroApp == app && hi.drawable != null) {
+                applyHeroArt(hi);
+            }
+        });
+    }
+
+    private void applyHeroArt(AppArt art) {
         if (art.isBanner) {
             heroArt.setScaleType(ImageView.ScaleType.CENTER_CROP);
             heroArt.setPadding(0, 0, 0, 0);

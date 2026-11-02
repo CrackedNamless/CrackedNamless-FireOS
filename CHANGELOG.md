@@ -10,6 +10,7 @@ All notable changes to this project are documented here. Each release on GitHub 
 - **Weather card redesigned:** location with a pin, large light temperature, bigger icon, a divider and the conditions below, on a soft gradient card.
 - **Edge-to-edge layout:** the large side and top/bottom margins are gone (about 1.5% safe margin), so the Home, Fire Health and Tools use the whole screen on any TV.
 - The footer now shows only the version number.
+- **Sharper featured app art:** the big Home art now loads the highest-density icon or banner (vector and adaptive icons are redrawn at 512 px) instead of the small tile image. The version label sits flush in the bottom-right corner.
 
 ### Fixed
 - Apps moved into a folder now still appear in the Home "Your Apps" row.

@@ -673,10 +673,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="14dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginRight="0dp"
         android:textColor="#80FFFFFF"
-        android:textSize="10sp" />
+        android:textSize="9sp"
+        android:paddingBottom="3dp"
+        android:paddingRight="5dp" />
 
     <FrameLayout
         android:id="@+id/bt_panel"

@@ -42,6 +42,8 @@ public final class AppArt {
     public static void clear() {
         BANNERS.clear();
         ICONS.clear();
+        HEROES.clear();
+        HERO_BANNER.clear();
         ACCENTS.clear();
     }
 
@@ -101,6 +103,60 @@ public final class AppArt {
 
     public interface Done<T> {
         void done(T value);
+    }
+
+    private static final java.util.Set<String> HERO_BANNER =
+            java.util.Collections.synchronizedSet(new java.util.HashSet<>());
+    private static final java.util.Map<String, Drawable.ConstantState> HEROES =
+            java.util.Collections.synchronizedMap(new java.util.HashMap<>());
+
+    // Versione ad alta risoluzione per il banner grande della Home: icone vettoriali/adattive ridisegnate a 512 px, bitmap prese alla densita' massima.
+    public static void loadHero(PackageManager pm, Resources res, AppEntry e, Done<AppArt> done) {
+        LOADER.execute(() -> {
+            AppArt art = hiRes(pm, res, e);
+            if (art != null) {
+                MAIN.post(() -> done.done(art));
+            }
+        });
+    }
+
+    private static AppArt hiRes(PackageManager pm, Resources res, AppEntry e) {
+        ComponentName cn = new ComponentName(e.packageName, e.className);
+        String key = cn.flattenToString();
+        Drawable.ConstantState cached = HEROES.get(key);
+        if (cached != null) {
+            return new AppArt(cached.newDrawable(res), HERO_BANNER.contains(key));
+        }
+        try {
+            android.content.pm.ActivityInfo ai = pm.getActivityInfo(cn, 0);
+            Resources ar = pm.getResourcesForApplication(ai.applicationInfo);
+            int bannerId = ai.banner != 0 ? ai.banner : ai.applicationInfo.banner;
+            boolean banner = bannerId != 0;
+            int id = banner ? bannerId : ai.getIconResource() != 0 ? ai.getIconResource() : ai.applicationInfo.icon;
+            Drawable src = id != 0 ? ar.getDrawableForDensity(id, 640, null) : null;
+            if (src == null) {
+                return null;
+            }
+            Drawable out;
+            if (src instanceof BitmapDrawable) {
+                Bitmap b = ((BitmapDrawable) src).getBitmap();
+                out = banner ? scaled(res, src, 1280) : (b.getWidth() < 512 ? new BitmapDrawable(res, Bitmap.createScaledBitmap(b, 512, 512 * b.getHeight() / b.getWidth(), true)) : src);
+            } else {
+                Bitmap bmp = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
+                src.setBounds(0, 0, 512, 512);
+                src.draw(new Canvas(bmp));
+                out = new BitmapDrawable(res, bmp);
+            }
+            if (out.getConstantState() != null) {
+                HEROES.put(key, out.getConstantState());
+                if (banner) {
+                    HERO_BANNER.add(key);
+                }
+            }
+            return new AppArt(out, banner);
+        } catch (PackageManager.NameNotFoundException | Resources.NotFoundException ex) {
+            return null;
+        }
     }
 
     // Solo dalla cache, senza toccare il PackageManager: va bene sul thread principale.
