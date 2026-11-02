@@ -262,6 +262,15 @@ public final class HealthActivity extends Activity {
         return blocked;
     }
 
+    // Solo app con icona non essenziali o installate dall'utente: i servizi di sistema e le app essenziali non si possono bloccare da qui.
+    private boolean isManageable(android.content.pm.ApplicationInfo info, Set<String> launchable) {
+        if (launchable.contains(info.packageName)) {
+            return true;
+        }
+        return (info.flags & android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0
+                && !Tweaks.isEssential(info.packageName, getPackageName());
+    }
+
     private void bind(List<MemInfoParser.Proc> procs, Set<String> blocked) {
         PackageManager pm = getPackageManager();
         Set<String> hidden = new HashSet<>();
@@ -287,12 +296,16 @@ public final class HealthActivity extends Activity {
         long closableKb = 0;
         int closableCount = 0;
         Set<String> shown = new HashSet<>();
+        Set<String> launchable = new HashSet<>(Tweaks.nonEssentialApps(pm, getPackageName()));
         for (String pkg : order) {
             if (hidden.contains(pkg)) {
                 continue;
             }
             try {
                 android.content.pm.ApplicationInfo info = pm.getApplicationInfo(pkg, 0);
+                if (!isManageable(info, launchable)) {
+                    continue;
+                }
                 long[] s = sums.get(pkg);
                 int rank = (int) s[1];
                 if (rank < FIRST_CLOSABLE) {
@@ -319,6 +332,9 @@ public final class HealthActivity extends Activity {
             }
             try {
                 android.content.pm.ApplicationInfo info = pm.getApplicationInfo(pkg, 0);
+                if (!isManageable(info, launchable)) {
+                    continue;
+                }
                 blockedOnly.add(new Item(String.valueOf(pm.getApplicationLabel(info)), pkg, pkg,
                         getString(R.string.health_blocked), pm.getApplicationIcon(info), false, true, true));
             } catch (PackageManager.NameNotFoundException ignored) {
