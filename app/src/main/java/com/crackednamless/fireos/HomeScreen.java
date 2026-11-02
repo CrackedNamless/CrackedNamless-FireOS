@@ -66,6 +66,8 @@ public final class HomeScreen {
     private final ImageView heroArt;
     private final View heroFade;
     private final View ambient;
+    private final View backdrop;
+    private final View heroFadeBottom;
     private final TextView heroChip;
     private final TextView heroTitle;
     private final TextView heroSubtitle;
@@ -149,6 +151,8 @@ public final class HomeScreen {
         heroArt = root.findViewById(R.id.hero_art);
         heroFade = root.findViewById(R.id.hero_fade);
         ambient = root.findViewById(R.id.ambient);
+        backdrop = root.findViewById(R.id.backdrop);
+        heroFadeBottom = root.findViewById(R.id.hero_fade_bottom);
         heroChip = root.findViewById(R.id.hero_chip);
         heroTitle = root.findViewById(R.id.hero_title);
         heroSubtitle = root.findViewById(R.id.hero_subtitle);
@@ -536,6 +540,7 @@ public final class HomeScreen {
         }
         libraryShown = show;
         credit.setVisibility(show ? View.GONE : View.VISIBLE);
+        backdrop.setVisibility(show ? View.GONE : View.VISIBLE);
         homeContent.setVisibility(show ? View.GONE : View.VISIBLE);
         library.setVisibility(show ? View.VISIBLE : View.GONE);
         tabHome.setSelected(!show);
@@ -629,7 +634,7 @@ public final class HomeScreen {
             heroArt.setScaleType(ImageView.ScaleType.CENTER_CROP);
             heroArt.setPadding(0, 0, 0, 0);
         } else {
-            int pad = (int) (40 * context.getResources().getDisplayMetrics().density);
+            int pad = (int) (96 * context.getResources().getDisplayMetrics().density);
             heroArt.setScaleType(ImageView.ScaleType.FIT_CENTER);
             heroArt.setPadding(pad, pad, pad, pad);
         }
@@ -638,36 +643,20 @@ public final class HomeScreen {
 
     private void paintHero(int accent) {
         float density = context.getResources().getDisplayMetrics().density;
-        int left = AppArt.shade(accent, 0.55f, 0.16f);
-        int right = AppArt.shade(accent, 0.65f, 0.26f);
-        float radius = 22 * density;
+        int base = AppArt.shade(accent, 0.5f, 0.07f);
+        int clear = base & 0x00FFFFFF;
+        backdrop.setBackgroundColor(base);
+        heroFade.setBackground(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{base, clear | 0x99000000, clear}));
+        heroFadeBottom.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{clear, base}));
 
-        GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{left, right});
-        bg.setCornerRadius(radius);
-        hero.setClipToOutline(true);
-
-        hero.setOutlineProvider(new android.view.ViewOutlineProvider() {
-            @Override
-            public void getOutline(View v, android.graphics.Outline outline) {
-                outline.setRoundRect(0, 0, v.getWidth(), v.getHeight(), radius);
-            }
-        });
-        hero.setBackground(bg);
-
-        heroArt.setBackgroundColor(right);
-
-        int edge = (Integer) new ArgbEvaluator().evaluate(0.54f, left, right);
-        GradientDrawable fade = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{edge, (edge & 0x00FFFFFF) | 0x99000000, edge & 0x00FFFFFF});
-        heroFade.setBackground(fade);
-
-        float glowR = 560 * density;
         GradientDrawable glow = new GradientDrawable();
         glow.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-        glow.setGradientCenter(0.32f, 0.3f);
-        glow.setGradientRadius(glowR);
-        glow.setColors(new int[]{(AppArt.shade(accent, 0.75f, 0.5f) & 0x00FFFFFF) | 0x80000000, AppArt.shade(accent, 0.75f, 0.3f) & 0x00FFFFFF});
+        glow.setGradientCenter(0.22f, 0.72f);
+        glow.setGradientRadius(520 * density);
+        int tint = AppArt.shade(accent, 0.8f, 0.55f) & 0x00FFFFFF;
+        glow.setColors(new int[]{tint | 0x4D000000, tint});
         ambient.setBackground(glow);
     }
 

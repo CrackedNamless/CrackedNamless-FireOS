@@ -6,7 +6,7 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ### Changed
 - **Premium glass look.** Buttons, tabs, pills, rows, cards and panels now use soft top-to-bottom gradients, a thin inner highlight and a brighter focus ring with a glow. The primary button is a polished pearl gradient. Fire Health, Tools and the app menu share the same glass background as the Home, and the menu panel is more translucent. All done with lightweight drawables, no runtime blur, so Home return time is unchanged.
-- **New "Aurora" look.** Neutral black palette with a soft glow behind the Home that follows the colour of the featured app, thin line icons, medium-weight typography instead of bold, and rounder 18 dp tiles.
+- **New "Cinema" look.** The featured app now fills the top of the Home as a full-bleed backdrop that fades into a page tinted with its colour. The top bar is frameless (text tabs with an underline, line icons, light-weight clock), the hero title is large and light, buttons are solid white pills, tiles have a crisp white focus border, and the whole UI uses flat near-black surfaces with hairline outlines. The previous glass look is kept in git as the tag `look-glass-v1`.
 
 ### Fixed
 - Apps moved into a folder now still appear in the Home "Your Apps" row.
