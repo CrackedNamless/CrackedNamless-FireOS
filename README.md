@@ -3,7 +3,7 @@
 A fast, glass-style Home screen for Amazon Fire TV. It replaces the ad-heavy Amazon launcher with a clean one that opens in about a second on a 1 GB Fire TV Stick, and ships a set of tools to remove Amazon background services.
 
 [![Latest release](https://img.shields.io/github/v/release/CrackedNamless/CrackedNamless-FireOS?style=flat-square)](https://github.com/CrackedNamless/CrackedNamless-FireOS/releases/latest)
-[![License: Non-Commercial](https://img.shields.io/badge/license-non--commercial%20%2B%20attribution-blue?style=flat-square)](LICENSE)
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-blue?style=flat-square)](LICENSE)
 ![Fire OS 7](https://img.shields.io/badge/Fire%20OS-7%20(Android%209)-orange?style=flat-square)
 
 ![Home screen](docs/screenshots/home.png)
@@ -217,7 +217,7 @@ This project is not affiliated with or endorsed by Amazon. Fire TV and Alexa are
 
 ## License
 
-[Non-Commercial License with Attribution](LICENSE). The source is open to read, use, modify and share for personal, hobby, educational, research and non-profit use. **Commercial use is not allowed** (selling it, charging for it, bundling it in a product that is sold, ads or paid features). Whatever you build on it, you must always credit the original author, **CrackedNamless**, link to this repository in your README or project page and in the credits or about screen of any app that contains this code, and pass on the same license. For commercial use, ask for a separate written license. See the license for the exact wording.
+[PolyForm Noncommercial License 1.0.0](LICENSE). You can read, use, modify and share the source for personal, hobby, educational, research and non-profit use. **Commercial use is not allowed.** Anyone who gets a copy from you must also get the license and the credit line in [NOTICE](NOTICE) (`Required Notice: Copyright (c) 2026 CrackedNamless`), so the original author always stays named. For commercial use, ask for a separate written license.
 
 This is a source-available license, not an OSI-approved open source license.
 
