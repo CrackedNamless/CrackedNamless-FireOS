@@ -517,7 +517,7 @@ public final class HomeScreen {
     }
 
     public void focusDefault() {
-        View target = libraryShown ? libraryGrid : heroPlay;
+        View target = libraryShown ? libraryGrid : tabHome;
         target.post(target::requestFocus);
     }
 

@@ -17,6 +17,7 @@ All notable changes to this project are documented here. Each release on GitHub 
 
 ### Changed
 - **Faster.** App icons and banners load in the background and are kept in memory, the grids no longer re-measure their cards, and the app list is cached. Cold start of the Home measured on a Fire TV Stick Lite went from about 1.4 s to about 0.5 s.
+- Coming back to the Home (after an app, or with the Home button) the focus now starts on the HOME tab in the top bar instead of the Open button.
 - The Library grid shows 6 columns with a title and a hint above it.
 - The Tools menu and the first-run setup share one list of services and performance settings (`Tweaks`).
 
