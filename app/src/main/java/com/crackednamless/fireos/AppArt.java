@@ -23,13 +23,26 @@ public final class AppArt {
         this.isBanner = isBanner;
     }
 
-    private static final java.util.Map<String, Drawable.ConstantState> BANNERS = new java.util.HashMap<>();
-    private static final java.util.Map<String, Drawable.ConstantState> ICONS = new java.util.HashMap<>();
+    private static final java.util.Map<String, Drawable.ConstantState> BANNERS =
+            java.util.Collections.synchronizedMap(new java.util.HashMap<>());
+    private static final java.util.Map<String, Drawable.ConstantState> ICONS =
+            java.util.Collections.synchronizedMap(new java.util.HashMap<>());
+    private static final java.util.Map<String, Integer> ACCENTS =
+            java.util.Collections.synchronizedMap(new java.util.HashMap<>());
+    private static final java.util.concurrent.ExecutorService LOADER =
+            java.util.concurrent.Executors.newSingleThreadExecutor(r -> {
+                Thread t = new Thread(r, "app-art");
+                t.setPriority(Thread.NORM_PRIORITY - 1);
+                t.setDaemon(true);
+                return t;
+            });
+    private static final android.os.Handler MAIN = new android.os.Handler(android.os.Looper.getMainLooper());
 
     // Il decode da PackageManager e' costoso: si tiene la copia scalata e a ogni uso se ne crea una nuova (le bounds non si condividono).
     public static void clear() {
         BANNERS.clear();
         ICONS.clear();
+        ACCENTS.clear();
     }
 
     private static Drawable fresh(java.util.Map<String, Drawable.ConstantState> cache, String key, Resources res) {
@@ -63,6 +76,7 @@ public final class AppArt {
             }
             Drawable d = scaled(res, pm.getActivityIcon(cn), MAX_ICON);
             keep(ICONS, key, d);
+            ACCENTS.put(key, accent(d));
             return new AppArt(d, false);
         } catch (PackageManager.NameNotFoundException ignored) {
             return new AppArt(null, false);
@@ -83,6 +97,76 @@ public final class AppArt {
         } catch (PackageManager.NameNotFoundException ignored) {
             return null;
         }
+    }
+
+    public interface Done<T> {
+        void done(T value);
+    }
+
+    // Solo dalla cache, senza toccare il PackageManager: va bene sul thread principale.
+    public static AppArt peek(Resources res, AppEntry e) {
+        String key = new ComponentName(e.packageName, e.className).flattenToString();
+        Drawable d = fresh(BANNERS, key, res);
+        if (d != null) {
+            return new AppArt(d, true);
+        }
+        d = fresh(ICONS, key, res);
+        return d != null ? new AppArt(d, false) : null;
+    }
+
+    public static int cachedAccent(AppEntry e) {
+        Integer c = ACCENTS.get(new ComponentName(e.packageName, e.className).flattenToString());
+        return c != null ? c : DEFAULT_ACCENT;
+    }
+
+    // Decodifica in coda su un thread a bassa priorita' e consegna il risultato sul thread principale.
+    public static void load(PackageManager pm, Resources res, AppEntry e, Done<AppArt> done) {
+        LOADER.execute(() -> {
+            AppArt art = banner(pm, res, e);
+            MAIN.post(() -> done.done(art));
+        });
+    }
+
+    // Scalda la cache in background, cosi' quando si apre la Home le card sono gia' pronte.
+    public static void preload(PackageManager pm, Resources res, java.util.List<AppEntry> apps) {
+        java.util.List<AppEntry> copy = new java.util.ArrayList<>(apps);
+        LOADER.execute(() -> {
+            for (AppEntry e : copy) {
+                if (peek(res, e) == null) {
+                    banner(pm, res, e);
+                }
+            }
+        });
+    }
+
+    // Anteprima di una cartella: fino a 4 icone in griglia 2x2 su fondo vetro, disegnata in background.
+    public static void folder(PackageManager pm, Resources res, java.util.List<AppEntry> members, Done<Drawable> done) {
+        java.util.List<AppEntry> copy = new java.util.ArrayList<>(members);
+        LOADER.execute(() -> {
+            int w = 320, h = 180, size = 64, gap = 12;
+            Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(bmp);
+            android.graphics.Paint bg = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+            bg.setShader(new android.graphics.LinearGradient(0, 0, 0, h, 0x44FFFFFF, 0x18FFFFFF,
+                    android.graphics.Shader.TileMode.CLAMP));
+            c.drawRect(0, 0, w, h, bg);
+            int n = Math.min(4, copy.size());
+            int left = (w - (2 * size + gap)) / 2;
+            int top = (h - (2 * size + gap)) / 2 - 8;
+            for (int i = 0; i < n; i++) {
+                AppEntry e = copy.get(i);
+                Drawable icon = icon(pm, res, e);
+                if (icon == null) {
+                    continue;
+                }
+                int x = left + (i % 2) * (size + gap);
+                int y = top + (i / 2) * (size + gap);
+                icon.setBounds(x, y, x + size, y + size);
+                icon.draw(c);
+            }
+            Drawable out = new BitmapDrawable(res, bmp);
+            MAIN.post(() -> done.done(out));
+        });
     }
 
     public static int accent(Drawable d) {

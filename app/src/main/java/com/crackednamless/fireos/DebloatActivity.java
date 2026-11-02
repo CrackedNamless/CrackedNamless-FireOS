@@ -55,6 +55,14 @@ public final class DebloatActivity extends Activity {
             this.stateColor = stateColor;
             this.action = action;
         }
+
+        static Row section(String title) {
+            return new Row(title, null, null, 0, null);
+        }
+
+        boolean isSection() {
+            return action == null;
+        }
     }
 
     private static final class Service {
@@ -80,18 +88,20 @@ public final class DebloatActivity extends Activity {
         super.onCreate(savedInstanceState);
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(Color.BLACK);
-        root.setPadding(dp(64), dp(32), dp(64), dp(24));
+        root.setBackgroundColor(0xFF0B0E14);
+        root.setPadding(dp(64), dp(28), dp(64), dp(20));
 
-        TextView title = text(getString(R.string.tools_title), 28, Color.WHITE);
+        TextView title = text(getString(R.string.tools_title), 26, Color.WHITE);
         title.setTypeface(Typeface.DEFAULT_BOLD);
         root.addView(title);
-        status = text(getString(R.string.tools_intro), 15, DIM);
-        status.setPadding(0, dp(4), 0, dp(16));
+        status = text(getString(R.string.tools_intro), 14, DIM);
+        status.setPadding(0, dp(2), 0, dp(12));
         root.addView(status);
 
         ListView list = new ListView(this);
-        list.setDivider(null);
+        list.setDivider(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        list.setDividerHeight(dp(4));
+        list.setVerticalScrollBarEnabled(false);
         list.setSelector(R.drawable.row_bg);
         adapter = new Adapter();
         list.setAdapter(adapter);
@@ -133,8 +143,16 @@ public final class DebloatActivity extends Activity {
         Resources res = getResources();
         String on = getString(R.string.tools_on);
         String off = getString(R.string.tools_off);
+        rows.add(Row.section(getString(R.string.tools_section_speed)));
         rows.add(new Row(getString(R.string.tools_fast_home), getString(R.string.tools_fast_home_sub),
                 fast ? on : off, fast ? GREEN : DIM, this::toggleFast));
+        boolean perf = performanceOn();
+        rows.add(new Row(getString(R.string.tools_performance), getString(R.string.tools_performance_sub),
+                perf ? on : off, perf ? GREEN : DIM, () -> setPerformance(!perf)));
+        rows.add(new Row(getString(R.string.tools_free_memory), getString(R.string.tools_free_memory_sub),
+                "", DIM, this::freeMemory));
+
+        rows.add(Row.section(getString(R.string.tools_section_amazon)));
         rows.add(new Row(getString(R.string.tools_disable_all), getString(R.string.tools_disable_all_sub),
                 toDisable.isEmpty() ? getString(R.string.tools_already_done)
                         : res.getQuantityString(R.plurals.tools_count_active, toDisable.size(), toDisable.size()),
@@ -144,16 +162,15 @@ public final class DebloatActivity extends Activity {
                 toEnable.isEmpty() ? getString(R.string.tools_none_to_enable)
                         : res.getQuantityString(R.plurals.tools_count_disabled, toEnable.size(), toEnable.size()),
                 DIM, () -> bulk(toEnable, "pm enable --user 0 ", R.plurals.tools_done_enabled)));
-        boolean perf = performanceOn();
-        rows.add(new Row(getString(R.string.tools_performance), getString(R.string.tools_performance_sub),
-                perf ? on : off, perf ? GREEN : DIM, () -> setPerformance(!perf)));
         rows.add(new Row(getString(R.string.tools_prime), getString(R.string.tools_prime_sub),
                 getString(R.string.tools_tap_to_change), DIM,
                 () -> exec(Collections.singletonList(PRIME_TOGGLE), outputs -> getString(
                         "ignore".equals(outputs.get(0).trim()) ? R.string.tools_prime_blocked
                                 : R.string.tools_prime_allowed))));
-        rows.add(new Row(getString(R.string.tools_free_memory), getString(R.string.tools_free_memory_sub),
-                "", DIM, this::freeMemory));
+
+        if (!services.isEmpty()) {
+            rows.add(Row.section(getString(R.string.tools_section_services, services.size())));
+        }
         for (Service s : services) {
             rows.add(new Row(s.label, s.pkg,
                     getString(s.disabled ? R.string.tools_service_disabled : R.string.tools_service_active),
@@ -305,19 +322,84 @@ public final class DebloatActivity extends Activity {
         }
 
         @Override
+        public int getViewTypeCount() {
+            return 2;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return rows.get(position).isSection() ? 0 : 1;
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            return false;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return !rows.get(position).isSection();
+        }
+
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Row item = rows.get(position);
-            LinearLayout row = new LinearLayout(DebloatActivity.this);
-            row.setOrientation(LinearLayout.HORIZONTAL);
-            row.setGravity(Gravity.CENTER_VERTICAL);
-            row.setPadding(dp(20), dp(10), dp(20), dp(10));
-            LinearLayout names = new LinearLayout(DebloatActivity.this);
-            names.setOrientation(LinearLayout.VERTICAL);
-            names.addView(text(item.title, 18, Color.WHITE));
-            names.addView(text(item.sub, 12, 0x80FFFFFF));
-            row.addView(names, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(text(item.state, 16, item.stateColor));
-            return row;
+            if (item.isSection()) {
+                TextView header = convertView instanceof TextView ? (TextView) convertView
+                        : text("", 10, 0x99FFFFFF);
+                header.setText(item.title);
+                header.setTypeface(Typeface.DEFAULT_BOLD);
+                header.setLetterSpacing(0.12f);
+                header.setPadding(dp(4), position == 0 ? dp(2) : dp(18), 0, dp(6));
+                return header;
+            }
+            RowViews v;
+            if (convertView != null && convertView.getTag() instanceof RowViews) {
+                v = (RowViews) convertView.getTag();
+            } else {
+                LinearLayout row = new LinearLayout(DebloatActivity.this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.CENTER_VERTICAL);
+                row.setPadding(dp(18), dp(9), dp(18), dp(9));
+                LinearLayout names = new LinearLayout(DebloatActivity.this);
+                names.setOrientation(LinearLayout.VERTICAL);
+                TextView title = text("", 17, Color.WHITE);
+                title.setTypeface(Typeface.DEFAULT_BOLD);
+                title.setSingleLine();
+                title.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                TextView sub = text("", 12, 0x80FFFFFF);
+                sub.setSingleLine();
+                sub.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                names.addView(title);
+                names.addView(sub);
+                row.addView(names, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                TextView state = text("", 14, DIM);
+                state.setTypeface(Typeface.DEFAULT_BOLD);
+                state.setPadding(dp(16), 0, 0, 0);
+                row.addView(state);
+                v = new RowViews(row, title, sub, state);
+                row.setTag(v);
+            }
+            v.title.setText(item.title);
+            v.sub.setText(item.sub);
+            v.sub.setVisibility(item.sub == null || item.sub.isEmpty() ? View.GONE : View.VISIBLE);
+            v.state.setText(item.state);
+            v.state.setTextColor(item.stateColor);
+            return v.root;
+        }
+    }
+
+    private static final class RowViews {
+        final View root;
+        final TextView title;
+        final TextView sub;
+        final TextView state;
+
+        RowViews(View root, TextView title, TextView sub, TextView state) {
+            this.root = root;
+            this.title = title;
+            this.sub = sub;
+            this.state = state;
         }
     }
 

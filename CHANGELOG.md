@@ -2,9 +2,13 @@
 
 All notable changes to this project are documented here. Each release on GitHub carries the signed APK and the matching source code.
 
-## [0.3.0] - 2026-10-31
+## [0.3.0] - 2026-11-02
 
 ### Added
+- **Folders in the Library.** Hold OK on an app and choose "Move to folder…": pick an existing folder, a ready-made one (Streaming, Games, Music, Tools, Kids) or type a new name. Folders appear first in the Library as a card with a collage of their apps; open one with OK and return with Back. Hold OK on a folder to rename or delete it (its apps go back to the Library). Apps in a folder leave the Home row, so the row keeps only the apps you use most.
+- **Uninstall from the Library.** Hold OK on an app and choose Uninstall: Fire OS asks for confirmation. System apps are not removed; the menu points to Tools to disable them instead. "App info" opens the system page of the app.
+- **Full-card app art.** Every card is filled by the app's wide banner when it has one; apps with only an icon get the icon centred over a gradient in the icon's own colour. Cards are always 16:9 and have rounded corners.
+- **Tools organised in sections.** The Tools menu is now split into "Speed and memory", "Amazon background services" and "Individual services", with clearer headings and a darker, quieter layout.
 - **Ready out of the box.** The first time the launcher opens, it turns on Fast Home, Performance and Disable all unneeded services by itself (you only choose "Always allow" for USB debugging once). It does this once, so settings you switch off later stay off. `tools/install.sh` also pre-approves the local VPN so no consent screen appears.
 - **Automatic updates.** The launcher checks the latest GitHub Release every few hours and downloads a newer APK in the background. A small card appears in the bottom right corner, over whatever app is on screen: press OK to update now (installs and restarts only the launcher, a few seconds) or Back to postpone (any other navigation key also postpones it; with no answer it closes after 20 seconds and installs when the Fire TV goes to standby). If a video or a show is playing, it is paused first; after the update the app you were in comes back and playback resumes at the same point. After an update the accessibility service is switched on again by the app.
 
@@ -12,6 +16,8 @@ All notable changes to this project are documented here. Each release on GitHub 
 - **Random standby.** The Fire TV could go to standby by itself, even seconds after waking up. The power-key watcher reads the system log, and when that log reader restarted, its own error message ("read: unexpected EOF!") was taken for a press of the power button. Only real power-key and Home lines are accepted now.
 
 ### Changed
+- **Faster.** App icons and banners load in the background and are kept in memory, the grids no longer re-measure their cards, and the app list is cached. Cold start of the Home measured on a Fire TV Stick Lite went from about 1.4 s to about 0.5 s.
+- The Library grid shows 6 columns with a title and a hint above it.
 - The Tools menu and the first-run setup share one list of services and performance settings (`Tweaks`).
 
 ## [0.2.0] - 2026-10-30

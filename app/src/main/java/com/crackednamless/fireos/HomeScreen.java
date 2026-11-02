@@ -1,6 +1,7 @@
 package com.crackednamless.fireos;
 
 import android.animation.ArgbEvaluator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,9 +43,11 @@ public final class HomeScreen {
         void openStore(Intent intent);
 
         void openInfo(AppEntry entry);
+
+        void uninstall(AppEntry entry);
     }
 
-    private static final int LIBRARY_SPAN = 8;
+    private static final int LIBRARY_SPAN = 6;
     private static final int RECENT_SPAN = 5;
 
     private final Context context;
@@ -117,6 +120,13 @@ public final class HomeScreen {
     private final RecyclerView libraryGrid;
     private final RecyclerView appsRow;
 
+    private final TextView libraryTitle;
+    private final TextView libraryHint;
+    private final Folders folders;
+    private AppMenu menu;
+    private List<AppEntry> allApps = Collections.emptyList();
+    private String openFolder;
+
     private AppEntry heroApp;
     private boolean libraryShown;
 
@@ -142,6 +152,9 @@ public final class HomeScreen {
         recentRow = root.findViewById(R.id.recent_row);
         appsRow = root.findViewById(R.id.apps_row);
         libraryGrid = root.findViewById(R.id.library_grid);
+        libraryTitle = root.findViewById(R.id.library_title);
+        libraryHint = root.findViewById(R.id.library_hint);
+        folders = new Folders(context);
         wifi = root.findViewById(R.id.wifi);
         wifiButton = root.findViewById(R.id.wifi_btn);
         wifiPing = root.findViewById(R.id.wifi_ping);
@@ -183,17 +196,27 @@ public final class HomeScreen {
         mediaToggle.setOnClickListener(v -> media.toggle());
         FocusScale.apply(mediaToggle, null);
 
-        rowAdapter = new AppAdapter(pm, host::launch, () -> showLibrary(true));
+        boolean editable = context instanceof Activity && root instanceof ViewGroup;
+        rowAdapter = new AppAdapter(pm, host::launch, () -> showLibrary(true), null, null);
         appsRow.setLayoutManager(new GridLayoutManager(context, LIBRARY_SPAN));
+        appsRow.setHasFixedSize(true);
         appsRow.setAdapter(rowAdapter);
 
         recentAdapter = new RecentAdapter(pm, host::launch);
         recentRow.setLayoutManager(new GridLayoutManager(context, RECENT_SPAN));
         recentRow.setAdapter(recentAdapter);
 
-        libraryAdapter = new AppAdapter(pm, host::launch, null);
+        libraryAdapter = new AppAdapter(pm, host::launch, null, this::openFolder, editable ? this::onTileMenu : null);
         libraryGrid.setLayoutManager(new GridLayoutManager(context, LIBRARY_SPAN));
+        libraryGrid.setHasFixedSize(true);
+        libraryGrid.setItemViewCacheSize(12);
         libraryGrid.setAdapter(libraryAdapter);
+        if (editable) {
+            menu = new AppMenu(context, (ViewGroup) root, menuActions(), () -> {
+                blockUnderlying(false);
+                focusDefault();
+            });
+        }
 
         tabHome.setSelected(true);
         tabHome.setOnClickListener(v -> showLibrary(false));
@@ -272,8 +295,9 @@ public final class HomeScreen {
         }
         appsKey = next;
 
-        rowAdapter.submit(apps.subList(0, Math.min(apps.size(), LIBRARY_SPAN - 1)));
-        libraryAdapter.submit(apps);
+        allApps = apps;
+        AppArt.preload(pm, context.getResources(), apps);
+        rebuildLibrary();
 
         if (!recents.isEmpty()) {
             RecentAdapter.Entry first = recents.get(0);
@@ -375,7 +399,114 @@ public final class HomeScreen {
         }
     }
 
+    private void rebuildLibrary() {
+        FolderLayout layout = FolderLayout.build(allApps, folders.assignment());
+        rowAdapter.submit(layout.loose.subList(0, Math.min(layout.loose.size(), LIBRARY_SPAN - 1)));
+
+        List<AppEntry> inside = openFolder != null ? layout.folders.get(openFolder) : null;
+        if (openFolder != null && inside == null) {
+            openFolder = null;
+        }
+        List<AppAdapter.Tile> tiles = new ArrayList<>();
+        if (inside != null) {
+            for (AppEntry e : inside) {
+                tiles.add(AppAdapter.Tile.of(e));
+            }
+            libraryTitle.setText(context.getString(R.string.library_folder, openFolder, inside.size()));
+            libraryHint.setText(R.string.library_hint_folder);
+        } else {
+            for (Map.Entry<String, List<AppEntry>> f : layout.folders.entrySet()) {
+                tiles.add(AppAdapter.Tile.folder(f.getKey(), f.getValue()));
+            }
+            for (AppEntry e : layout.loose) {
+                tiles.add(AppAdapter.Tile.of(e));
+            }
+            libraryTitle.setText(context.getString(R.string.library_all, allApps.size()));
+            libraryHint.setText(menu != null ? context.getString(R.string.library_hint) : "");
+        }
+        libraryAdapter.submitTiles(tiles);
+    }
+
+    private void openFolder(String name) {
+        openFolder = name;
+        rebuildLibrary();
+        focusDefault();
+    }
+
+    private List<String> folderNames() {
+        return new ArrayList<>(FolderLayout.build(allApps, folders.assignment()).folders.keySet());
+    }
+
+    private void onTileMenu(AppAdapter.Tile tile) {
+        if (menu == null || menu.isShown()) {
+            return;
+        }
+        blockUnderlying(true);
+        if (tile.app != null) {
+            menu.showApp(tile.app, folders.folderOf(tile.app.packageName), folderNames());
+        } else {
+            menu.showFolder(tile.folder);
+        }
+    }
+
+    private AppMenu.Actions menuActions() {
+        return new AppMenu.Actions() {
+            @Override
+            public void move(AppEntry app, String folder) {
+                folders.put(app.packageName, folder);
+                rebuildLibrary();
+            }
+
+            @Override
+            public void info(AppEntry app) {
+                host.openInfo(app);
+            }
+
+            @Override
+            public void uninstall(AppEntry app) {
+                host.uninstall(app);
+            }
+
+            @Override
+            public void rename(String from, String to) {
+                folders.rename(from, to);
+                if (from.equalsIgnoreCase(openFolder)) {
+                    openFolder = Folders.clean(to);
+                }
+                rebuildLibrary();
+            }
+
+            @Override
+            public void delete(String folder) {
+                folders.delete(folder);
+                rebuildLibrary();
+            }
+        };
+    }
+
+    // Indietro: chiude per primo cio che sta sopra (menu, pannelli), poi la cartella aperta, poi la Libreria.
+    public boolean back() {
+        if (closePanel()) {
+            return true;
+        }
+        if (libraryShown && openFolder != null) {
+            openFolder = null;
+            rebuildLibrary();
+            focusDefault();
+            return true;
+        }
+        if (libraryShown) {
+            showLibrary(false);
+            return true;
+        }
+        return false;
+    }
+
     public void showLibrary(boolean show) {
+        if (!show && openFolder != null) {
+            openFolder = null;
+            rebuildLibrary();
+        }
         libraryShown = show;
         credit.setVisibility(show ? View.GONE : View.VISIBLE);
         homeContent.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -705,6 +836,10 @@ public final class HomeScreen {
     }
 
     public boolean closePanel() {
+        if (menu != null && menu.isShown()) {
+            menu.hide();
+            return true;
+        }
         if (isSpeedShown()) {
             showSpeed(false);
             return true;

@@ -214,6 +214,16 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
+    @Override
+    public void uninstall(AppEntry entry) {
+        try {
+            startActivity(new Intent(Intent.ACTION_DELETE, Uri.fromParts("package", entry.packageName, null))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (ActivityNotFoundException | SecurityException e) {
+            Toast.makeText(this, R.string.uninstall_unavailable, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void start(Intent intent) {
         try {
             startActivity(intent);
@@ -234,11 +244,6 @@ public class HomeActivity extends Activity implements HomeScreen.Host {
 
     @Override
     public void onBackPressed() {
-        if (screen.closePanel()) {
-            return;
-        }
-        if (screen.isLibraryShown()) {
-            screen.showLibrary(false);
-        }
+        screen.back();
     }
 }

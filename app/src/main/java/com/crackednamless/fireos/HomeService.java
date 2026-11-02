@@ -563,6 +563,13 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
+    @Override
+    public void uninstall(AppEntry entry) {
+        launchPackage = null;
+        begin(new Intent(Intent.ACTION_DELETE, Uri.fromParts("package", entry.packageName, null))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
     private void begin(Intent intent) {
         try {
             startActivity(intent);
@@ -905,12 +912,7 @@ public class HomeService extends AccessibilityService implements HomeScreen.Host
                 }
                 break;
             case KeyEvent.KEYCODE_BACK:
-                if (screen.closePanel()) {
-                    break;
-                }
-                if (screen.isLibraryShown()) {
-                    screen.showLibrary(false);
-                }
+                screen.back();
                 break;
             case KeyEvent.KEYCODE_MENU:
                 openSettings();

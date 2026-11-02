@@ -26,12 +26,12 @@ public final class AppRepository {
 
     private static List<AppEntry> cached;
 
-    public static void invalidate() {
+    public static synchronized void invalidate() {
         cached = null;
         AppArt.clear();
     }
 
-    public static List<AppEntry> load(PackageManager pm, String ownPackage) {
+    public static synchronized List<AppEntry> load(PackageManager pm, String ownPackage) {
         if (cached != null) {
             return cached;
         }

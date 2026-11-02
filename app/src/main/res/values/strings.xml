@@ -35,6 +35,33 @@
     <string name="close">Close</string>
     <string name="repeat">Repeat</string>
 
+    <!-- Library: folders and app menu -->
+    <string name="library_all">ALL APPS · %1$d</string>
+    <string name="library_folder">FOLDER · %1$s · %2$d</string>
+    <string name="library_hint">Hold OK on an app for options</string>
+    <string name="library_hint_folder">Back to return to the Library</string>
+    <string name="folder_tile">%1$s · %2$d</string>
+    <string name="menu_folder_of">Folder: %1$s</string>
+    <string name="menu_move">Move to folder…</string>
+    <string name="menu_move_title">Move to</string>
+    <string name="menu_remove_from_folder">Remove from folder</string>
+    <string name="menu_new_folder">New folder…</string>
+    <string name="menu_folder_name">Folder name</string>
+    <string name="menu_create">Create</string>
+    <string name="menu_rename_folder">Rename folder</string>
+    <string name="menu_rename">Rename</string>
+    <string name="menu_delete_folder">Delete folder</string>
+    <string name="menu_delete_folder_hint">The apps go back to the Library.</string>
+    <string name="menu_uninstall">Uninstall</string>
+    <string name="menu_system_app">System app: use Tools to disable it instead.</string>
+    <string name="menu_back">Back</string>
+    <string name="preset_streaming">Streaming</string>
+    <string name="preset_games">Games</string>
+    <string name="preset_music">Music</string>
+    <string name="preset_tools">Tools</string>
+    <string name="preset_kids">Kids</string>
+    <string name="uninstall_unavailable">Cannot uninstall this app.</string>
+
     <!-- Relative times -->
     <string name="ago_now">just now</string>
     <string name="ago_minutes">%1$d min ago</string>
@@ -105,6 +132,9 @@
 
     <!-- Tools menu -->
     <string name="tools_title">Tools</string>
+    <string name="tools_section_speed">SPEED AND MEMORY</string>
+    <string name="tools_section_amazon">AMAZON BACKGROUND SERVICES</string>
+    <string name="tools_section_services">INDIVIDUAL SERVICES · %1$d</string>
     <string name="tools_intro">Press OK to run. Everything is reversible: apps and their data stay.</string>
     <string name="tools_on">ON</string>
     <string name="tools_off">OFF</string>

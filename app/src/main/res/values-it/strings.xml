@@ -30,6 +30,32 @@
     <string name="close">Chiudi</string>
     <string name="repeat">Ripeti</string>
 
+    <string name="library_all">TUTTE LE APP · %1$d</string>
+    <string name="library_folder">CARTELLA · %1$s · %2$d</string>
+    <string name="library_hint">Tieni premuto OK su un\'app per le opzioni</string>
+    <string name="library_hint_folder">Indietro per tornare alla Libreria</string>
+    <string name="folder_tile">%1$s · %2$d</string>
+    <string name="menu_folder_of">Cartella: %1$s</string>
+    <string name="menu_move">Sposta in una cartella…</string>
+    <string name="menu_move_title">Sposta in</string>
+    <string name="menu_remove_from_folder">Togli dalla cartella</string>
+    <string name="menu_new_folder">Nuova cartella…</string>
+    <string name="menu_folder_name">Nome della cartella</string>
+    <string name="menu_create">Crea</string>
+    <string name="menu_rename_folder">Rinomina cartella</string>
+    <string name="menu_rename">Rinomina</string>
+    <string name="menu_delete_folder">Elimina cartella</string>
+    <string name="menu_delete_folder_hint">Le app tornano nella Libreria.</string>
+    <string name="menu_uninstall">Disinstalla</string>
+    <string name="menu_system_app">App di sistema: usa Strumenti per disattivarla.</string>
+    <string name="menu_back">Indietro</string>
+    <string name="preset_streaming">Streaming</string>
+    <string name="preset_games">Giochi</string>
+    <string name="preset_music">Musica</string>
+    <string name="preset_tools">Strumenti</string>
+    <string name="preset_kids">Bambini</string>
+    <string name="uninstall_unavailable">Impossibile disinstallare questa app.</string>
+
     <string name="ago_now">adesso</string>
     <string name="ago_minutes">%1$d min fa</string>
     <string name="ago_yesterday">ieri</string>
@@ -87,6 +113,9 @@
     <string name="bt_kind_computer">Computer</string>
 
     <string name="tools_title">Strumenti</string>
+    <string name="tools_section_speed">VELOCITÀ E MEMORIA</string>
+    <string name="tools_section_amazon">SERVIZI AMAZON IN BACKGROUND</string>
+    <string name="tools_section_services">SERVIZI SINGOLI · %1$d</string>
     <string name="tools_intro">OK per eseguire. Tutto reversibile: le app e i loro dati restano.</string>
     <string name="tools_on">ATTIVO</string>
     <string name="tools_off">SPENTO</string>
