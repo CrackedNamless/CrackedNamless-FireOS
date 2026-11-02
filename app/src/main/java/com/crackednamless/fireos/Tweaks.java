@@ -37,6 +37,11 @@ final class Tweaks {
         return commands;
     }
 
+    // Impedisce a Prime Video di restare attivo in background (sempre "ignore", mai un interruttore).
+    static final String PRIME_BLOCK = "for p in com.amazon.avod com.amazon.firebat; do "
+            + "cmd appops set $p RUN_IN_BACKGROUND ignore; cmd appops set $p RUN_ANY_IN_BACKGROUND ignore; "
+            + "am force-stop $p; done; echo ignore";
+
     // Un comando pm disable-user per ogni servizio presente su questo Stick e ancora attivo.
     static List<String> disableCommands(PackageManager pm) {
         List<String> commands = new ArrayList<>();

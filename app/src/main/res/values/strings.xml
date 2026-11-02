@@ -207,6 +207,6 @@
     <string name="err_adb_not_ready">ADB is not authorised yet: open the tools menu once and allow it</string>
 
     <!-- First run -->
-    <string name="first_run_start">Setting up: Fast Home, performance and unneeded services. If a prompt appears, choose Always allow</string>
-    <string name="first_run_done">Ready: Fast Home, performance mode and unneeded services are set. Change them any time in the tools menu</string>
+    <string name="first_run_start">Setting up: Fast Home, performance, unneeded services and Prime Video in background. If a prompt appears, choose Always allow</string>
+    <string name="first_run_done">Ready: Fast Home, performance mode, unneeded services and Prime Video in background are set. Change them any time in the tools menu</string>
 </resources>

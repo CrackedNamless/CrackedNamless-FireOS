@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-// Alla prima apertura attiva da sola Fast Home, la disattivazione dei servizi superflui e le prestazioni, cosi' non serve aprire il menu strumenti.
+// Alla prima apertura attiva da sola Fast Home, la disattivazione dei servizi superflui, le prestazioni e il blocco di Prime Video in background, cosi' non serve aprire il menu strumenti.
 // Dopo la prima volta non tocca piu' nulla: chi spegne una regolazione la ritrova spenta.
 final class FirstRun {
 
@@ -57,6 +57,7 @@ final class FirstRun {
     private static void applyTweaks(Context app, Reporter reporter) {
         List<String> commands = Tweaks.performanceCommands(true);
         commands.addAll(Tweaks.disableCommands(app.getPackageManager()));
+        commands.add(Tweaks.PRIME_BLOCK);
         AdbBridge.run(app, commands, new AdbBridge.Listener() {
             @Override
             public void onStatus(String message) {

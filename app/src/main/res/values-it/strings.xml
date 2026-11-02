@@ -187,6 +187,6 @@
     <string name="err_adb_not_ready">ADB non è ancora autorizzato: apri una volta il menu strumenti e consentilo</string>
 
     <!-- Prima configurazione -->
-    <string name="first_run_start">Configurazione: Sblocco rapido Home, prestazioni e servizi superflui. Se compare una richiesta, scegli Consenti sempre</string>
-    <string name="first_run_done">Pronto: Sblocco rapido Home, prestazioni e servizi superflui sono attivi. Puoi cambiarli quando vuoi dal menu strumenti</string>
+    <string name="first_run_start">Configurazione: Sblocco rapido Home, prestazioni, servizi superflui e Prime Video in background. Se compare una richiesta, scegli Consenti sempre</string>
+    <string name="first_run_done">Pronto: Sblocco rapido Home, prestazioni, servizi superflui e Prime Video in background sono a posto. Puoi cambiarli quando vuoi dal menu strumenti</string>
 </resources>
